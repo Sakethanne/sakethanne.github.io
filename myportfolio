@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		div {
+			background-color: grey;
+			margin: 100px;
+			border-spacing: 10px;
+			text-align: center;
+			align-self: center;
+			border-style: dotted;
+			padding: 20px;
+			content: 100%;
+			height: 130%;
+		}
+		body {
+			size: 200px;
+			font-size: 25px;
+			height: 130%;
+		}
+	</style>
+	<script type="text/javascript">
+		var d=new Date();
+		document.write("Date:  "+d.getDate()+"-");document.write((d.getMonth()+1)+"-");document.write(d.getYear()-100);
+		function validate() {
+		if( document.getElementById("usernameid").value == "" )
+         {
+            alert( "Please provide your name!" );
+            document.getElementById("usernameid").focus() ;
+            return false;
+         }
+         var emailID = document.getElementById("usernameid").value;
+         atpos = emailID.indexOf("@");
+         dotpos = emailID.lastIndexOf(".");
+         
+         if (atpos < 1 || ( dotpos - atpos < 2 )) 
+         {
+            alert("Please enter correct email ID")
+            document.getElementById("usernameid").focus() ;
+            return false;
+         }
+         if( document.getElementById("newpasswordid").value == "" )
+         {
+            alert( "Please provide a security Password!" );
+            document.getElementById("newpasswordid").focus() ;
+            return false;
+         }
+         if( document.getElementById("confirmnewpasswordid").value == "" )
+         {
+            alert( "Please provide the same security Password as above" );
+            document.getElementById("confirmnewpasswordid").focus() ;
+            return false;
+         }
+         if( document.getElementById("newpasswordid").value != document.getElementById("confirmnewpasswordid").value )
+         {
+            alert( "Please provide the same passwords in both fields" );
+            return false;
+         }
+         return( true );
+			}
+	</script>
+	<meta charset="utf-8">
+	<title>Forgot Password</title>
+</head>
+<body>
+	<form action="file:///C:/Users/Admin/Desktop/New%20folder/passwordchangesuccessful.html" name="myForm"  onsubmit="return(validate());">
+	<div>
+	<p align="center">
+		<br>
+		<br>Forgot Password
+		<table align="center" border="3" cellspacing="10" cellpadding="6">
+		<tr>
+			<th>User Name</th>
+			<td><input type="text" name="username" id="usernameid"></td>
+		</tr>
+		<tr>
+			<th>New Password</th>
+			<td><input type="password" name="newpassword" id="newpasswordid"></td>
+		</tr>
+		<tr>
+			<th>Confirm New Password</th>
+			<td><input type="password" name="confirmnewpassword" id="confirmnewpasswordid"></td >
+		</tr>
+	</table></p>
+	<button type="submit" onsubmit="return(validate());">Submit</button>
+</div>
+</form>
+</body>
+</html>
