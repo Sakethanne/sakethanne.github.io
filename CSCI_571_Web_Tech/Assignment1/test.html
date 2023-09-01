@@ -6,9 +6,8 @@
 <style>
 .figure-container {
         display:inline-flex; /* Use flexbox for layout */
-        margin-left: 15px;
-        margin-right: 15px;
-        margin-top: 5px;
+        margin-left: 30px;
+        margin-right: 30px;
         margin-bottom: 20px;
     }
 .figure {
@@ -17,10 +16,11 @@
         padding-left: 5px;
     }
 figcaption{
-        padding-top: 45px;
+        padding-top: 40px;
         font-size: large;
         color: rgba(5,56,192,255);
         font-weight: bolder;
+        padding-bottom: 20px;
     }
 .heading{
         color: rgba(5,56,192,255);
@@ -32,13 +32,13 @@ figcaption{
     }
 h1{
         color: rgba(5,56,192,255);
-        padding-left: 30px;
-        padding-top: 10px;
+        padding-left: 45px;
+        margin-bottom: none;
     }
 .menu{
-        padding-top: 10px;
-        padding-left: 30px;
-        margin-bottom: 20px;
+        padding-top: 7px;
+        padding-left: 45px;
+        margin-bottom: 30px;
         font-size: x-small;
     }
 a{
@@ -51,18 +51,17 @@ a{
 body {
     margin: 0;
     padding: 0;
-    margin-bottom: 20px;
-    width: 870px;
+    width: 850px;
 }
 .container {
-    width: 770px;
-    height: 450px;
+    width: 750px;
+    height: 415px;
     margin-left: 45px;
     background-image: url('Cutlery.png');
     background-attachment: fixed;
     background-repeat: no-repeat;
-    background-size: 870px auto;
-    background-position: 0px -80px;
+    background-size: 760px 750px;
+    background-position: 35px -40px;
 }
 .transparent-box {
     background-color: rgba(255, 255, 255, 0);
@@ -70,18 +69,19 @@ body {
     color: rgba(5,56,192,255);
     font-weight: 600;
     padding-left: 35px;
-    padding-top: 5px;
+    padding-top: 1px;
 }
 button{
     font-size: small;
     padding: 10px;
-    background-color: white;
+    border-radius: 0px;
+    background-color:white;
     color: black;
 }
 .floating-content {
     background-color: White;
     color:black;
-    padding-left: 10px;
+    
     width: 100%;
 }
 </style>
@@ -89,7 +89,7 @@ button{
 <body>
     <div class="floating-content">
         <h1>BöN</h1>
-        <hr width = 850px; align="left" margin="none" border="none" padding="none">
+        <hr width = 835px; align="left" margin="none" border="none" padding="none">
     <div class="menu">
         <a style="color: rgba(45,87,203,255)">Home</a>
         <a>Decor</a>
@@ -111,24 +111,24 @@ button{
 
     <div class="figure-container">
         <figure class="figure">
-            <img src="Decor.png" alt="Decor" width="375px" height="375px">
+            <img src="Decor.png" alt="Decor" width="362px" height="315px">
             <figcaption>Decor</figcaption>
         </figure>
 
         <figure class="figure">
-            <img src="Bedroom.png" alt="Your Bedroom" width="375px" height="375px">
+            <img src="Bedroom.png" alt="Your Bedroom" width="362px" height="315px">
             <figcaption>Your Bedroom</figcaption>
         </figure>
     </div>
 
     <div class="figure-container">
         <figure class="figure">
-            <img src="Kitchen.png" alt="Your Kitchen" width="375px" height="375px">
+            <img src="Kitchen.png" alt="Your Kitchen" width="362px" height="315px">
             <figcaption>Your Kitchen</figcaption>
         </figure>
 
         <figure class="figure">
-            <img src="Bathroom.png" alt="Your Bathroom" width="375px" height="375px">
+            <img src="Bathroom.png" alt="Your Bathroom" width="362px" height="315px">
             <figcaption>Your Bathroom</figcaption>
         </figure>
     </div>
