@@ -28,12 +28,14 @@ figcaption{
         font-family: MyFont;
         padding-top: 15px;
     }
-h1{
+.h1{
         color: rgba(5,56,192,255);
         padding-left: 43px;
-        margin-bottom: none;
-        padding-bottom: none;
+        margin: 0px;
+        padding-bottom: 7px;
         font-family: 'Times New Roman', Times, serif;
+        font-size: xx-large;
+        font-weight: 600;
     }
 .menu{
         padding-top: 7px;
@@ -51,8 +53,9 @@ a{
 }
 body {
     margin: 0;
+    margin-top: 20px;
     padding: 0;
-    width: 840px;
+    max-width: 830px;
 }
 .container {
     width: 750px;
@@ -87,4 +90,6 @@ button{
     width: 100%;
     font-family: MyFont;
     font-weight: 100;
+    padding-top: 0px;
+    margin-top: 0px;
 }
