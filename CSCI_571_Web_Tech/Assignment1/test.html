@@ -3,88 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>3725520208 CS571 Asg1</title>
-<style>
-.figure-container {
-        display:inline-flex; /* Use flexbox for layout */
-        margin-left: 30px;
-        margin-right: 30px;
-        margin-bottom: 20px;
-    }
-.figure {
-        text-align: center; /* Center-align content */
-        margin: 10px; /* Add margin for spacing */
-        padding-left: 5px;
-    }
-figcaption{
-        padding-top: 38px;
-        font-size: large;
-        color: rgba(5,56,192,255);
-        font-weight: bolder;
-        padding-bottom: 20px;
-    }
-.heading{
-        color: rgba(5,56,192,255);
-        font-size: x-large;
-        text-align: center;
-        width: 850px;
-        font-weight: 600;
-        padding-top: 15px;
-    }
-h1{
-        color: rgba(5,56,192,255);
-        padding-left: 43px;
-        margin-bottom: none;
-    }
-.menu{
-        padding-top: 7px;
-        padding-left: 42px;
-        margin-bottom: 30px;
-        font-size: x-small;
-    }
-a{
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-.homelink{
-    color: rgba(45,87,203,255)";
-}
-body {
-    margin: 0;
-    padding: 0;
-    width: 840px;
-}
-.container {
-    width: 750px;
-    height: 415px;
-    margin-left: 45px;
-    background-image: url('Cutlery.png');
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: 760px 750px;
-    background-position: 35px -40px;
-}
-.transparent-box {
-    background-color: rgba(255, 255, 255, 0);
-    font-size: xxx-large;
-    color: rgba(5,56,192,255);
-    font-weight: 600;
-    padding-left: 35px;
-    padding-top: 1px;
-}
-button{
-    font-size: small;
-    padding: 10px;
-    border-radius: 0px;
-    background-color:white;
-    color: black;
-}
-.floating-content {
-    background-color: White;
-    color:black;
-    
-    width: 100%;
-}
-</style>
+<link rel="stylesheet" href="home.css">
 </head>
 <body>
     <div class="floating-content">
@@ -108,7 +27,6 @@ button{
   </div>
   <div class="floating-content">
     <div class="heading"><p>Defining Styling Since 1965</p></div>
-
     <div class="figure-container">
         <figure class="figure">
             <img src="Decor.png" alt="Decor" width="362px" height="315px">
@@ -120,13 +38,14 @@ button{
             <figcaption>Your Bedroom</figcaption>
         </figure>
     </div>
+    
 
     <div class="figure-container">
         <figure class="figure">
             <img src="Kitchen.png" alt="Your Kitchen" width="362px" height="315px">
             <figcaption>Your Kitchen</figcaption>
         </figure>
-
+        <!-- This code to organise the figures side by side is taken from chatgpt -->
         <figure class="figure">
             <img src="Bathroom.png" alt="Your Bathroom" width="362px" height="315px">
             <figcaption>Your Bathroom</figcaption>
