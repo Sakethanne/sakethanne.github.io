@@ -58,7 +58,6 @@ body {
     margin-top: 20px;
     padding: 0;
     max-width: 830px;
-    overflow-x: hidden;
 }
 /* css for the background image and the center transparent box to scroll over the background image */
 .container {
@@ -102,7 +101,7 @@ button{
 }
 /* extending the line from one end of the screen to other end  */
 #line{
-    width: 860px;
+    width: 840px;
     margin-left: -10px;
     margin-right: none;
 }
