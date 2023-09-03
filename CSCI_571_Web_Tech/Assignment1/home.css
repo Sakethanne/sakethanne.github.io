@@ -40,6 +40,7 @@ figcaption{
         font-size: xx-large;
         font-weight: 600;
     }
+    /* arranging all the menu items  */
 .menu{
         padding-top: 7px;
         padding-left: 42px;
@@ -51,14 +52,13 @@ a{
         padding-right: 5px;
         font-family: 'Times New Roman', Times, serif;
     }
-.homelink{
-    color: rgba(45,87,203,255)";
-}
+/* general css that applies to the entire html body */
 body {
     margin: 0;
     margin-top: 20px;
     padding: 0;
     max-width: 830px;
+    overflow-x: hidden;
 }
 /* css for the background image and the center transparent box to scroll over the background image */
 .container {
@@ -71,6 +71,7 @@ body {
     background-size: 760px 750px;
     background-position: 35px -40px;
 }
+/* css for the transparent box that hosts the contents for the fall cutlery and shop button */
 .transparent-box {
     background-color: rgba(255, 255, 255, 0);
     font-size: xxx-large;
@@ -80,6 +81,7 @@ body {
     padding-left: 35px;
     padding-top: 1px;
 }
+/* adding the css styling details for the button on the floatinf content */
 button{
     font-size: small;
     padding: 10px;
@@ -97,4 +99,19 @@ button{
     font-weight: 100;
     padding-top: 0px;
     margin-top: 0px;
+}
+/* extending the line from one end of the screen to other end  */
+#line{
+    width: 860px;
+    margin-left: -10px;
+    margin-right: none;
+}
+/* setting the color of the home link to blue sinxe it is selected */
+#homelink{
+    color: rgba(45,87,203,255);
+}
+/* Setting the height and width of the images to a fixed value */
+img{
+    width:362px;
+    height:315px;
 }
