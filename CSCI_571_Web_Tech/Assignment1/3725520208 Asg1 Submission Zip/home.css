@@ -3,6 +3,10 @@
     font-family: MyFont;
     src: url(AbrilFatface-Regular.ttf);
 }
+@font-face {
+    font-family: MainHeadingFont;
+    src: url(NotoSerif-VariableFont_wdth,wght.ttf);
+}
 /* css for the div containing the figures below the center stage  */
 .figure-container {
         display:inline-flex; /* Use flexbox for layout */
@@ -36,10 +40,11 @@ figcaption{
         padding-left: 43px;
         margin: 0px;
         padding-bottom: 7px;
-        font-family: 'Times New Roman', Times, serif;
+        font-family: MainHeadingFont;
         font-size: xx-large;
         font-weight: 600;
     }
+    /* arranging all the menu items  */
 .menu{
         padding-top: 7px;
         padding-left: 42px;
@@ -49,11 +54,11 @@ figcaption{
 a{
         padding-left: 5px;
         padding-right: 5px;
-        font-family: 'Times New Roman', Times, serif;
+        /* font-family: 'Times New Roman', Times, serif; */
+        font-family: Helvetica, sans-serif;
+        /* font-family: MainHeadingFont; */
     }
-.homelink{
-    color: rgba(45,87,203,255)";
-}
+/* general css that applies to the entire html body */
 body {
     margin: 0;
     margin-top: 20px;
@@ -71,6 +76,7 @@ body {
     background-size: 760px 750px;
     background-position: 35px -40px;
 }
+/* css for the transparent box that hosts the contents for the fall cutlery and shop button */
 .transparent-box {
     background-color: rgba(255, 255, 255, 0);
     font-size: xxx-large;
@@ -80,12 +86,14 @@ body {
     padding-left: 35px;
     padding-top: 1px;
 }
+/* adding the css styling details for the button on the floatinf content */
 button{
     font-size: small;
     padding: 10px;
     border-radius: 0px;
     background-color:white;
     color: rgba(38,38,38,255);
+    border: none;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 /* css for the floating content in general */
@@ -97,4 +105,19 @@ button{
     font-weight: 100;
     padding-top: 0px;
     margin-top: 0px;
+}
+/* extending the line from one end of the screen to other end  */
+#line{
+    width: 840px;
+    margin-left: -10px;
+    margin-right: none;
+}
+/* setting the color of the home link to blue sinxe it is selected */
+#homelink{
+    color: rgba(45,87,203,255);
+}
+/* Setting the height and width of the images to a fixed value */
+img{
+    width:362px;
+    height:315px;
 }
