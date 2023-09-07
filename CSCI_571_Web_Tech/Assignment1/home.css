@@ -113,7 +113,7 @@ button{
 }
 /* extending the line from one end of the screen to other end  */
 #line{
-    width: 840px;
+    width: 845px;
     margin-left: -10px;
     margin-right: none;
     border: none;
