@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Table Input Validation</title>
+  <style>
+    /* CSS for the error label */
+    .error-label {
+      color: red;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <tr>
+      <td>Row 1:</td>
+      <td>
+        <input type="text" id="input1">
+        <span class="error-label" id="errorLabel1">Please enter data</span>
+      </td>
+    </tr>
+    <tr>
+      <td>Row 2:</td>
+      <td>
+        <input type="text" id="input2">
+        <span class="error-label" id="errorLabel2">Please enter data</span>
+      </td>
+    </tr>
+  </table>
+  
+  <button onclick="validateInputs()">Submit</button>
+
+  <script>
+    function validateInputs() {
+      const input1 = document.getElementById('input1');
+      const input2 = document.getElementById('input2');
+      const errorLabel1 = document.getElementById('errorLabel1');
+      const errorLabel2 = document.getElementById('errorLabel2');
+      
+      // Check validation for input1
+      if (input1.value.trim() === '') {
+        errorLabel1.style.display = 'inline';
+      } else {
+        errorLabel1.style.display = 'none';
+      }
+
+      // Check validation for input2
+      if (input2.value.trim() === '') {
+        errorLabel2.style.display = 'inline';
+      } else {
+        errorLabel2.style.display = 'none';
+      }
+      
+      // You can add more validation checks for other input fields here
+      
+      // Perform other actions if needed based on the validation results
+    }
+  </script>
+</body>
+</html>

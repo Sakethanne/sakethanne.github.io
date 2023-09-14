@@ -1,0 +1,71 @@
+body {
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Use the full viewport height */
+    margin: 0; /* Remove default margin to prevent unwanted spacing */
+  }
+  .container {
+    display: flex;
+    align-items: center;
+    margin: 0 auto; /* Center the container horizontally */
+    max-width: 600px; /* Optional: Limit the container's maximum width */
+    padding-left: 250px;
+    margin-top: -20px;
+  }
+
+  /* CSS for the image */
+  .image {
+    width: 150px;
+    height: 70px;
+    margin-right: 10px;
+  }
+.heading{
+    font-size: 35px;
+    font-weight: bold;
+}
+table, td, th{
+    border: 1.5px solid black;
+    margin-top: -10px;
+    padding: 8px;
+    align-self: center;
+    border-collapse: collapse;
+    text-align: center;
+}
+label{
+    font-weight: bold;
+}
+#pricefrom{
+    width: 65px;
+}
+#priceto{
+    width: 65px;
+}
+.submit {
+    display: inline-block;
+    padding: 3px 5px;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: black;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 2px #999;
+  }
+  
+.submit:hover{background-color: #37bb3c}
+
+.clear {
+    display: inline-block;
+    padding: 3px 5px;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: black;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 2px #999;
+  }

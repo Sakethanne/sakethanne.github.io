@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>3725520208 CS571 Assignment 2</title>
+        <link rel="icon" type="image/jpg" href="Mono_SmUse_Card_RGB.jpg">
+        <link rel="stylesheet" href="ebay.css">
+        <script src="ebay.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <a href="https://www.ebay.com/" target="_blank"><img src="images/eBayLogo.png" alt="eBayLogo" class="image"/></a>
+            <p class="heading">Shopping</p>
+          </div>
+        <table align="Center">
+            <form onsubmit="submitdata(event)">
+            <tr>
+                <td>
+                    <label for="keywords">Keywords<span style="color: red">*</span>&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                    <input type="text" id="keywords" name="keywords" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="price">Price Range&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                    From&nbsp;&nbsp;<input type="number" id="pricefrom" name="pricefrom" required>&nbsp;&nbsp;&nbsp;to&nbsp;&nbsp;&nbsp;<input type="number" id="priceto" name="priceto" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="price">Condition&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                    <input type="checkbox" id="new" name="new"> New&nbsp;
+                    <input type="checkbox" id="used" name="used"> Used&nbsp;
+                    <input type="checkbox" id="verygood" name="verygood"> Very Good&nbsp;
+                    <input type="checkbox" id="good" name="good"> Good&nbsp;
+                    <input type="checkbox" id="acceptable" name="acceptable"> Acceptable&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="price">Seller&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                    <input type="checkbox" id="returnaccepted" name="returnaccepted">&nbsp;Return Accepted&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="price">Shipping&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                    <input type="checkbox" id="free" name="free">&nbsp;&nbsp;Free&nbsp;&nbsp;<input type="checkbox" id="expedicted" name="expedicted">&nbsp;&nbsp;Expedicted&nbsp;&nbsp;<br/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="price">Sort by&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                    <select id="country" name="country">
+                        <option value="BestMatch">Best Match</option>
+                        <option value="CurrentPriceHighest">Price: highest first</option>
+                        <option value="PricePlusShippingHighest">Price + Shipping: highest first</option>
+                        <option value="PricePlusShippingLowest">Price + Shipping: lowest first</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input class="clear" type="button" value="Clear" onclick="cleanform(event)"> <button class="submit">Submit</button>
+                </td>
+            </tr>
+        </form>
+        </table>
+    </body>
+</html>
