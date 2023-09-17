@@ -69,3 +69,23 @@ label{
     border-radius: 3px;
     box-shadow: 0 2px #999;
   }
+
+.result, .total-results{
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: black;
+    font-size: 23px;
+    font-weight: bold;
+    padding: 25px;
+    border-bottom: 1px black;
+}
+
+.line{
+  align-items: center;
+  width: 700px;
+  height: 1px;
+  border: none;
+  height: 1px;
+  background-color: black;
+}

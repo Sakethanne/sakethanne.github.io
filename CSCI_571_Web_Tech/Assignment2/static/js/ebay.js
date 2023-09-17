@@ -110,7 +110,7 @@ function cleanform(event) {
             return false;
         }
         else{
-            result.innerHTML = data['data']['findItemsAdvancedResponse'][0]['paginationOutput'][0]['totalEntries'] + " Results found for " + keyword;
+            result.innerHTML = data['data']['findItemsAdvancedResponse'][0]['paginationOutput'][0]['totalEntries'] + " Results found for <i>" + keyword + "<\i><hr class = 'line'>";
             results.appendChild(result);
         }
         
