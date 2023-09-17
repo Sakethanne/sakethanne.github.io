@@ -3,13 +3,13 @@
     <head>
         <meta charset="UTF-8">
         <title>3725520208 CS571 Assignment 2</title>
-        <link rel="icon" type="image/jpg" href="Mono_SmUse_Card_RGB.jpg">
-        <link rel="stylesheet" href="ebay.css">
-        <script src="ebay.js"></script>
+        <link rel="icon" type="image/jpg" href="{{ url_for('static', filename='/images/Mono_SmUse_Card_RGB.jpg') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='/css/ebay.css') }}">
+        <script src="{{ url_for('static', filename='/js/ebay.js') }}"></script>
     </head>
     <body>
         <div class="container">
-            <a href="https://www.ebay.com/" target="_blank"><img src="images/eBayLogo.png" alt="eBayLogo" class="image"/></a>
+            <a href="https://www.ebay.com/" target="_blank"><img src="{{ url_for('static', filename='/images/eBayLogo.png') }}" alt="eBayLogo" class="image"/></a>
             <p class="heading">Shopping</p>
           </div>
         <table align="Center">
@@ -51,7 +51,7 @@
             <tr>
                 <td>
                     <label for="price">Sort by&nbsp;&nbsp;:&nbsp;&nbsp;</label>
-                    <select id="country" name="country">
+                    <select id="sortby" name="sortby">
                         <option value="BestMatch">Best Match</option>
                         <option value="CurrentPriceHighest">Price: highest first</option>
                         <option value="PricePlusShippingHighest">Price + Shipping: highest first</option>
@@ -66,5 +66,9 @@
             </tr>
         </form>
         </table>
+
+        <div id="total-results"></div>
+
+        <div id="items-container"></div>
     </body>
 </html>
