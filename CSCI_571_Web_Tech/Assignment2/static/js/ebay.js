@@ -88,8 +88,9 @@ function cleanform(event) {
     return true;
   }
 
+  jsonresponse = '';
   function sendinputdata(data) {
-    keyword = data['keyword']
+    keyword = data['keyword'];
     fetch('/sendinputdata', {
         method: 'POST',
         headers: {
@@ -100,6 +101,7 @@ function cleanform(event) {
     .then(response => response.json())
     .then(data => {
         console.log(data['data']['findItemsAdvancedResponse']); // Handle the response from Flask
+        jsonresponse = data;
         const results = document.getElementById('total-results');
         const result = document.createElement('div');
         result.innerHTML = ''
@@ -113,15 +115,40 @@ function cleanform(event) {
             result.innerHTML = data['data']['findItemsAdvancedResponse'][0]['paginationOutput'][0]['totalEntries'] + " Results found for <i>" + keyword + "<\i><hr class = 'line'>";
             results.appendChild(result);
         }
-        
-
+        counter = 0;
         const itemscontainer = document.getElementById('items-container');
-        for (const itemcontent in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item']) {
+        for (let counter = 0; counter < 3; counter++) {
+                const item = document.createElement('div');
+                item.className = "item"; // Add a CSS class
+                item.innerHTML = data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]; // Add content
+                itemscontainer.appendChild(item);
+    };
+    document.getElementById('showmorebutton').innerHTML = '<input class="showmore" id="showmoreless" type="button" value="Show More" onclick="getadditionaldata()">';
+    })
+}
+
+function getadditionaldata() {
+    counter = 3;
+    const itemscontainer = document.getElementById('items-container');
+    for (let counter = 3; counter < 10; counter++) {
         const item = document.createElement('div');
         item.className = "item"; // Add a CSS class
-        item.innerHTML = data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][itemcontent]['title'][0]; // Add content
+        item.innerHTML = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]; // Add content
         itemscontainer.appendChild(item);
-        // console.log(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][itemcontent]['title'][0])
     };
-    })
+    document.getElementById('showmorebutton').innerHTML = '<input class="showmore" id="showmoreless" type="button" value="Show Less" onclick="getolddata()">';
+}
+
+
+function getolddata() {
+    counter = 0;
+    const itemscontainer = document.getElementById('items-container');
+    itemscontainer.innerHTML = '';
+    for (let counter = 0; counter < 3; counter++) {
+        const item = document.createElement('div');
+        item.className = "item"; // Add a CSS class
+        item.innerHTML = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]; // Add content
+        itemscontainer.appendChild(item);
+    };
+    document.getElementById('showmorebutton').innerHTML = '<input class="showmore" id="showmoreless" type="button" value="Show More" onclick="getadditionaldata()">';
 }
