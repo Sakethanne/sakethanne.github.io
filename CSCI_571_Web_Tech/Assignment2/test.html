@@ -1,28 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Center Button in a Div</title>
+    <title>Button with Shadow</title>
     <style>
-        body {
-            display: flex;
-            /* justify-content: center; */
-            align-items: center;
-            height: 100vh; /* Set the height of the body to the viewport height */
-            margin: 0; /* Remove default margin */
-        }
-
-        #container {
-            text-align: center; /* Center-align the content within the container */
-        }
-
-        #centeredButton {
-            padding: 10px 20px; /* Add some padding for better appearance */
+        /* Style the button with shadow */
+        .shadow-button {
+            background-color: #007bff; /* Button background color */
+            color: white; /* Button text color */
+            padding: 10px 20px; /* Button padding */
+            border: none; /* Remove button border */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Add shadow */
+            cursor: pointer; /* Change cursor to a hand pointer on hover */
         }
     </style>
 </head>
 <body>
-    <div id="container">
-        <button id="centeredButton">Centered Button</button>
-    </div>
+    <button class="shadow-button">Button with Shadow</button>
 </body>
 </html>
