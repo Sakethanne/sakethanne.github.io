@@ -64,8 +64,8 @@ function cleanform(event) {
   function validatedata(event) {
     event.preventDefault(); // Prevent the default form submission behavior
     const keywords = document.getElementById('keywords').value;
-    let pricefrom = document.getElementById('pricefrom').value;
-    let priceto = document.getElementById('priceto').value;
+    let pricefrom = Number(document.getElementById('pricefrom').value);
+    let priceto = Number(document.getElementById('priceto').value);
     const newvalue = document.getElementById('new').checked;
     const usedvalue = document.getElementById('used').checked;
     const vergoodvalue = document.getElementById('verygood').checked;
@@ -121,9 +121,10 @@ function cleanform(event) {
         for (let counter = 0; counter < 3; counter++) {
             const item = document.createElement('button');
             item.className = "item"; // Add a CSS class
+            item.addEventListener("click", individualitemdetails);
             htmltext = ""
-            htmltext = '<table class="individualitem"><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><img src="' +data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
-            htmltext += '" height="130px" width="130px"></td><th class="individualitem">' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
+            htmltext = '<table class="individualitem"><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' +data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
+            htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
             htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : ' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0]
             htmltext += '<a href="' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
             htmltext += `"><img src="/static//images/redirect.png" height="18px" width="18px"></a>`
@@ -147,9 +148,10 @@ function getadditionaldata() {
     for (let counter = 3; counter < 10; counter++) {
         const item = document.createElement('button');
         item.className = "item"; // Add a CSS class
+        item.addEventListener("click", individualitemdetails);
         htmltext = ""
-        htmltext = '<table class="individualitem"><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><img src="' +jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
-        htmltext += '" height="130px" width="130px"></td><th class="individualitem">' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
+        htmltext = '<table class="individualitem"><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' +jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
+        htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
         htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : ' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0]
         htmltext += '<a href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
         htmltext += `"><img src="/static//images/redirect.png" height="18px" width="18px"></a>`
@@ -174,9 +176,10 @@ function getolddata() {
     for (let counter = 0; counter < 3; counter++) {
         const item = document.createElement('button');
         item.className = "item"; // Add a CSS class
+        item.addEventListener("click", individualitemdetails);
         htmltext = ""
-        htmltext = '<table class="individualitem"><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><img src="' +jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
-        htmltext += '" height="130px" width="130px"></td><th class="individualitem">' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
+        htmltext = '<table class="individualitem"><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' +jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
+        htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
         htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : ' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0]
         htmltext += '<a href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
         htmltext += `"><img src="/static//images/redirect.png" height="18px" width="18px"></a>`
@@ -191,4 +194,34 @@ function getolddata() {
         itemscontainer.appendChild(item);
     };
     document.getElementById('showmorebutton').innerHTML = '<input class="showmore" id="showmoreless" type="button" value="Show More" onclick="getadditionaldata()">';
+}
+
+function individualitemdetails() {
+    // storing previous html details
+    heading = document.getElementById('total-results').innerHTML;
+    items = document.getElementById('items-container').innerHTML;
+    extrabutton = document.getElementById('showmorebutton').innerHTML;
+
+    // clearing the html content for the selected items
+    document.getElementById('total-results').innerHTML = '';
+    document.getElementById('items-container').innerHTML = '';
+    document.getElementById('showmorebutton').innerHTML  = '';
+
+    // setting the new html content
+    const new_heading = document.createElement('div')
+    new_heading.className = "result";
+    new_heading.innerHTML = 'Item Details <br> <input class="backtores" id="backtores" type="button" value="Back to Search Results" onclick="backtonormal()">'
+    document.getElementById('total-results').appendChild(new_heading);
+}
+
+function backtonormal() {
+    //event.preventDefault(); // Prevent the default form submission behavior
+    // clearing the curent details
+    document.getElementById('total-results').innerHTML = '';
+    document.getElementById('items-container').innerHTML = '';
+    document.getElementById('showmorebutton').innerHTML  = '';
+    // setting the previous details
+    document.getElementById("total-results").innerHTML= heading ;
+    document.getElementById("items-container").innerHTML= items ;
+    document.getElementById("showmorebutton").innerHTML   = extrabutton;
 }

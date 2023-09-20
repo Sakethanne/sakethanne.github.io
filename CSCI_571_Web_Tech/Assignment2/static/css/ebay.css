@@ -138,3 +138,39 @@ label{
 #individualitem{
   width: 120px;
 }
+
+.image-container {
+  width: 130px; /* Set the initial width of the image container */
+  height: 130px; /* Set the initial height of the image container */
+  transition: transform 0.3s ease; /* Add a smooth transition effect */
+  background-color: grey;
+}
+
+/* Style the image */
+.image-container img {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease; /* Add a smooth transition effect */
+}
+
+/* Increase the size of the image on hover */
+.image-container:hover {
+  transform: scale(1.5); /* Increase the size by 20% (1.2 times) */
+  border: 5px grey;
+}
+
+.backtores {
+  display: inline-block;
+  padding: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: black;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0 2px #999;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}

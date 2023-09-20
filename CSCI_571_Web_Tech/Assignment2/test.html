@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Button with Shadow</title>
+    <title>Image Hover Effect</title>
     <style>
-        /* Style the button with shadow */
-        .shadow-button {
-            background-color: #007bff; /* Button background color */
-            color: white; /* Button text color */
-            padding: 10px 20px; /* Button padding */
-            border: none; /* Remove button border */
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Add shadow */
-            cursor: pointer; /* Change cursor to a hand pointer on hover */
+        /* Style the image container */
+        .image-container {
+            width: 200px; /* Set the initial width of the image container */
+            height: 200px; /* Set the initial height of the image container */
+            transition: transform 0.3s ease; /* Add a smooth transition effect */
+        }
+
+        /* Style the image */
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s ease; /* Add a smooth transition effect */
+        }
+
+        /* Increase the size of the image on hover */
+        .image-container:hover {
+            transform: scale(1.2); /* Increase the size by 20% (1.2 times) */
         }
     </style>
 </head>
 <body>
-    <button class="shadow-button">Button with Shadow</button>
+    <div class="image-container">
+        <img src="/static/images/eBayLogo.png" alt="Image"  />
+    </div>
 </body>
 </html>
