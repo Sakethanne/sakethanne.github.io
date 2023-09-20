@@ -100,6 +100,8 @@ def getsingleitemdetails():
         headers = {
             "X-EBAY-API-IAF-TOKEN": application_token
             }
+        # print(get_single_item_url)
+        # print(headers)
         response = requests.get(get_single_item_url, headers=headers)
         if response.status_code == 200:
             data = response.json()  # Parse the JSON response

@@ -90,6 +90,7 @@ function cleanform(event) {
   }
 
   jsonresponse = '';
+  itemid = ''
   function sendinputdata(data) {
     keyword = data['keyword'];
     fetch('/sendinputdata', {
@@ -120,10 +121,12 @@ function cleanform(event) {
         const itemscontainer = document.getElementById('items-container');
         for (let counter = 0; counter < 3; counter++) {
             const item = document.createElement('button');
-            item.className = "item"; // Add a CSS class
-            item.addEventListener("click", individualitemdetails);
+            item.className = "item";
+            item.id = data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]
+            item.addEventListener("click", function(event){ individualitemdetails(this)});
             htmltext = ""
-            htmltext = '<table class="individualitem"><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' +data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
+            htmltext = '<table class="individualitem"'
+            htmltext+= '><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' +data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
             htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
             htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : ' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0]
             htmltext += '<a href="' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
@@ -148,9 +151,14 @@ function getadditionaldata() {
     for (let counter = 3; counter < 10; counter++) {
         const item = document.createElement('button');
         item.className = "item"; // Add a CSS class
-        item.addEventListener("click", individualitemdetails);
+        item.id = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]
+        // item.addEventListener("click", function(){
+        //     individualitemdetails(item.id);
+        //  });
+        item.addEventListener("click", function(event){ individualitemdetails(this)});
         htmltext = ""
-        htmltext = '<table class="individualitem"><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' +jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
+        htmltext = '<table class="individualitem"'
+        htmltext += '><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' +jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
         htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
         htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : ' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0]
         htmltext += '<a href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
@@ -176,9 +184,14 @@ function getolddata() {
     for (let counter = 0; counter < 3; counter++) {
         const item = document.createElement('button');
         item.className = "item"; // Add a CSS class
-        item.addEventListener("click", individualitemdetails);
+        item.id = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]
+        // item.addEventListener("click", function(){
+        //     individualitemdetails(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]);
+        //  });
+        item.addEventListener("click", function(event){ individualitemdetails(this)});
         htmltext = ""
-        htmltext = '<table class="individualitem"><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' +jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
+        htmltext = '<table class="individualitem"'
+        htmltext += '><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' +jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
         htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
         htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : ' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0]
         htmltext += '<a href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
@@ -196,7 +209,8 @@ function getolddata() {
     document.getElementById('showmorebutton').innerHTML = '<input class="showmore" id="showmoreless" type="button" value="Show More" onclick="getadditionaldata()">';
 }
 
-function individualitemdetails() {
+function individualitemdetails(event) {
+    console.log(event['attributes']['id']['nodeValue']);
     // storing previous html details
     detailshtml = ''
     heading = document.getElementById('total-results').innerHTML;
@@ -214,7 +228,8 @@ function individualitemdetails() {
     new_heading.innerHTML = 'Item Details <br> <input class="backtores" id="backtores" type="button" value="Back to Search Results" onclick="backtonormal()">'
     document.getElementById('total-results').appendChild(new_heading);
 
-    itemid = '125654398756'
+    // itemid = '125654398756'
+    itemid = event['attributes']['id']['nodeValue']
     data = {
         'itemid' : itemid
     }
@@ -228,24 +243,45 @@ function individualitemdetails() {
         .then(response => response.json())
         .then(d => {
             console.log(d);
-            detailshtml = '<div class = "details-table-container"><table><tr><th>Photo</th><td><img src="'
-            detailshtml += d['data']['Item']['GalleryURL']
-            detailshtml += '" height="200px" width="200px"></td></tr><tr><th>Ebay Produt Link</th><td><a href="'
+            detailshtml = '<div class = "details-table-container"><table id = "details-table" class = "details-table">'
+            if(d['data']['Item']['PictureURL'] != undefined){
+                detailshtml += '<tr class="details-table"><th class="details-table">Photo</th><td class="details-table"><img src="'
+                detailshtml += d['data']['Item']['PictureURL'][0]
+                detailshtml += '" height="200px" width="200px"></td></tr>'
+            }
+            detailshtml += '<tr class="details-table"><th class="details-table">Ebay Produt Link</th><td class="details-table"><a href="'
             detailshtml += d['data']['Item']['ViewItemURLForNaturalSearch']
-            detailshtml+= '">eBay product Link</a></td></tr><tr><th>Title</th><td>'
+            detailshtml+= '" target="_blank">eBay product Link</a></td></tr><tr class="details-table"><th class="details-table">Title</th><td class="details-table">'
             detailshtml += d['data']['Item']['Title']
-            detailshtml+= '</td></tr><tr><th>Price</th><td>'
-            detailshtml+= d['data']['Item']['CurrentPrice']['Value'] +' '+ d['data']['Item']['CurrentPrice']['CurrencyID']
-            detailshtml+= '</td></tr><tr><th>Location</th><td>'
-            detailshtml += d['data']['Item']['Location'] +' '+ d['data']['Item']['PostalCode']
-            detailshtml+= '</td></tr><tr><th>Seller</th><td>'
-            detailshtml += d['data']['Item']['Seller']['UserID']
-            detailshtml+= '</td></tr><tr><th>Return Policy (US)</th><td>'
-            detailshtml += d['data']['Item']['ReturnPolicy']['ReturnsAccepted'] + 'with in ' + d['data']['Item']['ReturnPolicy']['ReturnsWithin']
+            if(d['data']['Item']['CurrentPrice']['Value'] != undefined){
+                detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">Price</th><td class="details-table">'
+                detailshtml+= d['data']['Item']['CurrentPrice']['Value'] 
+                if(d['data']['Item']['CurrentPrice']['CurrencyID'] != undefined){
+                    detailshtml += ' '+ d['data']['Item']['CurrentPrice']['CurrencyID']
+                }
+            }
+            if(d['data']['Item']['Location'] != undefined){
+                detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">Location</th><td class="details-table">'
+                detailshtml += d['data']['Item']['Location']
+                if(d['data']['Item']['PostalCode'] != undefined){
+                    detailshtml += ' '+ d['data']['Item']['PostalCode']
+                }
+            }
+            if(d['data']['Item']['Seller']['UserID'] != undefined){
+                detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">Seller</th><td class="details-table">'
+                detailshtml += d['data']['Item']['Seller']['UserID']
+            }
+            if(d['data']['Item']['ReturnPolicy']['ReturnsAccepted'] != undefined){
+                detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">Return Policy (US)</th><td class="details-table">'
+                detailshtml += d['data']['Item']['ReturnPolicy']['ReturnsAccepted']
+                if(d['data']['Item']['ReturnPolicy']['ReturnsWithin'] != undefined){
+                    detailshtml += ' with in ' + d['data']['Item']['ReturnPolicy']['ReturnsWithin']
+                }
+            }
             for(var key in d['data']['Item']['ItemSpecifics']['NameValueList']){
-                detailshtml+= '</td></tr><tr><th>'
+                detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">'
                 detailshtml += d['data']['Item']['ItemSpecifics']['NameValueList'][key]['Name']
-                detailshtml+= '</th><td>'
+                detailshtml+= '</th><td class="details-table">'
                 detailshtml += d['data']['Item']['ItemSpecifics']['NameValueList'][key]['Value']
             }
             detailshtml+= '</td></tr></table></div>'
@@ -263,4 +299,17 @@ function backtonormal() {
     document.getElementById("total-results").innerHTML= heading ;
     document.getElementById("items-container").innerHTML= items ;
     document.getElementById("showmorebutton").innerHTML   = extrabutton;
+    // var buttons = document.getElementsByClassName('item');
+    // var idlist = [];
+    // for(var i=0; i<document.getElementsByClassName('item').length; i++){
+    //     idlist.push(document.getElementsByClassName('item')[i]['firstChild']['attributes']['name']['nodeValue']);
+    // }
+    // console.log(idlist);
+    // j = 0;
+    var buttons = document.querySelectorAll(".item");
+    buttons.forEach(function(button) {
+        button.addEventListener("click", function(event){
+            individualitemdetails(this);
+         });
+    });
 }

@@ -174,3 +174,19 @@ label{
   margin-bottom: 20px;
   margin-top: 5px;
 }
+
+.details-table-container{
+  display: inline-block;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.details-table {
+  vertical-align: middle;
+  text-align: left;
+}
+
+#details-table {
+  width: 750px;
+}
