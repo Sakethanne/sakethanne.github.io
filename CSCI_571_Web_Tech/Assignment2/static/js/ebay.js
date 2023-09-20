@@ -198,6 +198,7 @@ function getolddata() {
 
 function individualitemdetails() {
     // storing previous html details
+    detailshtml = ''
     heading = document.getElementById('total-results').innerHTML;
     items = document.getElementById('items-container').innerHTML;
     extrabutton = document.getElementById('showmorebutton').innerHTML;
@@ -212,6 +213,44 @@ function individualitemdetails() {
     new_heading.className = "result";
     new_heading.innerHTML = 'Item Details <br> <input class="backtores" id="backtores" type="button" value="Back to Search Results" onclick="backtonormal()">'
     document.getElementById('total-results').appendChild(new_heading);
+
+    itemid = '125654398756'
+    data = {
+        'itemid' : itemid
+    }
+    fetch('/getindividualdata', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(d => {
+            console.log(d);
+            detailshtml = '<div class = "details-table-container"><table><tr><th>Photo</th><td><img src="'
+            detailshtml += d['data']['Item']['GalleryURL']
+            detailshtml += '" height="200px" width="200px"></td></tr><tr><th>Ebay Produt Link</th><td><a href="'
+            detailshtml += d['data']['Item']['ViewItemURLForNaturalSearch']
+            detailshtml+= '">eBay product Link</a></td></tr><tr><th>Title</th><td>'
+            detailshtml += d['data']['Item']['Title']
+            detailshtml+= '</td></tr><tr><th>Price</th><td>'
+            detailshtml+= d['data']['Item']['CurrentPrice']['Value'] +' '+ d['data']['Item']['CurrentPrice']['CurrencyID']
+            detailshtml+= '</td></tr><tr><th>Location</th><td>'
+            detailshtml += d['data']['Item']['Location'] +' '+ d['data']['Item']['PostalCode']
+            detailshtml+= '</td></tr><tr><th>Seller</th><td>'
+            detailshtml += d['data']['Item']['Seller']['UserID']
+            detailshtml+= '</td></tr><tr><th>Return Policy (US)</th><td>'
+            detailshtml += d['data']['Item']['ReturnPolicy']['ReturnsAccepted'] + 'with in ' + d['data']['Item']['ReturnPolicy']['ReturnsWithin']
+            for(var key in d['data']['Item']['ItemSpecifics']['NameValueList']){
+                detailshtml+= '</td></tr><tr><th>'
+                detailshtml += d['data']['Item']['ItemSpecifics']['NameValueList'][key]['Name']
+                detailshtml+= '</th><td>'
+                detailshtml += d['data']['Item']['ItemSpecifics']['NameValueList'][key]['Value']
+            }
+            detailshtml+= '</td></tr></table></div>'
+            document.getElementById('items-container').innerHTML = detailshtml;
+        })
 }
 
 function backtonormal() {

@@ -162,15 +162,15 @@ label{
 .backtores {
   display: inline-block;
   padding: 8px;
-  font-size: 15px;
+  font-size: 13px;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
   outline: none;
   color: black;
   border: none;
-  border-radius: 3px;
+  border-radius: 4px;
   box-shadow: 0 2px #999;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  margin-top: 5px;
 }
