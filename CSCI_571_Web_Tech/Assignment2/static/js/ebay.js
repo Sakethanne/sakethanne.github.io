@@ -90,6 +90,7 @@ function cleanform(event) {
     return true;
   }
 
+  let skipflag = 0;
   jsonresponse = '';
   itemid = ''
   function sendinputdata(data) {
@@ -123,6 +124,10 @@ function cleanform(event) {
         const itemscontainer = document.getElementById('items-container');
         for (let counter = 0; counter < Number(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
             if(iterator<3){
+                if((data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined)||(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined)||(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined)||(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__'])==undefined){
+                    skipflag = skipflag + 1;
+                    continue;
+                };
             iterator = iterator + 1;
             const item = document.createElement('button');
             item.className = "item";
@@ -130,7 +135,14 @@ function cleanform(event) {
             item.addEventListener("click", function(event){ individualitemdetails(this)});
             htmltext = ""
             htmltext = '<table class="individualitem"'
-            htmltext+= '><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' +data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
+            imgurl = ""
+            if(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined){
+                imgurl = 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg'
+            }
+            else{
+                imgurl = data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
+            };
+            htmltext+= '><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' + imgurl
             htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
             htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : ' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0]
             htmltext += '<a href="' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
@@ -155,7 +167,10 @@ if(Number(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@coun
 function getadditionaldata() {
     counter = 3;
     const itemscontainer = document.getElementById('items-container');
-    for (let counter = 3; counter < Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
+    for (let counter = 3+Number(skipflag); counter < Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
+        if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__'])==undefined){
+            continue;
+        };
         const item = document.createElement('button');
         item.className = "item"; // Add a CSS class
         item.id = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]
@@ -164,8 +179,15 @@ function getadditionaldata() {
         //  });
         item.addEventListener("click", function(event){ individualitemdetails(this)});
         htmltext = ""
+        imgurl = ""
+        if(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined){
+            imgurl = 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg'
+        }
+        else{
+            imgurl = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
+        };
         htmltext = '<table class="individualitem"'
-        htmltext += '><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' +jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
+        htmltext += '><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' + imgurl
         htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
         htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : ' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0]
         htmltext += '<a href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
@@ -191,8 +213,13 @@ function getolddata() {
     const itemscontainer = document.getElementById('items-container');
     itemscontainer.innerHTML = '';
     iterator = 0;
+    skipflag = 0;
     for (let counter = 0; counter < Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
         if(iterator<3){
+            if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__'])==undefined){
+                skipflag = skipflag + 1;
+                continue;
+            };
             iterator = iterator + 1;
         const item = document.createElement('button');
         item.className = "item"; // Add a CSS class
@@ -202,8 +229,15 @@ function getolddata() {
         //  });
         item.addEventListener("click", function(event){ individualitemdetails(this)});
         htmltext = ""
+        imgurl = ""
+        if(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined){
+            imgurl = 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg'
+        }
+        else{
+            imgurl = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
+        };
         htmltext = '<table class="individualitem"'
-        htmltext += '><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' +jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
+        htmltext += '><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' + imgurl
         htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
         htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : ' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0]
         htmltext += '<a href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]

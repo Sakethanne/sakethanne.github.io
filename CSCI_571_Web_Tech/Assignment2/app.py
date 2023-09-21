@@ -22,7 +22,7 @@ def processinputdata():
     condtapi = ''
     try:
         api = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsAdvanced&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=SaiVenka-WebAppli-PRD-672a069ab-61e3ce4f&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='
-        api += data['keyword']
+        api += data['keyword'].replace(' ','%20')
         api += '&paginationInput.entriesPerPage=10&sortOrder='
         api += data['sortby']
 
