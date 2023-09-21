@@ -54,7 +54,7 @@ label{
     box-shadow: 0 2px #999;
   }
   
-.submit:hover{background-color: #37bb3c}
+.submit:hover{background-color: #50b753}
 
 .clear {
     display: inline-block;
@@ -191,4 +191,10 @@ label{
 
 #details-table {
   width: 750px;
+}
+
+.backtores:hover{background-color: #50b753}
+
+#sortby{
+  text-align: center;
 }

@@ -12,6 +12,7 @@ function cleanform(event) {
     document.getElementById('returnaccepted').checked = false;
     document.getElementById('free').checked = false;
     document.getElementById('expedicted').checked = false;
+    document.getElementById('sortby').value = 'BestMatch';
     cleanresults(event);
   }
 
@@ -117,9 +118,12 @@ function cleanform(event) {
             result.innerHTML = data['data']['findItemsAdvancedResponse'][0]['paginationOutput'][0]['totalEntries'] + " Results found for <i>" + keyword + "<\i><hr class = 'line'>";
             results.appendChild(result);
         }
+        iterator = 0;
         counter = 0;
         const itemscontainer = document.getElementById('items-container');
-        for (let counter = 0; counter < 3; counter++) {
+        for (let counter = 0; counter < Number(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
+            if(iterator<3){
+            iterator = iterator + 1;
             const item = document.createElement('button');
             item.className = "item";
             item.id = data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]
@@ -141,14 +145,17 @@ function cleanform(event) {
             // console.log(htmltext)
             itemscontainer.appendChild(item);
     };
+};
+if(Number(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']) > 3){
     document.getElementById('showmorebutton').innerHTML = '<input class="showmore" id="showmoreless" type="button" value="Show More" onclick="getadditionaldata()">';
+}
     })
 }
 
 function getadditionaldata() {
     counter = 3;
     const itemscontainer = document.getElementById('items-container');
-    for (let counter = 3; counter < 10; counter++) {
+    for (let counter = 3; counter < Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
         const item = document.createElement('button');
         item.className = "item"; // Add a CSS class
         item.id = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]
@@ -173,7 +180,9 @@ function getadditionaldata() {
         // console.log(htmltext)
         itemscontainer.appendChild(item);
     };
-    document.getElementById('showmorebutton').innerHTML = '<input class="showmore" id="showmoreless" type="button" value="Show Less" onclick="getolddata()">';
+    if(Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']) > 3){
+        document.getElementById('showmorebutton').innerHTML = '<input class="showmore" id="showmoreless" type="button" value="Show Less" onclick="getolddata()">';
+    };
 }
 
 
@@ -181,7 +190,10 @@ function getolddata() {
     counter = 0;
     const itemscontainer = document.getElementById('items-container');
     itemscontainer.innerHTML = '';
-    for (let counter = 0; counter < 3; counter++) {
+    iterator = 0;
+    for (let counter = 0; counter < Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
+        if(iterator<3){
+            iterator = iterator + 1;
         const item = document.createElement('button');
         item.className = "item"; // Add a CSS class
         item.id = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]
@@ -206,7 +218,10 @@ function getolddata() {
         // console.log(htmltext)
         itemscontainer.appendChild(item);
     };
+};
+if(Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']) > 3){
     document.getElementById('showmorebutton').innerHTML = '<input class="showmore" id="showmoreless" type="button" value="Show More" onclick="getadditionaldata()">';
+};
 }
 
 function individualitemdetails(event) {

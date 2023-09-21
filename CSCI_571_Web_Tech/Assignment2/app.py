@@ -18,20 +18,26 @@ def index():
 @app.route('/sendinputdata', methods=['POST'])
 def processinputdata():
     data = request.json  # Get the JSON data from the request
-    i = 2
+    i = 0
     condtapi = ''
     try:
         api = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsAdvanced&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=SaiVenka-WebAppli-PRD-672a069ab-61e3ce4f&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='
         api += data['keyword']
         api += '&paginationInput.entriesPerPage=10&sortOrder='
         api += data['sortby']
-        api += '&itemFilter(0).name=MinPrice&itemFilter(0).value='
-        api += data['pricefrom']
-        api += '&itemFilter(0).paramName=Currency&itemFilter(0).paramValue=USD'
-        api += '&itemFilter(1).name=MaxPrice&itemFilter(1).value='
-        api += data['priceto']
-        api += '&itemFilter(1).paramName=Currency&itemFilter(1).paramValue=USD'
-        
+
+        if(data['pricefrom'] != ""):
+            api += '&itemFilter('+str(i)+').name=MinPrice&itemFilter('+str(i)+').value='
+            api += data['pricefrom']
+            api += '&itemFilter('+str(i)+').paramName=Currency&itemFilter('+str(i)+').paramValue=USD'
+            i = i + 1
+
+        if(data['priceto'] != ""):
+            api += '&itemFilter('+str(i)+').name=MaxPrice&itemFilter('+str(i)+').value='
+            api += data['priceto']
+            api += '&itemFilter('+str(i)+').paramName=Currency&itemFilter('+str(i)+').paramValue=USD'
+            i = i + 1
+
         if(data['newvalue'] == True):    
             condtapi += '&itemFilter('+str(i)+').name=Condition&itemFilter('+str(i)+').value='
             condtapi += str(1000)
