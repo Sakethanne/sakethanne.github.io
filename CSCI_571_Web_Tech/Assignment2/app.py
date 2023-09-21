@@ -67,7 +67,7 @@ def processinputdata():
             i = i + 1
 
         if(data['expedictedvalue'] == True):    
-            api += '&itemFilter('+str(i)+').name=ExpeditedShippingType&itemFilter('+str(i)+').value='
+            api += '&itemFilter('+str(i)+').name=Expedited_Shipping_Type&itemFilter('+str(i)+').value='
             api += 'Expedited'
             i = i + 1
 
