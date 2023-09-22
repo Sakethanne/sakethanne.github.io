@@ -91,17 +91,23 @@ function cleanform(event) {
   }
 
   let skipflag = 0;
+  let countflag = 0;
   jsonresponse = '';
   itemid = ''
   function sendinputdata(data) {
     keyword = data['keyword'];
-    fetch('/sendinputdata', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
+    var url = '/sendinputdata?'
+    for(var key in data){
+        url += key+ '='+ data[key] + '&'
+    }
+    // fetch('/sendinputdata', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(data),
+    // })
+    fetch(url)
     .then(response => response.json())
     .then(data => {
         console.log(data['data']['findItemsAdvancedResponse']); // Handle the response from Flask
@@ -121,14 +127,16 @@ function cleanform(event) {
         }
         iterator = 0;
         counter = 0;
+        countflag = 0;
         const itemscontainer = document.getElementById('items-container');
         for (let counter = 0; counter < Number(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
-            if(iterator<3){
+            if((iterator<3) && (countflag < 10)){
                 if((data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined)||(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined)||(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined)||(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__'])==undefined){
                     skipflag = skipflag + 1;
                     continue;
                 };
             iterator = iterator + 1;
+            countflag = countflag + 1;
             const item = document.createElement('button');
             item.className = "item";
             item.id = data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]
@@ -146,7 +154,7 @@ function cleanform(event) {
             htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
             htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : ' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0]
             htmltext += '<a href="' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
-            htmltext += `"><img src="/static//images/redirect.png" height="18px" width="18px"></a>`
+            htmltext += `" target="_blank"><img src="/static//images/redirect.png" height="18px" width="18px"></a>`
             htmltext += '</td></tr><tr class="individualitem"><td class="individualitem"> Condition : ' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0]
             if(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['topRatedListing'][0].toString() != "false"){
                 htmltext += `<img src="/static//images/topRatedImage.png" height="25px" width="22px">`
@@ -171,6 +179,8 @@ function getadditionaldata() {
         if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__'])==undefined){
             continue;
         };
+        if(countflag < 10){
+        countflag = countflag + 1;
         const item = document.createElement('button');
         item.className = "item"; // Add a CSS class
         item.id = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]
@@ -191,7 +201,7 @@ function getadditionaldata() {
         htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
         htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : ' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0]
         htmltext += '<a href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
-        htmltext += `"><img src="/static//images/redirect.png" height="18px" width="18px"></a>`
+        htmltext += `" target="_blank"><img src="/static//images/redirect.png" height="18px" width="18px"></a>`
         htmltext += '</td></tr><tr class="individualitem"><td class="individualitem"> Condition : ' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0]
         if(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['topRatedListing'][0].toString() != "false"){
             htmltext += `<img src="/static//images/topRatedImage.png" height="25px" width="22px">`
@@ -202,6 +212,7 @@ function getadditionaldata() {
         // console.log(htmltext)
         itemscontainer.appendChild(item);
     };
+};
     if(Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']) > 3){
         document.getElementById('showmorebutton').innerHTML = '<input class="showmore" id="showmoreless" type="button" value="Show Less" onclick="getolddata()">';
     };
@@ -214,13 +225,15 @@ function getolddata() {
     itemscontainer.innerHTML = '';
     iterator = 0;
     skipflag = 0;
+    countflag = 0;
     for (let counter = 0; counter < Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
-        if(iterator<3){
+        if((iterator<3) && (countflag < 10)){
             if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__'])==undefined){
                 skipflag = skipflag + 1;
                 continue;
             };
             iterator = iterator + 1;
+            countflag = countflag + 1;
         const item = document.createElement('button');
         item.className = "item"; // Add a CSS class
         item.id = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]
@@ -241,7 +254,7 @@ function getolddata() {
         htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
         htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : ' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0]
         htmltext += '<a href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
-        htmltext += `"><img src="/static//images/redirect.png" height="18px" width="18px"></a>`
+        htmltext += `" target="_blank"><img src="/static//images/redirect.png" height="18px" width="18px"></a>`
         htmltext += '</td></tr><tr class="individualitem"><td class="individualitem"> Condition : ' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0]
         if(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['topRatedListing'][0].toString() != "false"){
             htmltext += `<img src="/static//images/topRatedImage.png" height="25px" width="22px">`
@@ -282,13 +295,18 @@ function individualitemdetails(event) {
     data = {
         'itemid' : itemid
     }
-    fetch('/getindividualdata', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-        })
+    var indurl = '/getindividualdata?'
+    for(var key in data){
+        indurl += key+ '='+ data[key] + '&'
+    }
+    // fetch('/getindividualdata', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(data),
+    //     })
+    fetch(indurl)
         .then(response => response.json())
         .then(d => {
             console.log(d);

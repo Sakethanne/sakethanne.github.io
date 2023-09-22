@@ -103,8 +103,8 @@ label{
   border: none;
   border-radius: 3px;
   box-shadow: 0 2px #999;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 #showmorebutton {
@@ -128,7 +128,11 @@ label{
   border: 1.5px solid black;
   border-radius: 3px;
   cursor: pointer;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Add shadow */
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Add shadow */
+}
+
+.item:hover{
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.5); /* Add shadow */
 }
 
 .individualitem{
