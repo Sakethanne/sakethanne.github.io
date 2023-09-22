@@ -159,7 +159,14 @@ function cleanform(event) {
             if(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['topRatedListing'][0].toString() != "false"){
                 htmltext += `<img src="/static//images/topRatedImage.png" height="25px" width="22px">`
             }
-            htmltext += '</td></tr><tr class="individualitem"><th class="individualitem"> Price : $' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']
+            shippingcsot = ''
+            if((data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0].hasOwnProperty('shippingServiceCost')) && (Number(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0]['shippingServiceCost'][0]['__value__']) > 0)){
+                shippingcsot = ' ( + $'+data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0]['shippingServiceCost'][0]['__value__']+' Shipping)'
+                htmltext += '</td></tr><tr class="individualitem"><th class="individualitem"> Price : $' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__'] + shippingcsot
+            }
+            else{
+                htmltext += '</td></tr><tr class="individualitem"><th class="individualitem"> Price : $' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']
+            };
             htmltext += '</th></tr></table>'
             item.innerHTML = htmltext;
             // console.log(htmltext)
@@ -206,7 +213,14 @@ function getadditionaldata() {
         if(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['topRatedListing'][0].toString() != "false"){
             htmltext += `<img src="/static//images/topRatedImage.png" height="25px" width="22px">`
         }
-        htmltext += '</td></tr><tr class="individualitem"><th class="individualitem"> Price : $' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']
+        shippingcsot = ''
+            if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0].hasOwnProperty('shippingServiceCost')) && (Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0]['shippingServiceCost'][0]['__value__']) > 0)){
+                shippingcsot = ' ( + $'+jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0]['shippingServiceCost'][0]['__value__']+' Shipping)'
+                htmltext += '</td></tr><tr class="individualitem"><th class="individualitem"> Price : $' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__'] + shippingcsot
+            }
+            else{
+                htmltext += '</td></tr><tr class="individualitem"><th class="individualitem"> Price : $' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']
+            };
         htmltext += '</th></tr></table>'
         item.innerHTML = htmltext;
         // console.log(htmltext)
@@ -259,7 +273,14 @@ function getolddata() {
         if(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['topRatedListing'][0].toString() != "false"){
             htmltext += `<img src="/static//images/topRatedImage.png" height="25px" width="22px">`
         }
-        htmltext += '</td></tr><tr class="individualitem"><th class="individualitem"> Price : $' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']
+        shippingcsot = ''
+            if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0].hasOwnProperty('shippingServiceCost')) && (Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0]['shippingServiceCost'][0]['__value__']) > 0)){
+                shippingcsot = ' ( + $'+jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0]['shippingServiceCost'][0]['__value__']+' Shipping)'
+                htmltext += '</td></tr><tr class="individualitem"><th class="individualitem"> Price : $' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__'] + shippingcsot
+            }
+            else{
+                htmltext += '</td></tr><tr class="individualitem"><th class="individualitem"> Price : $' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']
+            };
         htmltext += '</th></tr></table>'
         item.innerHTML = htmltext;
         // console.log(htmltext)

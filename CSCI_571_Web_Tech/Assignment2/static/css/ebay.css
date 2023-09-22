@@ -3,7 +3,7 @@ body {
     align-items: center; /* Center vertically */
     height: 100vh; /* Use the full viewport height */
     margin: 0; /* Remove default margin to prevent unwanted spacing */
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    /* font-family: sans-serif; */
   }
   .container {
     display: flex;
@@ -107,6 +107,8 @@ label{
   margin-bottom: 15px;
 }
 
+.showmore:hover{background-color: #50b753}
+
 #showmorebutton {
   text-align: center;
 }
@@ -119,8 +121,8 @@ label{
 
 .item{
   text-align: center;
-  height: 200px;
-  width: 800px;
+  height: 190px;
+  width: 750px;
   padding: 10px;
   background-color: #f4f3f4;
   color: black;
@@ -149,7 +151,7 @@ label{
 .image-container {
   width: 130px; /* Set the initial width of the image container */
   height: 130px; /* Set the initial height of the image container */
-  transition: transform 0.3s ease; /* Add a smooth transition effect */
+  transition: transform 0.7s ease; /* Add a smooth transition effect */
   background-color: grey;
 }
 
@@ -162,13 +164,13 @@ label{
 
 /* Increase the size of the image on hover */
 .image-container:hover {
-  transform: scale(1.5); /* Increase the size by 20% (1.2 times) */
+  transform: scale(1.6); /* Increase the size by 20% (1.2 times) */
   border: 5px grey;
 }
 
 .backtores {
   display: inline-block;
-  padding: 8px;
+  padding: 7px;
   font-size: 13px;
   cursor: pointer;
   text-align: center;
