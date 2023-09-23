@@ -55,7 +55,10 @@ label{
     box-shadow: 0 2px #999;
   }
   
-.submit:hover{background-color: #50b753}
+.submit:hover{
+  background-color: #50b753;
+  color: white;
+}
 
 .clear {
     display: inline-block;
@@ -107,7 +110,10 @@ label{
   margin-bottom: 15px;
 }
 
-.showmore:hover{background-color: #50b753}
+.showmore:hover{
+  background-color: #50b753;
+  color: white;
+}
 
 #showmorebutton {
   text-align: center;
@@ -200,7 +206,10 @@ label{
   width: 750px;
 }
 
-.backtores:hover{background-color: #50b753}
+.backtores:hover{
+  background-color: #50b753;
+  color: white;
+}
 
 #sortby{
   text-align: center;
