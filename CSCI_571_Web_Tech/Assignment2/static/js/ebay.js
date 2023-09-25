@@ -77,7 +77,7 @@ function cleanform(event) {
     const expedictedvalue = document.getElementById('expedicted').checked;
 
     if(priceto < pricefrom){
-        alert("Oops! Lower price limit cannot be greater than the upper price limit!");
+        alert("Oops! Lower price limit cannot be greater than the upper price limit!\n Please try again");
         console.log(pricefrom);
         console.log(priceto);
         return false;
