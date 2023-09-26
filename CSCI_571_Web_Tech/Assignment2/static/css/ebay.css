@@ -1,9 +1,10 @@
-body {
+html, body {
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
     height: 100vh; /* Use the full viewport height */
     margin: 0; /* Remove default margin to prevent unwanted spacing */
     /* font-family: sans-serif; */
+    scroll-behavior: smooth;
   }
   .container {
     display: flex;
@@ -92,6 +93,7 @@ label{
   border: none;
   height: 1px;
   background-color: black;
+  margin-bottom: -10px;
 }
 
 .showmore {
@@ -106,7 +108,7 @@ label{
   border: none;
   border-radius: 3px;
   box-shadow: 0 2px #999;
-  margin-top: 15px;
+  margin-top: 5px;
   margin-bottom: 15px;
 }
 
