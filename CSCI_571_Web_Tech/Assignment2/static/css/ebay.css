@@ -3,7 +3,7 @@ html, body {
     align-items: center; /* Center vertically */
     height: 100vh; /* Use the full viewport height */
     margin: 0; /* Remove default margin to prevent unwanted spacing */
-    /* font-family: sans-serif; */
+    font-family: 'Times New Roman', Times, serif;
     scroll-behavior: smooth;
   }
   .container {
@@ -25,14 +25,25 @@ html, body {
     font-size: 35px;
     font-weight: bold;
 }
-table, td, th{
-    border: 1.5px solid black;
+td, th{
+    border: 1px solid #cccc;
     margin-top: -10px;
     padding: 8px;
     align-self: center;
     border-collapse: collapse;
     text-align: center;
+    max-width: fit-content;
 }
+
+table{
+  border: 1.5px solid black;
+  margin-top: -10px;
+  padding: 8px;
+  align-self: center;
+  border-collapse: collapse;
+  text-align: center;
+}
+
 label{
     font-weight: bold;
 }
@@ -88,7 +99,7 @@ label{
 
 .line{
   align-items: center;
-  width: 700px;
+  width: 750px;
   height: 1px;
   border: none;
   height: 1px;
@@ -108,7 +119,7 @@ label{
   border: none;
   border-radius: 3px;
   box-shadow: 0 2px #999;
-  margin-top: 5px;
+  margin-top: -10px;
   margin-bottom: 15px;
 }
 
@@ -117,6 +128,10 @@ label{
   color: white;
 }
 
+.clear:hover{
+  background-color: #50b753;
+  color: white;
+}
 #showmorebutton {
   text-align: center;
 }
@@ -135,17 +150,38 @@ label{
   background-color: #f4f3f4;
   color: black;
   margin: 2px;
-  border: 1.5px solid black;
+  border: 1px solid grey;
   border-radius: 3px;
   cursor: pointer;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Add shadow */
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 15px;
 }
 
 .item:hover{
-  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.5); /* Add shadow */
+  box-shadow: 2px 2px 3px rgba(109, 101, 101, 0.5),2px 2px 3px rgba(109, 101, 101, 0.5),-2px 2px 3px rgba(109, 101, 101, 0.5);
 }
 
 .individualitem{
+  width: 100%;
+  height: 100%;
+  border: none;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 540px;
+}
+
+.individualitems{
+  width: 100%;
+  height: 100%;
+  border: none;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.individualitem-table{
   width: 100%;
   height: 100%;
   border: none;
@@ -157,28 +193,26 @@ label{
 }
 
 .image-container {
-  width: 130px; /* Set the initial width of the image container */
-  height: 130px; /* Set the initial height of the image container */
-  transition: transform 0.7s ease; /* Add a smooth transition effect */
-  background-color: grey;
+  width: 160px;
+  height: 150px;
+  background-color: #f4f3f4;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 
-/* Style the image */
-.image-container img {
-  width: 100%;
-  height: 100%;
-  transition: transform 0.3s ease; /* Add a smooth transition effect */
+.item-image-class{
+ transition: transform 0.7s ease; 
 }
 
-/* Increase the size of the image on hover */
-.image-container:hover {
-  transform: scale(1.6); /* Increase the size by 20% (1.2 times) */
+.item-image-class:hover{
+  transform: scale(1.6); 
   border: 5px grey;
-}
+ }
 
 .backtores {
   display: inline-block;
-  padding: 7px;
+  padding: 6px;
   font-size: 13px;
   cursor: pointer;
   text-align: center;
@@ -189,7 +223,7 @@ label{
   border-radius: 4px;
   box-shadow: 0 2px #999;
   margin-bottom: 20px;
-  margin-top: 5px;
+  margin-top: -10px;
 }
 
 .details-table-container{
@@ -197,11 +231,24 @@ label{
   font-size: 14px;
   text-align: center;
   text-decoration: none;
+  margin-top: -15px;
 }
 
 .details-table {
   vertical-align: middle;
   text-align: left;
+  border: 1px solid #cccc;
+  height: 10px;
+  margin-top: -15px;
+}
+
+th.details-table {
+  min-width: 140px;
+  width: fit-content;
+}
+
+td.details-table {
+  width: fit-content;
 }
 
 #details-table {
@@ -215,4 +262,52 @@ label{
 
 #sortby{
   text-align: center;
+}
+
+button:active {
+  transform: scale(0.999);
+  /* Scaling button to 0.98 to its original size */
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.24);
+  /* Lowering the shadow */
+}
+
+.clear:active {
+  transform: scale(0.98);
+  /* Scaling button to 0.98 to its original size */
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.24);
+  /* Lowering the shadow */
+}
+
+.backtores:active {
+  transform: scale(0.98);
+  /* Scaling button to 0.98 to its original size */
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.24);
+  /* Lowering the shadow */
+}
+
+.showmore:active {
+  transform: scale(0.98);
+  /* Scaling button to 0.98 to its original size */
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.24);
+  /* Lowering the shadow */
+}
+
+.itemdetailspara{
+  font-size: 35px;
+  margin-top: -10px;
+  margin-bottom: -15px;
+}
+
+.badge{
+  padding-left: 5px;
+  top: 5px;
+}
+
+.badgespan{
+  top: 5px;
+}
+
+.item-image-class{
+  max-width: 130px;
+  max-height: 130px;
 }

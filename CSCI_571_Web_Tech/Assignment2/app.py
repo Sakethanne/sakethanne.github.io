@@ -19,12 +19,13 @@ def index():
 def processinputdata():
     # data = request.json  # Get the JSON data from the request
     data = request.args
+    print(data)
     i = 0
     condtapi = ''
     try:
         api = 'https://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsAdvanced&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=SaiVenka-WebAppli-PRD-672a069ab-61e3ce4f&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords='
         api += data['keyword'].replace(' ','%20')
-        api += '&paginationInput.entriesPerPage=50&sortOrder='
+        api += '&paginationInput.entriesPerPage=100&sortOrder='
         api += data['sortby']
 
         if(data['pricefrom'] != ""):

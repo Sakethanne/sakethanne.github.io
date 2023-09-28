@@ -76,6 +76,11 @@ function cleanform(event) {
     const freevalue = document.getElementById('free').checked;
     const expedictedvalue = document.getElementById('expedicted').checked;
 
+    if((pricefrom < 0) || (priceto < 0)){
+        alert("Price Range values cannot be negative! Please try a value greater than or equal to 0.0");
+        return false
+    }
+    
     if(priceto < pricefrom){
         alert("Oops! Lower price limit cannot be greater than the upper price limit!\n Please try again");
         console.log(pricefrom);
@@ -83,10 +88,6 @@ function cleanform(event) {
         return false;
     }
 
-    if(pricefrom < 0 || priceto < 0){
-        alert("Price Range values cannot be negative! Please try a value greater than or equal to 0.0");
-        return false
-    }
     return true;
   }
 
@@ -102,13 +103,6 @@ function cleanform(event) {
     }
     var newurl = url.slice(0, url.length - 1);
     url = newurl;
-    // fetch('/sendinputdata', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(data),
-    // })
     fetch(url)
     .then(response => response.json())
     .then(data => {
@@ -133,33 +127,38 @@ function cleanform(event) {
         const itemscontainer = document.getElementById('items-container');
         for (let counter = 0; counter < Number(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
             if((iterator<3) && (countflag < 10)){
-                if((data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined)||(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined)||(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined)||(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__'])==undefined){
+                if((('title' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter])&&(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('sellingStatus' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter])&&(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined))){
                     skipflag = skipflag + 1;
                     continue;
                 };
-            iterator = iterator + 1;
-            countflag = countflag + 1;
+            
             const item = document.createElement('button');
             item.className = "item";
             item.id = data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]
             item.addEventListener("click", function(event){ individualitemdetails(this)});
             htmltext = ""
-            htmltext = '<table class="individualitem"'
+            htmltext = '<table class="individualitem-table"'
             imgurl = ""
-            if(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined){
-                imgurl = 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg'
+            if((data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined) || (data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg')){
+                imgurl = '/static//images/ebay_default.jpg'
             }
             else{
                 imgurl = data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
             };
-            htmltext+= '><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' + imgurl
-            htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
-            htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : <i>' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] + '</i>'
-            htmltext += '<a href="' + data['data']['findItemsAdvancedResponse'][0]['itemSearchURL'][0]
-            htmltext += `" target="_blank"><img src="/static//images/redirect.png" height="18px" width="18px"></a>`
-            htmltext += '</td></tr><tr class="individualitem"><td class="individualitem"> Condition : ' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0]
+            htmltext+= '><tr class="individualitem"><td rowspan="4" class="individualitems" id="individualitem"><div class="image-container"><img class="item-image-class" src="' + imgurl
+            htmltext += '" style="border: 3px solid grey;"></div></td><th class="individualitem">' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
+            htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : <i>' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] + '&nbsp;</i>'
+            htmltext += '<a class="hyperlink" href="' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][0]['viewItemURL'][0]
+            htmltext += `" target="_blank"><img src="/static//images/redirect.png" height="15px" width="15px"></a>`
+            htmltext += '</td></tr><tr class="individualitem"><td class="individualitem"> Condition : '
+            if('condition' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]){
+                htmltext += data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0];
+            }
+            else{
+                continue;
+            }
             if(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['topRatedListing'][0].toString() != "false"){
-                htmltext += `<img src="/static//images/topRatedImage.png" height="25px" width="22px">`
+                htmltext += `<span class="badgespan"><img class="badge" src="/static//images/topRatedImage.png" height="24px" width="21px"></span>`
             }
             shippingcsot = ''
             if((data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0].hasOwnProperty('shippingServiceCost')) && (Number(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0]['shippingServiceCost'][0]['__value__']) > 0)){
@@ -171,6 +170,8 @@ function cleanform(event) {
             };
             htmltext += '</th></tr></table>'
             item.innerHTML = htmltext;
+            iterator = iterator + 1;
+            countflag = countflag + 1;
             // console.log(htmltext)
             itemscontainer.appendChild(item);
     };
@@ -178,11 +179,18 @@ function cleanform(event) {
 if(Number(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']) > 3){
     document.getElementById('showmorebutton').innerHTML = '<input class="showmore" id="showmoreless" type="button" value="Show More" onclick="getadditionaldata()">';
 }
+
+var links = document.querySelectorAll(".hyperlink");
+    links.forEach(function(link) {
+        link.addEventListener("click", function(event){
+            event.stopPropagation(this);
+         });
+    });
+
     })
 }
 
 function getadditionaldata() {
-    
     counter = 3;
     const itemscontainer = document.getElementById('items-container');
     for (let counter = 3+Number(skipflag); counter < Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
@@ -190,7 +198,6 @@ function getadditionaldata() {
             continue;
         };
         if(countflag < 10){
-        countflag = countflag + 1;
         const item = document.createElement('button');
         item.className = "item"; // Add a CSS class
         item.id = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]
@@ -200,15 +207,15 @@ function getadditionaldata() {
         item.addEventListener("click", function(event){ individualitemdetails(this)});
         htmltext = ""
         imgurl = ""
-        if(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined){
-            imgurl = 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg'
+        if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined) || (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg')){
+            imgurl = '/static//images/ebay_default.jpg'
         }
         else{
             imgurl = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
         };
-        htmltext = '<table class="individualitem"'
-        htmltext += '><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' + imgurl
-        htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' 
+        htmltext = '<table class="individualitem-table"'
+        htmltext += '><tr class="individualitem"><td rowspan="4" class="individualitems" id="individualitem"><div class="image-container"><img class="item-image-class" src="' + imgurl
+        htmltext += '" style="border: 3px solid grey;"></div></td><th class="individualitem">' 
         htmltext += jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
         htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : <i>' 
         if('categoryName' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]){
@@ -217,8 +224,8 @@ function getadditionaldata() {
         else{
             continue;
         }
-        htmltext += '</i> <a href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['itemSearchURL'][0]
-        htmltext += `" target="_blank"><img src="/static//images/redirect.png" height="18px" width="18px"></a>`
+        htmltext += '&nbsp;</i> <a class="hyperlink" href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][0]['viewItemURL'][0]
+        htmltext += `" target="_blank"><img src="/static//images/redirect.png" height="15px" width="15px"></a>`
         htmltext += '</td></tr><tr class="individualitem"><td class="individualitem"> Condition : ' 
         if('condition' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]){
             htmltext += jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0]
@@ -227,7 +234,7 @@ function getadditionaldata() {
             continue;
         }
         if(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['topRatedListing'][0].toString() != "false"){
-            htmltext += `<img src="/static//images/topRatedImage.png" height="25px" width="22px">`
+            htmltext += `<span class="badgespan"><img class="badge" src="/static//images/topRatedImage.png" height="24px" width="21px"></span>`
         }
         shippingcsot = ''
             if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0].hasOwnProperty('shippingServiceCost')) && (Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0]['shippingServiceCost'][0]['__value__']) > 0)){
@@ -239,13 +246,14 @@ function getadditionaldata() {
             };
         htmltext += '</th></tr></table>'
         item.innerHTML = htmltext;
+        countflag = countflag + 1;
         // console.log(htmltext)
         itemscontainer.appendChild(item);
     };
 };
     if(Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']) > 3){
         document.getElementById('showmorebutton').innerHTML = '<input class="showmore" id="showmoreless" type="button" value="Show Less" onclick="getolddata()">';
-        function scrollToBottom() {
+        function scrollintoview() {
             window.scrollTo({
                 top: document.body.scrollHeight,
                 behavior: 'smooth' // Apply smooth scrolling
@@ -253,8 +261,15 @@ function getadditionaldata() {
         }
 
         // Call the function to scroll to the end after a delay (e.g., 1000 milliseconds)
-        setTimeout(scrollToBottom, 500);
+        setTimeout(scrollintoview, 250);
     };
+
+    var links = document.querySelectorAll(".hyperlink");
+    links.forEach(function(link) {
+        link.addEventListener("click", function(event){
+            event.stopPropagation(this);
+         });
+    });
 }
 
 
@@ -267,12 +282,11 @@ function getolddata() {
     countflag = 0;
     for (let counter = 0; counter < Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
         if((iterator<3) && (countflag < 10)){
-            if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined)||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__'])==undefined){
+            if((('title' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('currentPrice' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined))){
                 skipflag = skipflag + 1;
                 continue;
             };
-            iterator = iterator + 1;
-            countflag = countflag + 1;
+            
         const item = document.createElement('button');
         item.className = "item"; // Add a CSS class
         item.id = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['itemId'][0]
@@ -282,15 +296,15 @@ function getolddata() {
         item.addEventListener("click", function(event){ individualitemdetails(this)});
         htmltext = ""
         imgurl = ""
-        if(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined){
-            imgurl = 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg'
+        if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined) || (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg')){
+            imgurl = '/static//images/ebay_default.jpg'
         }
         else{
             imgurl = jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0]
         };
-        htmltext = '<table class="individualitem"'
-        htmltext += '><tr class="individualitem"><td rowspan="4" class="individualitem" id="individualitem"><div class="image-container"><img src="' + imgurl
-        htmltext += '" height="130px" width="130px" style="border: 3px solid grey;"></div></td><th class="individualitem">' 
+        htmltext = '<table class="individualitem-table"'
+        htmltext += '><tr class="individualitem"><td rowspan="4" class="individualitems" id="individualitem"><div class="image-container"><img class="item-image-class" src="' + imgurl
+        htmltext += '" style="border: 3px solid grey;"></div></td><th class="individualitem">' 
         htmltext += jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
         htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : <i>' 
         if('categoryName' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]){
@@ -299,8 +313,8 @@ function getolddata() {
         else{
             continue;
         }
-        htmltext += '</i><a href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['itemSearchURL'][0]
-        htmltext += `" target="_blank"><img src="/static//images/redirect.png" height="18px" width="18px"></a>`
+        htmltext += '&nbsp;</i><a class="hyperlink" href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][0]['viewItemURL'][0]
+        htmltext += `" target="_blank"><img src="/static//images/redirect.png" height="15px" width="15px"></a>`
         htmltext += '</td></tr><tr class="individualitem"><td class="individualitem"> Condition : ' 
         if('condition' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]){
             htmltext += jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0]
@@ -309,7 +323,7 @@ function getolddata() {
             continue;
         }
         if(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['topRatedListing'][0].toString() != "false"){
-            htmltext += `<img src="/static//images/topRatedImage.png" height="25px" width="22px">`
+            htmltext += `<span class="badgespan"><img class="badge" src="/static//images/topRatedImage.png" height="24px" width="21px"></span>`
         }
         shippingcsot = ''
             if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0].hasOwnProperty('shippingServiceCost')) && (Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['shippingInfo'][0]['shippingServiceCost'][0]['__value__']) > 0)){
@@ -321,13 +335,32 @@ function getolddata() {
             };
         htmltext += '</th></tr></table>'
         item.innerHTML = htmltext;
+        countflag = countflag + 1;
+        iterator = iterator + 1;
         // console.log(htmltext)
         itemscontainer.appendChild(item);
     };
 };
 if(Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']) > 3){
     document.getElementById('showmorebutton').innerHTML = '<input class="showmore" id="showmoreless" type="button" value="Show More" onclick="getadditionaldata()">';
+    function scrollintoview() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Apply smooth scrolling
+        });
+    }
+
+    // Call the function to scroll to the end after a delay (e.g., 1000 milliseconds)
+    setTimeout(scrollintoview, 10);
 };
+
+var links = document.querySelectorAll(".hyperlink");
+    links.forEach(function(link) {
+        link.addEventListener("click", function(event){
+            event.stopPropagation(this);
+         });
+    });
+
 }
 
 function individualitemdetails(event) {
@@ -346,7 +379,7 @@ function individualitemdetails(event) {
     // setting the new html content
     const new_heading = document.createElement('div')
     new_heading.className = "result";
-    new_heading.innerHTML = 'Item Details <br> <input class="backtores" id="backtores" type="button" value="Back to Search Results" onclick="backtonormal()">'
+    new_heading.innerHTML = '<p class = "itemdetailspara"> Item Details </p> <br> <input class="backtores" id="backtores" type="button" value="Back to Search Results" onclick="backtonormal()">'
     document.getElementById('total-results').appendChild(new_heading);
 
     // itemid = '125654398756'
@@ -358,13 +391,6 @@ function individualitemdetails(event) {
     for(var key in data){
         indurl += key+ '='+ data[key] + '&'
     }
-    // fetch('/getindividualdata', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(data),
-    //     })
     fetch(indurl)
         .then(response => response.json())
         .then(d => {
@@ -375,9 +401,9 @@ function individualitemdetails(event) {
                 detailshtml += d['data']['Item']['PictureURL'][0]
                 detailshtml += '" height="200px" width="200px"></td></tr>'
             }
-            detailshtml += '<tr class="details-table"><th class="details-table">Ebay Produt Link</th><td class="details-table"><a href="'
+            detailshtml += '<tr class="details-table"><th class="details-table">ebay Link</th><td class="details-table"><a href="'
             detailshtml += d['data']['Item']['ViewItemURLForNaturalSearch']
-            detailshtml+= '" target="_blank">eBay product Link</a></td></tr><tr class="details-table"><th class="details-table">Title</th><td class="details-table">'
+            detailshtml+= '" target="_blank">eBay Product Link</a></td></tr><tr class="details-table"><th class="details-table">Title</th><td class="details-table">'
             detailshtml += d['data']['Item']['Title']
             if(d['data']['Item']['CurrentPrice']['Value'] != undefined){
                 detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">Price</th><td class="details-table">'
@@ -416,7 +442,6 @@ function individualitemdetails(event) {
 }
 
 function backtonormal() {
-    //event.preventDefault(); // Prevent the default form submission behavior
     // clearing the curent details
     document.getElementById('total-results').innerHTML = '';
     document.getElementById('items-container').innerHTML = '';
@@ -425,17 +450,18 @@ function backtonormal() {
     document.getElementById("total-results").innerHTML= heading ;
     document.getElementById("items-container").innerHTML= items ;
     document.getElementById("showmorebutton").innerHTML   = extrabutton;
-    // var buttons = document.getElementsByClassName('item');
-    // var idlist = [];
-    // for(var i=0; i<document.getElementsByClassName('item').length; i++){
-    //     idlist.push(document.getElementsByClassName('item')[i]['firstChild']['attributes']['name']['nodeValue']);
-    // }
-    // console.log(idlist);
-    // j = 0;
+    //adding event listeners for buttons and links
     var buttons = document.querySelectorAll(".item");
     buttons.forEach(function(button) {
         button.addEventListener("click", function(event){
             individualitemdetails(this);
+         });
+    });
+
+    var links = document.querySelectorAll(".hyperlink");
+    links.forEach(function(link) {
+        link.addEventListener("click", function(event){
+            event.stopPropagation(this);
          });
     });
 }
