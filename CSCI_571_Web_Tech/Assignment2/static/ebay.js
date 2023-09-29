@@ -65,8 +65,8 @@ function cleanform(event) {
   function validatedata(event) {
     event.preventDefault(); // Prevent the default form submission behavior
     const keywords = document.getElementById('keywords').value;
-    let pricefrom = Number(document.getElementById('pricefrom').value);
-    let priceto = Number(document.getElementById('priceto').value);
+    let pricefrom = document.getElementById('pricefrom').value;
+    let priceto = document.getElementById('priceto').value;
     const newvalue = document.getElementById('new').checked;
     const usedvalue = document.getElementById('used').checked;
     const vergoodvalue = document.getElementById('verygood').checked;
@@ -76,18 +76,17 @@ function cleanform(event) {
     const freevalue = document.getElementById('free').checked;
     const expedictedvalue = document.getElementById('expedicted').checked;
 
-    if((pricefrom < 0) || (priceto < 0)){
+    if((Number(pricefrom) < 0) || (Number(priceto) < 0)){
         alert("Price Range values cannot be negative! Please try a value greater than or equal to 0.0");
         return false
     }
     
-    if(priceto < pricefrom){
+    if(((Number(pricefrom) > 0) && (Number(priceto) > 0)) && (Number(priceto) < Number(pricefrom))){
         alert("Oops! Lower price limit cannot be greater than the upper price limit!\n Please try again");
         console.log(pricefrom);
         console.log(priceto);
         return false;
     }
-
     return true;
   }
 
@@ -127,7 +126,7 @@ function cleanform(event) {
         const itemscontainer = document.getElementById('items-container');
         for (let counter = 0; counter < Number(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
             if((iterator<3) && (countflag < 10)){
-                if((('title' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter])&&(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('sellingStatus' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter])&&(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined))){
+                if((('title' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter])&&(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('sellingStatus' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter])&&(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined))||(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == "")){
                     skipflag = skipflag + 1;
                     continue;
                 };
@@ -139,7 +138,7 @@ function cleanform(event) {
             htmltext = ""
             htmltext = '<table class="individualitem-table"'
             imgurl = ""
-            if((data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined) || (data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg')){
+            if((data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined) ||(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == '')|| (data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg')){
                 imgurl = '/static//images/ebay_default.jpg'
             }
             else{
@@ -195,7 +194,7 @@ function getadditionaldata() {
     counter = 3;
     const itemscontainer = document.getElementById('items-container');
     for (let counter = 3+Number(skipflag); counter < Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
-        if((('title' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('currentPrice' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined))){
+        if((('title' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('currentPrice' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined)) || (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == "")){
             continue;
         };
         if(countflag < 10){
@@ -208,7 +207,7 @@ function getadditionaldata() {
         item.addEventListener("click", function(event){ individualitemdetails(this)});
         htmltext = ""
         imgurl = ""
-        if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined) || (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg')){
+        if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined) ||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == '')|| (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg')){
             imgurl = '/static//images/ebay_default.jpg'
         }
         else{
@@ -283,7 +282,7 @@ function getolddata() {
     countflag = 0;
     for (let counter = 0; counter < Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
         if((iterator<3) && (countflag < 10)){
-            if((('title' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('currentPrice' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined))){
+            if((('title' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('currentPrice' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined))||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == "")){
                 skipflag = skipflag + 1;
                 continue;
             };
@@ -297,7 +296,7 @@ function getolddata() {
         item.addEventListener("click", function(event){ individualitemdetails(this)});
         htmltext = ""
         imgurl = ""
-        if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined) || (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg')){
+        if((jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == undefined) ||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == '')|| (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg')){
             imgurl = '/static//images/ebay_default.jpg'
         }
         else{
@@ -402,6 +401,11 @@ function individualitemdetails(event) {
             if(d['data']['Item']['PictureURL'] != undefined){
                 detailshtml += '<tr class="details-table"><th class="details-table">Photo</th><td class="details-table"><img src="'
                 detailshtml += d['data']['Item']['PictureURL'][0]
+                detailshtml += '" height="200px" width="200px"></td></tr>'
+            }
+            else if((d['data']['Item']['PictureURL'] == '') || (d['data']['Item']['PictureURL'] == 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg')){
+                detailshtml += '<tr class="details-table"><th class="details-table">Photo</th><td class="details-table"><img src="'
+                detailshtml += '/static//images/ebay_default.jpg'
                 detailshtml += '" height="200px" width="200px"></td></tr>'
             }
             detailshtml += '<tr class="details-table"><th class="details-table">ebay Link</th><td class="details-table"><a href="'
