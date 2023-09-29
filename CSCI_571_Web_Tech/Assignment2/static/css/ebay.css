@@ -27,7 +27,7 @@ html, body {
 }
 td, th{
     border: 1px solid #cccc;
-    margin-top: -10px;
+    /* margin-top: -10px; */
     padding: 8px;
     align-self: center;
     border-collapse: collapse;
@@ -178,7 +178,7 @@ label{
   height: 100%;
   border: none;
   text-align: center;
-  vertical-align: middle;
+  margin-top: 10px;
 }
 
 .individualitem-table{
@@ -194,7 +194,7 @@ label{
 
 .image-container {
   width: 160px;
-  height: 150px;
+  height: 160px;
   background-color: #f4f3f4;
   align-items: center;
   display: flex;
@@ -202,7 +202,8 @@ label{
 }
 
 .item-image-class{
- transition: transform 0.7s ease; 
+  margin-top: 5px;
+ transition: transform 0.6s ease; 
 }
 
 .item-image-class:hover{

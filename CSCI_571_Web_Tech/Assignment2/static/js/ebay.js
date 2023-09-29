@@ -148,13 +148,14 @@ function cleanform(event) {
             htmltext+= '><tr class="individualitem"><td rowspan="4" class="individualitems" id="individualitem"><div class="image-container"><img class="item-image-class" src="' + imgurl
             htmltext += '" style="border: 3px solid grey;"></div></td><th class="individualitem">' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0]
             htmltext += '</th></tr><tr class="individualitem"><td class="individualitem"> Category : <i>' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] + '&nbsp;</i>'
-            htmltext += '<a class="hyperlink" href="' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][0]['viewItemURL'][0]
+            htmltext += '<a class="hyperlink" href="' + data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
             htmltext += `" target="_blank"><img src="/static//images/redirect.png" height="15px" width="15px"></a>`
             htmltext += '</td></tr><tr class="individualitem"><td class="individualitem"> Condition : '
             if('condition' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]){
                 htmltext += data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0];
             }
             else{
+                skipflag = skipflag + 1;
                 continue;
             }
             if(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['topRatedListing'][0].toString() != "false"){
@@ -224,7 +225,7 @@ function getadditionaldata() {
         else{
             continue;
         }
-        htmltext += '&nbsp;</i> <a class="hyperlink" href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][0]['viewItemURL'][0]
+        htmltext += '&nbsp;</i> <a class="hyperlink" href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
         htmltext += `" target="_blank"><img src="/static//images/redirect.png" height="15px" width="15px"></a>`
         htmltext += '</td></tr><tr class="individualitem"><td class="individualitem"> Condition : ' 
         if('condition' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]){
@@ -311,15 +312,17 @@ function getolddata() {
             htmltext += jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0]
         }
         else{
+            skipflag = skipflag + 1;
             continue;
         }
-        htmltext += '&nbsp;</i><a class="hyperlink" href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][0]['viewItemURL'][0]
+        htmltext += '&nbsp;</i><a class="hyperlink" href="' + jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['viewItemURL'][0]
         htmltext += `" target="_blank"><img src="/static//images/redirect.png" height="15px" width="15px"></a>`
         htmltext += '</td></tr><tr class="individualitem"><td class="individualitem"> Condition : ' 
         if('condition' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]){
             htmltext += jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0]
         }
         else{
+            skipflag = skipflag + 1;
             continue;
         }
         if(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['topRatedListing'][0].toString() != "false"){
