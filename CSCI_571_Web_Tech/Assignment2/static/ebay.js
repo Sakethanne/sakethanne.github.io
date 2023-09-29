@@ -81,7 +81,7 @@ function cleanform(event) {
         return false
     }
     
-    if(((Number(pricefrom) > 0) && (Number(priceto) > 0)) && (Number(priceto) < Number(pricefrom))){
+    if(((Number(pricefrom) != 0) && (Number(priceto) != 0)) && (Number(priceto) < Number(pricefrom))){
         alert("Oops! Lower price limit cannot be greater than the upper price limit!\n Please try again");
         console.log(pricefrom);
         console.log(priceto);
