@@ -80,12 +80,12 @@ def processinputdata():
         api += condtapi
 
         if(data['returnacceptedvalue'] == 'true'):
-            api += '&itemFilter('+str(i)+').name=ReturnsAcceptedOnly&itemFilter('+str(i)+').value='
+            api += '&itemFilter('+str(i)+').name=Returns_Accepted_Only&itemFilter('+str(i)+').value='
             api += str(data['returnacceptedvalue']).lower()
             i = i + 1
 
         if(data['freevalue'] == 'true'):
-            api += '&itemFilter('+str(i)+').name=FreeShippingOnly&itemFilter('+str(i)+').value='
+            api += '&itemFilter('+str(i)+').name=Free_Shipping_Only&itemFilter('+str(i)+').value='
             api += str(data['freevalue']).lower()
             i = i + 1
 
