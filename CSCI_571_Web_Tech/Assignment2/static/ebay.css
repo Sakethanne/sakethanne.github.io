@@ -253,7 +253,7 @@ td.details-table {
 }
 
 #details-table {
-  width: 750px;
+  width: fit-content;
 }
 
 .backtores:hover{

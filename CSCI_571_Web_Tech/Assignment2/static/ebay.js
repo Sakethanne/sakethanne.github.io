@@ -65,8 +65,8 @@ function cleanform(event) {
   function validatedata(event) {
     event.preventDefault(); // Prevent the default form submission behavior
     const keywords = document.getElementById('keywords').value;
-    let pricefrom = document.getElementById('pricefrom').value;
-    let priceto = document.getElementById('priceto').value;
+    var pricefrom = document.getElementById('pricefrom').value;
+    var priceto = document.getElementById('priceto').value;
     const newvalue = document.getElementById('new').checked;
     const usedvalue = document.getElementById('used').checked;
     const vergoodvalue = document.getElementById('verygood').checked;
@@ -79,6 +79,10 @@ function cleanform(event) {
     if((Number(pricefrom) < 0) || (Number(priceto) < 0)){
         alert("Price Range values cannot be negative! Please try a value greater than or equal to 0.0");
         return false
+    }
+
+    if(priceto == ""){
+        priceto = 9999999999;
     }
     //((Number(pricefrom) != 0) && (Number(priceto) != 0)) && (
     if(Number(priceto) < Number(pricefrom)){
@@ -407,7 +411,7 @@ function individualitemdetails(event) {
                 // console.log(d['data']['Item']['PictureURL'][0])
                 detailshtml += d['data']['Item']['PictureURL'][0]
                 
-                detailshtml += '" height="200px" width="200px"></td></tr>'
+                detailshtml += '" height="200px"></td></tr>'
             }
             else if((d['data']['Item']['PictureURL'].length == 0) || (d['data']['Item']['PictureURL'][0] == 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg') || ((d['data']['Item']['PictureURL'][0] == ""))){
                 detailshtml += '<tr class="details-table"><th class="details-table">Photo</th><td class="details-table"><img src="'
