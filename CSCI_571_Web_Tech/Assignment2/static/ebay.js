@@ -80,13 +80,14 @@ function cleanform(event) {
         alert("Price Range values cannot be negative! Please try a value greater than or equal to 0.0");
         return false
     }
-    
-    if(((Number(pricefrom) != 0) && (Number(priceto) != 0)) && (Number(priceto) < Number(pricefrom))){
+    //((Number(pricefrom) != 0) && (Number(priceto) != 0)) && (
+    if(Number(priceto) < Number(pricefrom)){
         alert("Oops! Lower price limit cannot be greater than the upper price limit!\n Please try again");
         console.log(pricefrom);
         console.log(priceto);
         return false;
     }
+
     return true;
   }
 
