@@ -127,7 +127,8 @@ function cleanform(event) {
         const itemscontainer = document.getElementById('items-container');
         for (let counter = 0; counter < Number(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
             if((iterator<3) && (countflag < 10)){
-                if((('title' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter])&&(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('sellingStatus' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter])&&(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined))||(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == "")){
+                //||(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == "")
+                if((('title' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter])&&(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('sellingStatus' in data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter])&&(data['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined))){
                     skipflag = skipflag + 1;
                     continue;
                 };
@@ -195,7 +196,8 @@ function getadditionaldata() {
     counter = 3;
     const itemscontainer = document.getElementById('items-container');
     for (let counter = 3+Number(skipflag); counter < Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
-        if((('title' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('currentPrice' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined)) || (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == "")){
+        if((('title' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('currentPrice' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined))){
+            // || (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == "")
             continue;
         };
         if(countflag < 10){
@@ -283,7 +285,8 @@ function getolddata() {
     countflag = 0;
     for (let counter = 0; counter < Number(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['@count']); counter++) {
         if((iterator<3) && (countflag < 10)){
-            if((('title' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('currentPrice' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined))||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == "")){
+            if((('title' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['title'][0] == undefined))||(('primaryCategory' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['primaryCategory'][0]['categoryName'][0] == undefined))||(('condition' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['condition'][0]['conditionDisplayName'][0] == undefined))||(('currentPrice' in jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]) && (jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['sellingStatus'][0]['currentPrice'][0]['__value__']==undefined))){
+                //||(jsonresponse['data']['findItemsAdvancedResponse'][0]['searchResult'][0]['item'][counter]['galleryURL'][0] == "")
                 skipflag = skipflag + 1;
                 continue;
             };
@@ -399,14 +402,17 @@ function individualitemdetails(event) {
         .then(d => {
             console.log(d);
             detailshtml = '<div class = "details-table-container"><table id = "details-table" class = "details-table">'
-            if(d['data']['Item']['PictureURL'] != undefined){
+            if(d['data']['Item']['PictureURL'][0] != undefined){
                 detailshtml += '<tr class="details-table"><th class="details-table">Photo</th><td class="details-table"><img src="'
+                // console.log(d['data']['Item']['PictureURL'][0])
                 detailshtml += d['data']['Item']['PictureURL'][0]
+                
                 detailshtml += '" height="200px" width="200px"></td></tr>'
             }
-            else if((d['data']['Item']['PictureURL'] == '') || (d['data']['Item']['PictureURL'] == 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg')){
+            else if((d['data']['Item']['PictureURL'].length == 0) || (d['data']['Item']['PictureURL'][0] == 'https://thumbs1.ebaystatic.com/%20pict/04040_0.jpg') || ((d['data']['Item']['PictureURL'][0] == ""))){
                 detailshtml += '<tr class="details-table"><th class="details-table">Photo</th><td class="details-table"><img src="'
                 detailshtml += '/static//images/ebay_default.jpg'
+                // console.log(d['data']['Item']['PictureURL'][0])
                 detailshtml += '" height="200px" width="200px"></td></tr>'
             }
             detailshtml += '<tr class="details-table"><th class="details-table">ebay Link</th><td class="details-table"><a href="'
@@ -431,18 +437,18 @@ function individualitemdetails(event) {
                 detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">Seller</th><td class="details-table">'
                 detailshtml += d['data']['Item']['Seller']['UserID']
             }
+            detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">Return Policy (US)</th><td class="details-table">'
             if(d['data']['Item']['ReturnPolicy']['ReturnsAccepted'] != undefined){
-                detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">Return Policy (US)</th><td class="details-table">'
                 detailshtml += d['data']['Item']['ReturnPolicy']['ReturnsAccepted']
-                if(d['data']['Item']['ReturnPolicy']['ReturnsWithin'] != undefined){
-                    detailshtml += ' with in ' + d['data']['Item']['ReturnPolicy']['ReturnsWithin']
-                }
+            }
+            if(d['data']['Item']['ReturnPolicy']['ReturnsWithin'] != undefined){
+                detailshtml += ' with in ' + d['data']['Item']['ReturnPolicy']['ReturnsWithin']
             }
             for(var key in d['data']['Item']['ItemSpecifics']['NameValueList']){
                 detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">'
                 detailshtml += d['data']['Item']['ItemSpecifics']['NameValueList'][key]['Name']
                 detailshtml+= '</th><td class="details-table">'
-                detailshtml += d['data']['Item']['ItemSpecifics']['NameValueList'][key]['Value']
+                detailshtml += d['data']['Item']['ItemSpecifics']['NameValueList'][key]['Value'][0]
             }
             detailshtml+= '</td></tr></table></div>'
             document.getElementById('items-container').innerHTML = detailshtml;
