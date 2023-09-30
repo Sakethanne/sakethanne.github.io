@@ -423,6 +423,10 @@ function individualitemdetails(event) {
             detailshtml += d['data']['Item']['ViewItemURLForNaturalSearch']
             detailshtml+= '" target="_blank">eBay Product Link</a></td></tr><tr class="details-table"><th class="details-table">Title</th><td class="details-table">'
             detailshtml += d['data']['Item']['Title']
+            if('Subtitle' in d['data']['Item']){
+                detailshtml += '</td></tr><tr class="details-table"><th class="details-table">Subtitle</th><td class="details-table">'
+                detailshtml += d['data']['Item']['Subtitle']
+            }
             if(d['data']['Item']['CurrentPrice']['Value'] != undefined){
                 detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">Price</th><td class="details-table">'
                 detailshtml+= d['data']['Item']['CurrentPrice']['Value'] 
