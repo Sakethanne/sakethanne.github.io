@@ -140,16 +140,21 @@ label{
   text-align: center;
   margin-bottom: 15px;
   padding-bottom: 15px;
+  justify-content: center;
+}
+
+.items-container{
+  text-align: center;
 }
 
 .item{
-  text-align: center;
+  display: block;
   height: 190px;
   width: 750px;
   padding: 10px;
   background-color: #f4f3f4;
   color: black;
-  margin: 2px;
+  margin: auto;
   border: 1px solid grey;
   border-radius: 3px;
   cursor: pointer;
