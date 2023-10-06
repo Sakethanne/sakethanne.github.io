@@ -46,6 +46,8 @@ def processinputdata():
             api += '&itemFilter('+str(i)+').paramName=Currency&itemFilter('+str(i)+').paramValue=USD'
             i = i + 1
 
+        # i = i + 1
+
         if((data['newvalue'] == 'true') or (data['usedvalue'] == 'true') or (data['vergoodvalue'] == 'true') or (data['goodvalue'] == 'true') or (data['acceptablevalue'] == 'true')):
             condtapi = ''
             condtapi += '&itemFilter('+str(i)+').name=Condition'
