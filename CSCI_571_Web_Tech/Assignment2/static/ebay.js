@@ -472,16 +472,20 @@ function individualitemdetails(event) {
                 detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">Seller</th><td class="details-table">'
                 detailshtml += d['data']['Item']['Seller']['UserID']
             }
-            detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">Return Policy (US)</th><td class="details-table">'
-            if(d['data']['Item']['ReturnPolicy']['ReturnsAccepted'] != undefined){
-                detailshtml += d['data']['Item']['ReturnPolicy']['ReturnsAccepted']
-            }
-            if(d['data']['Item']['ReturnPolicy']['ReturnsWithin'] != undefined){
-                detailshtml += ' with in ' + d['data']['Item']['ReturnPolicy']['ReturnsWithin']
+            detailshtml+= '</td></tr>'
+            if('ReturnPolicy' in d['data']['Item']){
+                detailshtml += '<tr class="details-table"><th class="details-table">Return Policy (US)</th><td class="details-table">'
+                if(d['data']['Item']['ReturnPolicy']['ReturnsAccepted'] != undefined){
+                    detailshtml += d['data']['Item']['ReturnPolicy']['ReturnsAccepted']
+                }
+                if(d['data']['Item']['ReturnPolicy']['ReturnsWithin'] != undefined){
+                    detailshtml += ' with in ' + d['data']['Item']['ReturnPolicy']['ReturnsWithin']
+                }
+                detailshtml += '</td></tr>'
             }
             if('ItemSpecifics' in d['data']['Item']){
             for(var key in d['data']['Item']['ItemSpecifics']['NameValueList']){
-                detailshtml+= '</td></tr><tr class="details-table"><th class="details-table">'
+                detailshtml+= '<tr class="details-table"><th class="details-table">'
                 detailshtml += d['data']['Item']['ItemSpecifics']['NameValueList'][key]['Name']
                 detailshtml+= '</th><td class="details-table">'
                 detailshtml += d['data']['Item']['ItemSpecifics']['NameValueList'][key]['Value'][0]
