@@ -24,7 +24,6 @@ class ProductSearchForm extends Component {
   };
 
   handleSelectChange = (event) => {
-    console.log(event);
     this.setState({ category: event.target.value });
   };
 
@@ -41,20 +40,20 @@ class ProductSearchForm extends Component {
 
   render() {
     return (
-      <div style={{backgroundColor: 'rgba(33,36,41,255)', borderRadius:'8px'}} className="container col-lg-9 mt-4">
+      <div style={{backgroundColor: 'rgba(33,36,41,255)', borderRadius:'8px'}} className="container col-lg-9 mt-4 align-items-center">
         <div className="row justify-content-center">
-          <div className="col-lg-10"> {/* Background 10 columns wide on larger screens */}
+          <div className="text-left col-lg-5"> {/* Background 10 columns wide on larger screens */}
             <form style={{ paddingBottom:'15px', alignContent:'center'}} className='small' onSubmit={this.handleSubmit}>
               <h3 className="text-white text-left pt-4">Product Search</h3>
               <div className="form-group row pb-4 pt-4"> {/* Use row class for label + input layout */}
-                <label htmlFor="keyword" className="text-white col-lg-2">Keyword<span className="text-danger">*</span></label>
-                <div className="col-lg-4">
+                <label htmlFor="keyword" className="text-white col-lg-3">Keyword<span className="text-danger">*</span></label>
+                <div className="col-lg-9">
                   <input type="text" className="form-control" id="keyword" required placeholder='Enter Product Name (eg. iPhone 8)' onChange={this.handleInputChange}/>
                 </div>
               </div>
               <div className="form-group row pb-4">
-                <label htmlFor="category" className="text-white col-lg-2">Category</label>
-                <div className="col-lg-2">
+                <label htmlFor="category" className="text-white col-lg-3">Category</label>
+                <div className="col-lg-4">
                   <select className="form-select" id="category" onChange={this.handleSelectChange} value={this.state.category}>
                     <option>All Categories</option>
                     <option>Art</option>
@@ -69,44 +68,44 @@ class ProductSearchForm extends Component {
                 </div>
               </div>
               <div className="form-group row pb-4">
-                <label className="text-white col-lg-2">Condition</label>
-                <div className="col-lg-4">
+                <label className="text-white col-lg-3">Condition</label>
+                <div className="col-lg-9">
                   <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="checkbox" id="conditionnew" value="new" onChange={this.handleInputChange}/>
+                    <input className="form-check-input" type="checkbox" id="conditionnew" onChange={this.handleInputChange}/>
                     <label className="text-white form-check-label" htmlFor="conditionnew">New</label>
                   </div>
                   <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="checkbox" id="conditionused" value="used" onChange={this.handleInputChange}/>
+                    <input className="form-check-input" type="checkbox" id="conditionused" onChange={this.handleInputChange}/>
                     <label className="text-white form-check-label" htmlFor="conditionused">Used</label>
                   </div>
                   <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="checkbox" id="conditionunspecified" value="unspecified" onChange={this.handleInputChange}/>
+                    <input className="form-check-input" type="checkbox" id="conditionunspecified" onChange={this.handleInputChange}/>
                     <label className="text-white form-check-label" htmlFor="conditionunspecified">Unspecified</label>
                   </div>
                 </div>
               </div>
               <div className="form-group row pb-4">
-                <label className="text-white col-lg-2">Shipping Options</label>
-                <div className="col-lg-4">
+                <label className="text-white col-lg-3">Shipping Options</label>
+                <div className="col-lg-9">
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="checkbox" id="localpickup" value="localpickup" onChange={this.handleInputChange}/>
+                    <input className="form-check-input" type="checkbox" id="localpickup" onChange={this.handleInputChange}/>
                     <label className="text-white form-check-label" htmlFor="localpickup">Local Pickup</label>
                   </div>
                   <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="checkbox" id="freeshipping" value="freeshipping" onChange={this.handleInputChange}/>
+                    <input className="form-check-input" type="checkbox" id="freeshipping" onChange={this.handleInputChange}/>
                     <label className="text-white form-check-label" htmlFor="freeshipping">Free Shipping</label>
                   </div>
                 </div>
               </div>
               <div className="form-group row pb-4">
-                <label htmlFor="distance" className="text-white col-lg-2">Distance (Miles)</label>
-                <div className="col-lg-2">
+                <label htmlFor="distance" className="text-white col-lg-3">Distance (Miles)</label>
+                <div className="col-lg-4">
                   <input type="number" className="form-control" id="distance" value={this.state.distance} placeholder='10' onChange={this.handleInputChange}/>
                 </div>
               </div>
               <div className="form-group row pb-4">
-                <label className="text-white col-lg-2">From<span className="text-danger">*</span></label>
-                <div className="col-lg-4">
+                <label className="text-white col-lg-3">From<span className="text-danger">*</span></label>
+                <div className="col-lg-9">
                   <div className="form-check pb-1">
                     <input
                       type="radio"
