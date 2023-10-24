@@ -16,7 +16,9 @@ class ProductSearchForm extends Component {
       distance: '10',
       from: '',
       listofzips: [],
-      autolocation:''
+      autolocation:'',
+      keywordvalid: true,
+      zipcodevalid: true
     };
   }
 
@@ -34,7 +36,9 @@ class ProductSearchForm extends Component {
       distance: '10',
       from: '',
       listofzips: [],
-      autolocation:''
+      autolocation:'',
+      keywordvalid: true,
+      zipcodevalid: true
     })
   };
 
@@ -72,9 +76,15 @@ class ProductSearchForm extends Component {
   handleInputChange = (event) => {
     const { id, value } = event.target;
     this.setState({ [id]: value });
+    if((id === 'keyword') && (value.length === 0)){
+      this.setState({keywordvalid: false});
+    }
     if((id === 'from') && (value.length >= 3)){
       this.callGeoNamesApi();
-    };
+    }
+    else if((id === 'from') && (value.length === 0)){
+      this.setState({zipcodevalid: false});
+    }
     if(this.state.location === 'currentlocation'){
       this.callipInfo();
     }
@@ -102,10 +112,13 @@ class ProductSearchForm extends Component {
           <div className="text-left col-lg-6"> {/* Background 10 columns wide on larger screens */}
             <form style={{ paddingBottom:'15px', alignContent:'center'}} className='small' onSubmit={this.handleSubmit}>
               <h3 className="text-white text-left pt-4">Product Search</h3>
-              <div className="form-group row pb-4 pt-4"> {/* Use row class for label + input layout */}
+              <div className="form-group row pb-4 pt-4 has-validation"> {/* Use row class for label + input layout */}
                 <label htmlFor="keyword" className="text-white col-lg-4">Keyword<span className="text-danger">*</span></label>
-                <div className="col-lg-8">
-                  <input type="text" className="form-control" id="keyword" required placeholder='Enter Product Name (eg. iPhone 8)' onChange={this.handleInputChange} value={this.state.keyword}/>
+                <div className={`col-lg-8 ${this.state.keywordvalid ? '' : 'is-invalid'}`}>
+                  <input type="text" className={`form-control ${this.state.keywordvalid ? '' : 'is-invalid'}`} id="keyword" required placeholder='Enter Product Name (eg. iPhone 8)' onChange={this.handleInputChange} value={this.state.keyword}/>
+                  <div className="invalid-feedback">
+                  Please enter a keyword.
+                </div>
                 </div>
               </div>
               <div className="form-group row pb-4">
@@ -160,7 +173,7 @@ class ProductSearchForm extends Component {
                   <input type="number" className="form-control" id="distance" value={this.state.distance} placeholder='10' onChange={this.handleInputChange}/>
                 </div>
               </div>
-              <div className="form-group row pb-4">
+              <div className="form-group row pb-4 has-validation">
                 <label className="text-white col-lg-4">From<span className="text-danger">*</span></label>
                 <div className="col-lg-8">
                   <div className="form-check pb-1">
@@ -183,10 +196,10 @@ class ProductSearchForm extends Component {
                       onChange={this.handleRadioChange}/>
                     <label className="form-check-label text-white col-lg-7" htmlFor="otherlocation">Other. Please specify zip code</label>
                   </div>
-                  <div className="col-lg-12">
+                  <div className={`col-lg-12 ${this.state.zipcodevalid ? '' : 'is-invalid'}`}>
                     <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${this.state.zipcodevalid ? '' : 'is-invalid'}`}
                         id="from"
                         list="zipsuggestions"
                         value={this.state.from}
@@ -199,6 +212,9 @@ class ProductSearchForm extends Component {
                           <option value={this.state.listofzips[3]} />
                           <option value={this.state.listofzips[4]} />
                         </datalist>
+                        <div className="invalid-feedback">
+                          Please enter a zipcode.
+                        </div>
                   </div>
                 </div>
               </div>
