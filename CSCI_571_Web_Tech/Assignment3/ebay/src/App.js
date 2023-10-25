@@ -1,12 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
-import ProductSearchForm from './ProductSearchForm';
-import FormExample from './text.jsx';
+// import ProductSearchForm from './ProductSearchForm';
+import Autocomplete from './text';
 
 function App() {
   return (
-    <ProductSearchForm />
-    // <FormExample ></FormExample>
+    // <ProductSearchForm />
+    <Autocomplete />
   );
 }
 
