@@ -1,119 +1,177 @@
-import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { Component } from 'react';
+import axios from 'axios';
 
-const ProductSearchForm = () => {
-  const initialState = {
-    location: 'currentlocation',
-    keyword: '',
-    category: 'All Categories',
-    conditionnew: '',
-    conditionused: '',
-    conditionunspecified: '',
-    localpickup: '',
-    freeshipping: '',
-    distance: '10',
-    from: '',
-    listofzips: [],
-    autolocation: '',
-    keywordvalid: true,
-    zipcodevalid: true,
+class ProductSearchForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      location: 'currentlocation',
+      keyword: '',
+      category: 'All Categories',
+      conditionnew: false,
+      conditionused: false,
+      conditionunspecified: false,
+      localpickup: false,
+      freeshipping: false,
+      distance: '10',
+      from: '',
+      listofzips: [],
+      autolocation:'',
+      keywordvalid: true,
+      zipcodevalid: true,
+      activeButton: 'results'
+    };
+  }
+
+  handleReset = (event) => {
+    console.log('clearing the form data');
+    this.setState({
+      location: 'currentlocation',
+      keyword: '',
+      category: 'All Categories',
+      conditionnew: false,
+      conditionused: false,
+      conditionunspecified: false,
+      localpickup: false,
+      freeshipping: false,
+      distance: '10',
+      from: '',
+      listofzips: [],
+      autolocation:'',
+      keywordvalid: true,
+      zipcodevalid: true,
+      activeButton: 'results'
+    })
   };
 
-  const [userInput, setuserInput] = useState(initialState);
-
-  useEffect(() => {
-    if (userInput.location === 'currentlocation') {
-      callIpInfo();
-    }
-  }, [userInput.location]);
-
-  const handleInputChange = (event) => {
-    const { id, value, type } = event.target;
-
-    if (type === 'checkbox') {
-      setuserInput((prevData) => ({
-        ...prevData,
-        [id]: event.target.checked ? 'on' : '',
-      }));
-    } else {
-      setuserInput({ ...userInput, [id]: value });
-    }
-
-    if ((id === 'from' && value.length >= 3)) {
-      callGeoNamesApi(value);
-    }
-  };
-
-  const handleSelectChange = (event) => {
-    setuserInput({ ...userInput, category: event.target.value });
-  };
-
-  const handleRadioChange = (event) => {
-    setuserInput({ ...userInput, location: event.target.value });
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(userInput);
-  };
-
-  const callGeoNamesApi = (zip) => {
+  callGeoNamesApi = (zip) => {
     // Replace with the actual API endpoint URL
     const apiUrl = `http://api.geonames.org/postalCodeSearchJSON?postalcode_startsWith=${zip}&maxRows=5&username=sakethanne&country=US`;
     console.log(apiUrl);
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        const zips = data.postalCodes.map((item) => item.postalCode);
-        setuserInput({ ...userInput, listofzips: zips });
+    axios.get(apiUrl)
+      .then((response) => {
+        let zips = [];
+        for (let i = 0; i < response.data.postalCodes.length; i++) {
+          zips[i] = response.data.postalCodes[i].postalCode;
+        }
+        this.setState({ listofzips: zips });
         console.log(zips);
-      })
-      .catch((error) => {
-        console.error('API request error:', error);
-      });
-  };
+  })
+  .catch((error) => {
+    // Handle any errors that occurred during the request
+    console.error('Error:', error);
+  });
+  }
 
-  const callIpInfo = () => {
+  callipInfo = () => {
     // Replace with the actual API endpoint URL
-    const apiUrl = 'https://ipinfo.io/json?token=f141f67b70d679';
+    const apiUrl = `https://ipinfo.io/json?token=f141f67b70d679`;
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
-        setuserInput({ ...userInput, autolocation: data.postal });
+        this.setState({ autolocation: data.postal });
       })
       .catch((error) => {
         console.error('API request error:', error);
       });
+  }
+
+  handleInputChange = (event) => {
+    const { id, value } = event.target;
+    this.setState({ [id]: value });
+    
+    if(((id === 'keyword') && (value === '')) || ((id === 'keyword') && (/[!@#$%^&*()_+{}\[\]:;<>,.?~\\]/.test(value)))){
+      this.setState({keywordvalid: false});
+    }
+    else if((id === 'keyword') && (value != '')){
+      this.setState({keywordvalid: true});
+    }
+    
+    if((id === 'from') && (value.length >= 3)){
+      this.callGeoNamesApi(value);
+    }
+    
+    if(((id === 'from') && (value === '')) || ((id === 'from') && !(/^\d{5}?$/.test(value)))){
+      this.setState({zipcodevalid: false});
+    }
+    else if((id === 'from') && (value != '')){
+      this.setState({zipcodevalid: true});
+    }
+
+    if(this.state.location === 'currentlocation'){
+      this.callipInfo();
+    }
   };
 
-  const handleReset = () => {
-    console.log('clearing the form data');
-    setuserInput(initialState);
+  handleNewCheckBoxChange = () => {
+    this.setState((prevState) => ({ conditionnew: !prevState.conditionnew }));
   };
 
-  const [activeButton, setActiveButton] = useState('results');
-
-  const handleResults = () => {
-    // Handle the search action here
-    setActiveButton('results'); // Set the 'search' button as active
+  handleUsedCheckBoxChange = () => {
+    this.setState((prevState) => ({ conditionused: !prevState.conditionused }));
   };
 
-  const handleWishlist = () => {
-    // Handle the clear action here
-    setActiveButton('wishlist'); // Set the 'clear' button as active
+  handleUnspecifiedCheckBoxChange = () => {
+    this.setState((prevState) => ({ conditionunspecified: !prevState.conditionunspecified }));
   };
 
-  return (
-  <div>
-    <div style={{backgroundColor: 'rgba(33,36,41,255)', borderRadius:'8px'}} className="container col-lg-9 mt-4 align-items-center">
+  handleFreeShippingCheckBoxChange = () => {
+    this.setState((prevState) => ({ freeshipping: !prevState.freeshipping }));
+  };
+
+  handleLocalPickupCheckBoxChange = () => {
+    this.setState((prevState) => ({ localpickup: !prevState.localpickup }));
+  };
+
+  handleSelectChange = (event) => {
+    this.setState({ category: event.target.value });
+  };
+
+  handleRadioChange = (event) => {
+    this.setState({
+      location: event.target.value,
+    });
+    if(event.target.value === 'currentlocation'){
+      this.setState({zipcodevalid: true});
+      this.setState({from: ''});
+    }
+  };
+
+  handleResults = () => {
+    this.setState({activeButton: 'results'});
+  };
+
+  handleWishlist = () => {
+    this.setState({activeButton: 'wishlist'});
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(this.state);
+    const queryParams = new URLSearchParams(this.state).toString();
+    console.log(queryParams)
+    axios.get(`../../senddata?${queryParams}`)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
+
+  render() {
+    return (
+    <div>
+      <div style={{backgroundColor: 'rgba(33,36,41,255)', borderRadius:'8px'}} className="container col-lg-9 mt-4 align-items-center">
         <div className="row justify-content-center">
           <div className="text-left col-lg-6"> {/* Background 10 columns wide on larger screens */}
-            <form style={{ paddingBottom:'15px', alignContent:'center'}} className='small' onSubmit={handleSubmit}>
+            <form style={{ paddingBottom:'15px', alignContent:'center'}} className='small' onSubmit={this.handleSubmit}>
               <h3 className="text-white text-left pt-4">Product Search</h3>
               <div className="form-group row pb-4 pt-4 has-validation"> {/* Use row class for label + input layout */}
                 <label htmlFor="keyword" className="text-white col-lg-4">Keyword<span className="text-danger">*</span></label>
-                <div className={`col-lg-8 ${userInput.keywordvalid ? '' : 'is-invalid'}`}>
-                  <input type="text" className={`form-control ${userInput.keywordvalid ? '' : 'is-invalid'}`} id="keyword" required placeholder='Enter Product Name (eg. iPhone 8)' onChange={handleInputChange} value={userInput.keyword}/>
+                <div className={`col-lg-8 ${this.state.keywordvalid ? '' : 'is-invalid'}`}>
+                  <input type="text" className={`form-control ${this.state.keywordvalid ? '' : 'is-invalid'}`} id="keyword" required placeholder='Enter Product Name (eg. iPhone 8)' onChange={this.handleInputChange} value={this.state.keyword}/>
                   <div className="invalid-feedback">
                   Please enter a keyword.
                 </div>
@@ -122,7 +180,7 @@ const ProductSearchForm = () => {
               <div className="form-group row pb-4">
                 <label htmlFor="category" className="text-white col-lg-4">Category</label>
                 <div className="col-lg-4">
-                  <select className="form-select" id="category" onChange={handleSelectChange} value={userInput.category}>
+                  <select className="form-select" id="category" onChange={this.handleSelectChange} value={this.state.category}>
                     <option>All Categories</option>
                     <option>Art</option>
                     <option>Baby</option>
@@ -139,15 +197,15 @@ const ProductSearchForm = () => {
                 <label className="text-white col-lg-4">Condition</label>
                 <div className="col-lg-8">
                   <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="checkbox" id="conditionnew" onChange={handleInputChange} checked={userInput.conditionnew === 'on'}/>
+                    <input className="form-check-input" type="checkbox" id="conditionnew" onChange={this.handleNewCheckBoxChange} checked={this.state.conditionnew}/>
                     <label className="text-white form-check-label" htmlFor="conditionnew">New</label>
                   </div>
                   <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="checkbox" id="conditionused" onChange={handleInputChange} checked={userInput.conditionused === 'on'}/>
+                    <input className="form-check-input" type="checkbox" id="conditionused" onChange={this.handleUsedCheckBoxChange} checked={this.state.conditionused}/>
                     <label className="text-white form-check-label" htmlFor="conditionused">Used</label>
                   </div>
                   <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="checkbox" id="conditionunspecified" onChange={handleInputChange} checked={userInput.conditionunspecified === 'on'}/>
+                    <input className="form-check-input" type="checkbox" id="conditionunspecified" onChange={this.handleUnspecifiedCheckBoxChange} checked={this.state.conditionunspecified}/>
                     <label className="text-white form-check-label" htmlFor="conditionunspecified">Unspecified</label>
                   </div>
                 </div>
@@ -156,11 +214,11 @@ const ProductSearchForm = () => {
                 <label className="text-white col-lg-4">Shipping Options</label>
                 <div className="col-lg-8">
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="checkbox" id="localpickup" onChange={handleInputChange} checked={userInput.localpickup === 'on'}/>
+                    <input className="form-check-input" type="checkbox" id="localpickup" onChange={this.handleLocalPickupCheckBoxChange} checked={this.state.localpickup}/>
                     <label className="text-white form-check-label" htmlFor="localpickup">Local Pickup</label>
                   </div>
                   <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="checkbox" id="freeshipping" onChange={handleInputChange} checked={userInput.freeshipping === 'on'}/>
+                    <input className="form-check-input" type="checkbox" id="freeshipping" onChange={this.handleFreeShippingCheckBoxChange} checked={this.state.freeshipping}/>
                     <label className="text-white form-check-label" htmlFor="freeshipping">Free Shipping</label>
                   </div>
                 </div>
@@ -168,7 +226,7 @@ const ProductSearchForm = () => {
               <div className="form-group row pb-4">
                 <label htmlFor="distance" className="text-white col-lg-4">Distance (Miles)</label>
                 <div className="col-lg-4">
-                  <input type="number" className="form-control" id="distance" value={userInput.distance} placeholder='10' onChange={handleInputChange}/>
+                  <input type="number" className="form-control" id="distance" value={this.state.distance} placeholder='10' onChange={this.handleInputChange}/>
                 </div>
               </div>
               <div className="form-group row pb-4 has-validation">
@@ -180,8 +238,8 @@ const ProductSearchForm = () => {
                       className='form-check-input'
                       name="from"
                       value="currentlocation"
-                      checked={userInput.location === 'currentlocation'}
-                      onChange={handleRadioChange}/>
+                      checked={this.state.location === 'currentlocation'}
+                      onChange={this.handleRadioChange}/>
                     <label className="form-check-label text-white" htmlFor="currentlocation">'Current Locaion'</label>
                   </div>
                   <div className="form-check pb-1">
@@ -190,25 +248,25 @@ const ProductSearchForm = () => {
                       className='form-check-input'
                       name="from"
                       value="otherlocation"
-                      checked={userInput.location === 'otherlocation'}
-                      onChange={handleRadioChange}/>
+                      checked={this.state.location === 'otherlocation'}
+                      onChange={this.handleRadioChange}/>
                     <label className="form-check-label text-white col-lg-7" htmlFor="otherlocation">Other. Please specify zip code</label>
                   </div>
-                  <div className={`col-lg-12 ${userInput.zipcodevalid ? '' : 'is-invalid'}`}>
+                  <div className={`col-lg-12 ${this.state.zipcodevalid ? '' : 'is-invalid'}`}>
                     <input
                         type="text"
-                        className={`form-control ${userInput.zipcodevalid ? '' : 'is-invalid'}`}
+                        className={`form-control ${this.state.zipcodevalid ? '' : 'is-invalid'}`}
                         id="from"
                         list="zipsuggestions"
-                        value={userInput.from}
-                        onChange={handleInputChange}
-                        disabled={userInput.location === 'currentlocation'}/>
+                        value={this.state.from}
+                        onChange={this.handleInputChange}
+                        disabled={this.state.location === 'currentlocation'}/>
                         <datalist id="zipsuggestions"> 
-                          <option value={userInput.listofzips[0]} />
-                          <option value={userInput.listofzips[1]} />
-                          <option value={userInput.listofzips[2]} />
-                          <option value={userInput.listofzips[3]} />
-                          <option value={userInput.listofzips[4]} />
+                          <option value={this.state.listofzips[0]} />
+                          <option value={this.state.listofzips[1]} />
+                          <option value={this.state.listofzips[2]} />
+                          <option value={this.state.listofzips[3]} />
+                          <option value={this.state.listofzips[4]} />
                         </datalist>
                         <div className="invalid-feedback">
                           Please enter a zipcode.
@@ -220,13 +278,14 @@ const ProductSearchForm = () => {
                 <button 
                   style={{ marginRight:'30px', backgroundColor:'rgba(249,251,253,255)', color:'rgba(136,134,133,255)', paddingLeft:'10px', paddingRight:'10px', paddingBottom:'6px', paddingTop:'6px'}}
                   type="submit"
-                  disabled={((userInput.keyword === '') || (userInput.location === 'otherlocation' && userInput.from===''))}
+                  disabled={((this.state.keyword === '') || (this.state.location === 'otherlocation' && !(/^\d{5}(-\d{4})?$/.test(this.state.from))))}
+                  // disabled={}
                   className="btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                     </svg> <b>Search</b></button>
                 <button
-                 onClick={handleReset}
+                 onClick={this.handleReset}
                  style={{ marginRight:'30px', backgroundColor:'rgba(249,251,253,255)', color:'rgba(136,134,133,255)', paddingLeft:'10px', paddingRight:'10px', paddingBottom:'6px', paddingTop:'6px'}}
                  type="button" className="btn">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><g transform="translate(16 0) scale(-1 1)"><path fill="currentColor" fillRule="evenodd" d="M4.5 11.5A.5.5 0 0 1 5 11h10a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 1 3h10a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z"/></g>
@@ -238,10 +297,10 @@ const ProductSearchForm = () => {
       </div>
       <div className='text-center mt-5'>
       <button
-        onClick={handleResults}
+        onClick={this.handleResults}
         style={{
-          backgroundColor: activeButton === 'results' ? 'rgba(33,36,41,255)' : 'white',
-          color: activeButton === 'results' ? 'white' : 'rgba(33,36,41,255)',
+          backgroundColor: this.state.activeButton === 'results' ? 'rgba(33,36,41,255)' : 'white',
+          color: this.state.activeButton === 'results' ? 'white' : 'rgba(33,36,41,255)',
           borderRadius: '4px',
           border:'none'
         }}
@@ -249,10 +308,10 @@ const ProductSearchForm = () => {
         Results
       </button>
       <button
-        onClick={handleWishlist}
+        onClick={this.handleWishlist}
         style={{
-          backgroundColor: activeButton === 'wishlist' ? 'rgba(33,36,41,255)' : 'white',
-          color: activeButton === 'wishlist' ? 'white' : 'rgba(33,36,41,255)',
+          backgroundColor: this.state.activeButton === 'wishlist' ? 'rgba(33,36,41,255)' : 'white',
+          color: this.state.activeButton === 'wishlist' ? 'white' : 'rgba(33,36,41,255)',
           borderRadius: '4px',
           border:'none'
         }}
@@ -260,8 +319,9 @@ const ProductSearchForm = () => {
         Wishlist
       </button>
     </div>
-  </div>
-  );
-};
+    </div>
+    );
+  }
+}
 
 export default ProductSearchForm;
