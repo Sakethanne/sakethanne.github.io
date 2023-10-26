@@ -80,11 +80,11 @@ class ProductSearchForm extends Component {
   handleInputChange = (event) => {
     const { id, value } = event.target;
     this.setState({ [id]: value });
-    
+    // eslint-disable-next-line
     if(((id === 'keyword') && (value === '')) || ((id === 'keyword') && (/[!@#$%^&*()_+{}\[\]:;<>,.?~\\]/.test(value)))){
       this.setState({keywordvalid: false});
     }
-    else if((id === 'keyword') && (value != '')){
+    else if((id === 'keyword') && (value !== '')){
       this.setState({keywordvalid: true});
     }
     
@@ -95,7 +95,7 @@ class ProductSearchForm extends Component {
     if(((id === 'from') && (value === '')) || ((id === 'from') && !(/^\d{5}?$/.test(value)))){
       this.setState({zipcodevalid: false});
     }
-    else if((id === 'from') && (value != '')){
+    else if((id === 'from') && (value !== '')){
       this.setState({zipcodevalid: true});
     }
 
@@ -148,16 +148,14 @@ class ProductSearchForm extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    console.log(this.state);
-    const queryParams = new URLSearchParams(this.state).toString();
-    console.log(queryParams)
-    axios.get(`../../senddata?${queryParams}`)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+    this.props.sendDataToApp(this.state);
+    // axios.get(`../../senddata?${queryParams}`)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error:', error);
+    //   });
   };
 
   render() {
