@@ -2,8 +2,14 @@ const express = require("express");
 const axios = require('axios');
 const app = express();
 app.use(express.json());
+// import { OAuthToken } from './ebay_oauth_token.js';
+const OAuthToken = require('./ebay_oauth_token.js');
 
-// const cors = require('cors');
+// Usage example
+const client_id = 'SaiVenka-WebAppli-PRD-672a069ab-61e3ce4f';
+const client_secret = 'PRD-72a069abaed4-bb97-47f0-9d07-3124';
+
+const oauthTokenobj = new OAuthToken(client_id, client_secret);
 
 let results;
 app.get("/senddata", (req, res) => {
@@ -58,6 +64,68 @@ app.get("/senddata", (req, res) => {
             console.error('API request error:', error);
         });
 });
+
+app.get("/geonames", (req, res) => {
+    console.log('inside geo function')
+    console.log(req.query);
+    var geonames = 'http://api.geonames.org/postalCodeSearchJSON?postalcode_startsWith='
+    geonames += req.query.zip
+    geonames += '&maxRows=5&username=sakethanne&country=US';
+    console.log(geonames);
+    axios.get(geonames)
+        .then((response) => {
+            console.log('inside response')
+            var geo = response.data;
+            res.json(geo);
+        })
+        .catch((error) => {
+            console.error('API request error:', error);
+        });
+});
+
+app.get("/getsimilaritems", (req, res) => {
+    console.log(req.query);
+    var similarproductsurl = 'https://svcs.ebay.com/MerchandisingService?OPERATION-NAME=getSimilarItems&SERVICE-NAME=MerchandisingService&SERVICE-VERSION=1.1.0&CONSUMER-ID=SaiVenka-WebAppli-PRD-672a069ab-61e3ce4f&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&itemId='
+    similarproductsurl+= req.query.productid
+    similarproductsurl += '&maxResults=20'
+    axios.get(similarproductsurl)
+        .then((response) => {
+            var similarproducts = response.data;
+            res.json(similarproducts);
+        })
+        .catch((error) => {
+            console.error('API request error:', error);
+        });
+});
+
+app.get("/getsingleitem", (req, res) => {
+
+    oauthTokenobj.getApplicationToken()
+    .then((accessToken) => {
+        console.log('Access Token:', accessToken);
+        var singleproducturl = 'https://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=SaiVenka-WebAppli-PRD-672a069ab-61e3ce4f&siteid=0&version=967&ItemID='
+        singleproducturl+= req.query.productid
+        // singleproducturl += '132961484706'
+        singleproducturl += '&IncludeSelector=Description,Details,ItemSpecifics'
+        axios.get(singleproducturl, {
+            headers: {
+            'X-EBAY-API-IAF-TOKEN': accessToken,
+            },
+          })
+            .then((response) => {
+                console.log('inside func')
+                var singleproduct = response.data;
+                res.json(singleproduct);
+            })
+            .catch((error) => {
+                console.error('API request error:', error);
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+    });
+});
+
 
 const PORT = process.env.PORT || 8080;
 

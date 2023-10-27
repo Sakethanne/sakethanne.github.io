@@ -47,10 +47,11 @@ class ProductSearchForm extends Component {
 
   callGeoNamesApi = (zip) => {
     // Replace with the actual API endpoint URL
-    const apiUrl = `http://api.geonames.org/postalCodeSearchJSON?postalcode_startsWith=${zip}&maxRows=5&username=sakethanne&country=US`;
-    console.log(apiUrl);
-    axios.get(apiUrl)
+    // const apiUrl = `http://api.geonames.org/postalCodeSearchJSON?postalcode_startsWith=${zip}&maxRows=5&username=sakethanne&country=US`;
+    // console.log(apiUrl);
+    axios.get(`../../geonames?zip=${zip}`)
       .then((response) => {
+        console.log(response);
         let zips = [];
         for (let i = 0; i < response.data.postalCodes.length; i++) {
           zips[i] = response.data.postalCodes[i].postalCode;

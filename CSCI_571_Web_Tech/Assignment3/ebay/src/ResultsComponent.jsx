@@ -98,7 +98,7 @@ class ResultsTable extends Component {
                         <tr key={index} style={{height:'70px'}} className='p-2'>
                             <td>{startIndex + index + 1}</td>
                             <td>
-                                <button><img src={product.galleryURL[0]} alt={product.title[0]} style={{width:'50px', height:'50pxx'}}/></button>
+                                <button><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '50px', height: '50px', maxWidth:'50px', maxHeight:'50px'}}/></button>
                             </td>
                             {/* eslint-disable-next-line */}
                             <td><a href='#' className='text-decoration-none' title={product.title[0]}><span className='d-inline-block text-truncate' style={{maxWidth: '250px'}}>
