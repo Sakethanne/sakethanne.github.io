@@ -4,12 +4,20 @@ const app = express();
 app.use(express.json());
 // import { OAuthToken } from './ebay_oauth_token.js';
 const OAuthToken = require('./ebay_oauth_token.js');
+const { ObjectId } = require('mongodb');
 
 // Usage example
 const client_id = 'SaiVenka-WebAppli-PRD-672a069ab-61e3ce4f';
 const client_secret = 'PRD-72a069abaed4-bb97-47f0-9d07-3124';
 
 const oauthTokenobj = new OAuthToken(client_id, client_secret);
+
+const { MongoClient } = require("mongodb");
+
+// Replace the uri string with your connection string.
+const uri = "mongodb+srv://sakethanne:annesaketh@ebay.gtnoxu7.mongodb.net/?retryWrites=true&w=majority";
+
+const client = new MongoClient(uri);
 
 let results;
 app.get("/senddata", (req, res) => {
@@ -126,7 +134,115 @@ app.get("/getsingleitem", (req, res) => {
     });
 });
 
+app.get("/getphotos", (req, res) => {
+    var googlesearchurl = 'https://www.googleapis.com/customsearch/v1?q='
+    googlesearchurl+= req.query.productname
+    googlesearchurl += '&cx=24c220cea25034c3d&imgSize=huge&num=8&searchType=image&key=AIzaSyAcXUA4w1kSAwfL5T3ea1t1qdJ1itSwbtg'
+    console.log(googlesearchurl)
+    axios.get(googlesearchurl)
+        .then((response) => {
+            var googleimageres = response.data;
+            res.json(googleimageres);
+        })
+        .catch((error) => {
+            console.error('API request error:', error);
+        });
+});
+
+app.get("/addfav", (req, res) => {
+    try{
+        const productid = req.query.productid;
+        const insertid = adddata(productid);
+        console.log(insertid);
+        res.json({'Status': 200});
+    }catch (err) {
+        res.json({'Status': 404});
+      };
+});
+
+app.get("/getfavs", (req, res) => {
+    try{
+        var wishlist_prods = [];
+        getdatamongo()
+        .then((resolvedValue) => {
+            wishlist_prods = resolvedValue.split(',');
+            res.json({'Status': 200, 'Wishlist_Products':wishlist_prods });
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+    }catch (err) {
+        res.json({'Status': 404});
+      };
+});
+
+app.get("/deletefav", (req, res) => {
+    try{
+        const productid = req.query.productid;
+        const deleteid = deletedata(productid);
+        res.json({'Status': 200});
+    }catch (err) {
+        res.json({'Status': 404});
+      };
+});
 
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
+// AIzaSyDJHwvjszMvgIadBNwPGdQ0bpoVF42Mx8k
+// <script async src="https://cse.google.com/cse.js?cx=24c220cea25034c3d">
+// </script>
+// <div class="gcse-search"></div>
+// AIzaSyAcXUA4w1kSAwfL5T3ea1t1qdJ1itSwbtg
+// https://www.facebook.com/share.php?u=hubspot.com
+
+async function adddata(productid) {
+  try {
+    await client.connect();
+    const database = client.db('ebay');
+    const favorites = database.collection('favorites');
+
+    // Query for a movie that has the title 'Back to the Future'
+    const data_to_insert = { productid: productid };
+    const result = await favorites.insertOne(data_to_insert);
+    console.log(result.insertedId);
+    return result.insertedId;
+  } finally {
+    await client.close();
+  }
+};
+
+
+async function getdatamongo() {
+    try {
+      await client.connect();
+      const database = client.db('ebay');
+      const favorites = database.collection('favorites');
+
+      const allData = await favorites.find({}).toArray();
+      wishlisted_products = [];
+      allData.forEach((item) => {
+        wishlisted_products.push(item.productid);
+      });
+      return (wishlisted_products.toString());
+    } finally {
+      await client.close();
+    }
+  };
+
+  async function deletedata(productid) {
+    try {
+      await client.connect();
+      const database = client.db('ebay');
+      const favorites = database.collection('favorites');
+
+      const query = { productid: productid};
+      const deleteresults = await favorites.deleteOne({ productid: productid});
+      console.log(deleteresults);
+      }catch (err) {
+        console.log(err);
+      }
+      finally{
+        await client.close();
+      };
+};
