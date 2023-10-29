@@ -25,7 +25,8 @@ class ProductSearchForm extends Component {
       zipcodevalid: true,
       activeButton: 'results',
       displayflag: null,
-      displayresults: 'results'
+      displayresults: 'results',
+      producttopass: ''
     };
   }
 
@@ -48,7 +49,8 @@ class ProductSearchForm extends Component {
       zipcodevalid: true,
       activeButton: 'results',
       displayflag: null,
-      displayresults: 'results'
+      displayresults: 'results',
+      producttopass: ''
     })
   };
 
@@ -155,12 +157,10 @@ class ProductSearchForm extends Component {
     this.setState({displayflag: true});
   };
 
-  // handleReSubmit = () => {
-  //   this.setState({ displayflag: false });
-  //   setTimeout(() => {
-  //     this.setState({ displayflag: true });
-  //   }, 1500);
-  // };
+  receiveDataFromResultsTable = (data) => {
+    this.setState({ producttopass: data });
+    this.setState({ displayresults: 'product'});
+  };
 
   render() {
 
@@ -324,7 +324,7 @@ class ProductSearchForm extends Component {
       </button>
     </div>
     <div>
-      {this.state.activeButton === 'results' ? this.state.displayflag === true ? this.state.displayresults === 'results' ? <ResultsTable data={this.state}/> : <ProductTable /> : '' : <WishlistTable />}
+      {this.state.activeButton === 'results' ? this.state.displayflag === true ? this.state.displayresults === 'results' ? <ResultsTable data={this.state} sendDataToResults={this.receiveDataFromResultsTable}/> : <ProductTable data={this.state.producttopass}/> : '' : <WishlistTable />}
     </div>
     </div>
     );

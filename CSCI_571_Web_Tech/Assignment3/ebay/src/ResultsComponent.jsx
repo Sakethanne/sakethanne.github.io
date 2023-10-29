@@ -90,6 +90,11 @@ class ResultsTable extends Component {
         }
       };
 
+      sendDataToResults = (event, index) => {
+        const { sendDataToResults } = this.props;
+        sendDataToResults(this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[index].itemId[0]); // Call the callback function with the data
+      };
+
   render() {
 
     if (!this.state.renderDelayed) {
@@ -148,7 +153,7 @@ class ResultsTable extends Component {
                                 <a href={product.galleryURL[0]} target='_blank'><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '50px', height: '50px', maxWidth:'50px', maxHeight:'50px'}}/></a>
                             </td>
                             {/* eslint-disable-next-line */}
-                            <td><a href='#' className='text-decoration-none' title={product.title[0]}><span className='d-inline-block text-truncate' style={{maxWidth: '250px'}}>
+                            <td><a href='#' className='text-decoration-none' title={product.title[0]} onClick={(e) => this.sendDataToResults(e, `${startIndex + index}`)}><span className='d-inline-block text-truncate' style={{maxWidth: '250px'}}>
                                     {product.title[0]}
                                 </span></a></td>
                             <td>${product.sellingStatus[0].currentPrice[0].__value__}</td>
