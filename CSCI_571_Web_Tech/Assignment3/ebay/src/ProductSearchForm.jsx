@@ -147,15 +147,11 @@ class ProductSearchForm extends Component {
 
   handleWishlist = async () => {
     this.setState({activeButton: 'wishlist'});
-    const wprods = await this.getWishlist();
-    this.setState({wishlistproducts: wprods})
   };
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    // if(this.state.displayflag === true){
-    //   this.handleReSubmit();
-    // }
+    this.handleResults();
     this.setState({displayflag: true});
   };
 

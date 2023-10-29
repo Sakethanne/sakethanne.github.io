@@ -11,8 +11,24 @@ class ResultsTable extends Component {
           isMounted: false,
           results: null,
           currentPage: 1,
-          renderDelayed: false
+          renderDelayed: false,
+          wishlistproductids: []
         };
+      }
+
+    getWishlist = async () => {
+        var products = [];
+        await axios.get(`../../getfavs`)
+          .then(async (response) => {
+            for(const product of response.data.Wishlist_Products) {
+                var newprod = JSON.parse(product);
+                products.push(newprod.productid);
+            }
+            this.setState({wishlistproductids:products})
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
       }
     
     componentDidMount(){
@@ -26,7 +42,7 @@ class ResultsTable extends Component {
                 .then((response) => {
                 console.log(response.data);
                 this.setState({results: response.data});
-
+                this.getWishlist();
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -40,6 +56,38 @@ class ResultsTable extends Component {
 
       handlePageChange = (page) => {
         this.setState({ currentPage: page });
+      };
+
+      addtowishlist = async (event, id) => {
+        var product_id = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].itemId[0];
+        if(this.state.wishlistproductids.includes(product_id)){
+            await axios.get(`../../deletefav?productid=${product_id}`)
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            this.setState((prevState) => ({
+                wishlistproductids: prevState.wishlistproductids.filter((item) => item !== product_id), // Create a new array excluding the value to be removed
+                  }));
+        }
+        else{
+            var product_name = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].title[0];
+            var product_price = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].sellingStatus[0].currentPrice[0].__value__;
+            var product_shipping = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].shippingInfo[0].shippingServiceCost[0].__value__;
+            var product_img = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].galleryURL[0];
+            await axios.get(`../../addfav?productid=${product_id}&product_name=${product_name}&product_price=${product_price}&product_shipping=${product_shipping}&product_img_url=${product_img}`)
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            this.setState((prevState) => ({
+                wishlistproductids: [...prevState.wishlistproductids, product_id], // Create a new array with the existing values and the new value
+                  }));
+        }
       };
 
   render() {
@@ -72,8 +120,12 @@ class ResultsTable extends Component {
     return (
         <div className='row justify-content-center mt-3'>
             <div className='col-lg-9'>
-            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button className="btn btn-primary" type="button">Button</button>
+            <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+                <button className="btn btn-light" 
+                style={{color: 'black'}} 
+                disabled={true}
+                 type="button">Details &gt;
+                 </button>
             </div>
                 <div className='text-left'>
                 <table className="table table-dark table-striped table-hover small">
@@ -93,7 +145,7 @@ class ResultsTable extends Component {
                         <tr key={index} style={{height:'70px'}} className='p-2'>
                             <td>{startIndex + index + 1}</td>
                             <td>
-                                <button><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '50px', height: '50px', maxWidth:'50px', maxHeight:'50px'}}/></button>
+                                <a href={product.galleryURL[0]} target='_blank'><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '50px', height: '50px', maxWidth:'50px', maxHeight:'50px'}}/></a>
                             </td>
                             {/* eslint-disable-next-line */}
                             <td><a href='#' className='text-decoration-none' title={product.title[0]}><span className='d-inline-block text-truncate' style={{maxWidth: '250px'}}>
@@ -105,11 +157,26 @@ class ResultsTable extends Component {
                                 </td>
                             <td>{product.postalCode[0]}</td>
                             <td>
-                                <button
+                                {this.state.wishlistproductids.includes(product.itemId[0]) ? (<button
                              style={{border: 'none', borderRadius:'4px'}}
-                             type='button'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                             type='button' 
+                             id={startIndex + index}
+                            //  onClick={this.addtowishlist}
+                            onClick={(e) => this.addtowishlist(e, `${startIndex + index}`)}
+                             ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="orange" className="bi bi-cart-plus-fill" viewBox="0 0 16 16">
                                 <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
-                            </svg></button>
+                            </svg></button>)
+                            :
+                            (<button
+                                style={{border: 'none', borderRadius:'4px'}}
+                                type='button' 
+                                id={startIndex + index}
+                               //  onClick={this.addtowishlist}
+                               onClick={(e) => this.addtowishlist(e, `${startIndex + index}`)}
+                                ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                                   <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
+                               </svg></button>)
+                        }  
                             </td>
                         </tr>
                         ))}
