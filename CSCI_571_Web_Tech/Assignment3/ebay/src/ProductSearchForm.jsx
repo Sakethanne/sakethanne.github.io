@@ -163,8 +163,7 @@ class ProductSearchForm extends Component {
   };
 
   render() {
-
-    const wishliststartindex = 0;
+    
     return (
     <div>
       <div style={{backgroundColor: 'rgba(33,36,41,255)', borderRadius:'8px'}} className="container col-lg-9 mt-4 align-items-center">

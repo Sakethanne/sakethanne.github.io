@@ -8,6 +8,7 @@ class IndividualProduct extends Component {
     constructor(props) {
         super(props);
         this.state = {
+          
         };
       }
     

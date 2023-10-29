@@ -45,7 +45,7 @@ class WishlistTable extends Component {
     var product_id = this.state.wishlist[index].productid;
     var alreadyexistsflag = false;
     for(var i=0; i<this.state.wishlist.length; i++){
-      if(this.state.wishlist[i].productid == product_id){
+      if(this.state.wishlist[i].productid === product_id){
         alreadyexistsflag = true;
         break;
       }
@@ -93,8 +93,6 @@ class WishlistTable extends Component {
           </div>); // Render progress bar until the delay is over
     };
 
-    var total = 0.0;
-
     return (
       <div className='container col-lg-9 mt-4 align-items-center'>
         <div className='row justify-content-center'>
@@ -116,10 +114,10 @@ class WishlistTable extends Component {
                 <tr key={index} style={{height:'70px'}} className='p-2'>
                   <td>{index + 1}</td>
                     <td>
-                      <a href={product.productimage} target='_blank'><img src={product.productimage} alt={product.productname} style={{width: '50px', height: '50px', maxWidth:'50px', maxHeight:'50px'}}/></a>
+                      <a href={product.productimage} target='_blank' rel="noreferrer"><img src={product.productimage} alt={product.productname} style={{width: '50px', height: '50px', maxWidth:'50px', maxHeight:'50px'}}/></a>
                     </td>
                     {/* eslint-disable-next-line */}
-                    <td><a href='#' className='text-decoration-none' title={product.productname}><span className='d-inline-block text-truncate' style={{maxWidth: '250px'}}>
+                    <td><a className='text-decoration-none' title={product.productname}><span className='d-inline-block text-truncate' style={{maxWidth: '250px'}}>
                       {product.productname}
                     </span></a></td>
                     <td>${product.productprice}</td>        

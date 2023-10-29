@@ -109,9 +109,13 @@ class ResultsTable extends Component {
     if(parseInt(this.state.results.findItemsAdvancedResponse[0].searchResult[0]['@count']) === 0){
         // console.log(typeof parseInt(this.state.results.findItemsAdvancedResponse[0].searchResult[0]['@count']));
         return (
-            <div className='row justify-content-center mt-4 col-lg-9'>
-                <div className="alert alert-warning text-center p-2 col-lg-9" role="alert">
-                    No Records
+            <div className='row justify-content-center mt-4'>
+                <div className='col-lg-9'>
+                    <div className='text-center'>
+                        <div className="alert alert-warning p-2" role="alert">
+                            No Records
+                        </div>
+                    </div>
                 </div>
             </div>)
     };
@@ -150,7 +154,7 @@ class ResultsTable extends Component {
                         <tr key={index} style={{height:'70px'}} className='p-2'>
                             <td>{startIndex + index + 1}</td>
                             <td>
-                                <a href={product.galleryURL[0]} target='_blank'><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '50px', height: '50px', maxWidth:'50px', maxHeight:'50px'}}/></a>
+                                <a href={product.galleryURL[0]} target='_blank' rel="noreferrer"><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '50px', height: '50px', maxWidth:'50px', maxHeight:'50px'}}/></a>
                             </td>
                             {/* eslint-disable-next-line */}
                             <td><a href='#' className='text-decoration-none' title={product.title[0]} onClick={(e) => this.sendDataToResults(e, `${startIndex + index}`)}><span className='d-inline-block text-truncate' style={{maxWidth: '250px'}}>
