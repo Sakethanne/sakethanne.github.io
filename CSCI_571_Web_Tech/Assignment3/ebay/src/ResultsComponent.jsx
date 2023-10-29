@@ -7,10 +7,9 @@ class ResultsTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
+          inputdata: this.props.data,
           isMounted: false,
           results: null,
-          progress: 0,
-          progressCompleted: false,
           currentPage: 1,
           renderDelayed: false
         };
@@ -20,13 +19,14 @@ class ResultsTable extends Component {
         if(!this.state.isMounted) {
             // eslint-disable-next-line
             this.state.isMounted = true;
-            const input = JSON.parse(this.props.data);
+            const input = this.props.data;
             const queryParams = new URLSearchParams(input).toString();
             console.log(queryParams)
             axios.get(`../../senddata?${queryParams}`)
                 .then((response) => {
                 console.log(response.data);
                 this.setState({results: response.data});
+
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -35,8 +35,7 @@ class ResultsTable extends Component {
           setTimeout(() => {
             // console.log('After 1 seconds of sleep');
             this.setState({ renderDelayed: true });
-            this.setState({ progressCompleted: true});
-          }, 2000);
+          }, 1500);
       };
 
       handlePageChange = (page) => {
@@ -46,9 +45,14 @@ class ResultsTable extends Component {
   render() {
 
     if (!this.state.renderDelayed) {
-        return null; // Render nothing until the delay is over
+        return (<div className='row justify-content-center mt-4'>
+            <div className='col-lg-9'>
+                <div className='text-center'><div className="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                <div className="progress-bar progress-bar-striped progress-bar-animated" style={{width: "50%"}}></div></div></div>
+            </div>
+            </div>); // Render progress bar until the delay is over
       };
-
+    
     if(parseInt(this.state.results.findItemsAdvancedResponse[0].searchResult[0]['@count']) === 0){
         // console.log(typeof parseInt(this.state.results.findItemsAdvancedResponse[0].searchResult[0]['@count']));
         return (
@@ -67,19 +71,10 @@ class ResultsTable extends Component {
 
     return (
         <div className='row justify-content-center mt-3'>
-            <div className='block'>
-                {this.state.progressCompleted ? null : (
-                    <div className="text-center progress mt-4 col-lg-9" role="progressbar" aria-label="Default striped example" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
-                        <div className="text-center progress-bar progress-bar-striped" style={{width: "50%"}}></div>
-                    </div>
-                )}
-            </div>
-
-            {/* Starting of the table generation code */}
             <div className='col-lg-9'>
-                <div className='text-right mb-2'>
-                    <button type="button" className="btn btn-light">Details</button>
-                </div>
+            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button className="btn btn-primary" type="button">Button</button>
+            </div>
                 <div className='text-left'>
                 <table className="table table-dark table-striped table-hover small">
                     <thead className='p-1 align-items-left text-left'>

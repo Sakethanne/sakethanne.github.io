@@ -152,7 +152,11 @@ app.get("/getphotos", (req, res) => {
 app.get("/addfav", (req, res) => {
     try{
         const productid = req.query.productid;
-        const insertid = adddata(productid);
+        const product_name = req.query.product_name;
+        const product_price = req.query.product_price;
+        const product_shipping = req.query.product_shipping;
+        const product_img_url = req.query.product_img_url;
+        const insertid = adddata(productid,product_name,product_price,product_shipping,product_img_url);
         console.log(insertid);
         res.json({'Status': 200});
     }catch (err) {
@@ -165,7 +169,7 @@ app.get("/getfavs", (req, res) => {
         var wishlist_prods = [];
         getdatamongo()
         .then((resolvedValue) => {
-            wishlist_prods = resolvedValue.split(',');
+            wishlist_prods = resolvedValue;
             res.json({'Status': 200, 'Wishlist_Products':wishlist_prods });
           })
           .catch((error) => {
@@ -196,14 +200,14 @@ app.listen(PORT, console.log(`Server started on port ${PORT}`));
 // AIzaSyAcXUA4w1kSAwfL5T3ea1t1qdJ1itSwbtg
 // https://www.facebook.com/share.php?u=hubspot.com
 
-async function adddata(productid) {
+async function adddata(productid,product_name,product_price,product_shipping,product_img_url) {
   try {
     await client.connect();
     const database = client.db('ebay');
     const favorites = database.collection('favorites');
 
     // Query for a movie that has the title 'Back to the Future'
-    const data_to_insert = { productid: productid };
+    const data_to_insert = { productid: productid, productname: product_name, productprice: product_price, productshipping: product_shipping, productimage: product_img_url };
     const result = await favorites.insertOne(data_to_insert);
     console.log(result.insertedId);
     return result.insertedId;
@@ -222,9 +226,10 @@ async function getdatamongo() {
       const allData = await favorites.find({}).toArray();
       wishlisted_products = [];
       allData.forEach((item) => {
-        wishlisted_products.push(item.productid);
+        wishlisted_products.push(JSON.stringify(item));
       });
-      return (wishlisted_products.toString());
+    //   console.log(wishlisted_products);
+      return (wishlisted_products);
     } finally {
       await client.close();
     }

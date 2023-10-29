@@ -28,6 +28,21 @@
   color: #61dafb;
 }
 
+/* App.css */
+
+/* Style for active tab within the specific page container */
+#NavbarSingle.btn.active {
+  background-color: black !important;
+  color: white !important;
+}
+
+/* Style for inactive tabs within the specific page container */
+#NavbarSingle.btn:not(.active) {
+  background-color: white !important;
+  color: black !important;
+}
+
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

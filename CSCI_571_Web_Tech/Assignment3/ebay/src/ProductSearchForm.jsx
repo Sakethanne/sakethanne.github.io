@@ -1,6 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
 import axios from 'axios';
+import ResultsTable from './ResultsComponent';
+import WishlistTable from './WishlistComponent';
+import ProductTable from './ProductComponent';
 
 class ProductSearchForm extends Component {
   constructor(props) {
@@ -20,7 +23,9 @@ class ProductSearchForm extends Component {
       autolocation:'',
       keywordvalid: true,
       zipcodevalid: true,
-      activeButton: 'results'
+      activeButton: 'results',
+      displayflag: null,
+      displayresults: 'results'
     };
   }
 
@@ -41,14 +46,13 @@ class ProductSearchForm extends Component {
       autolocation:'',
       keywordvalid: true,
       zipcodevalid: true,
-      activeButton: 'results'
+      activeButton: 'results',
+      displayflag: null,
+      displayresults: 'results'
     })
   };
 
   callGeoNamesApi = (zip) => {
-    // Replace with the actual API endpoint URL
-    // const apiUrl = `http://api.geonames.org/postalCodeSearchJSON?postalcode_startsWith=${zip}&maxRows=5&username=sakethanne&country=US`;
-    // console.log(apiUrl);
     axios.get(`../../geonames?zip=${zip}`)
       .then((response) => {
         console.log(response);
@@ -60,13 +64,11 @@ class ProductSearchForm extends Component {
         console.log(zips);
   })
   .catch((error) => {
-    // Handle any errors that occurred during the request
     console.error('Error:', error);
   });
   }
 
   callipInfo = () => {
-    // Replace with the actual API endpoint URL
     const apiUrl = `https://ipinfo.io/json?token=f141f67b70d679`;
     fetch(apiUrl)
       .then((response) => response.json())
@@ -143,23 +145,30 @@ class ProductSearchForm extends Component {
     this.setState({activeButton: 'results'});
   };
 
-  handleWishlist = () => {
+  handleWishlist = async () => {
     this.setState({activeButton: 'wishlist'});
+    const wprods = await this.getWishlist();
+    this.setState({wishlistproducts: wprods})
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
-    this.props.sendDataToApp(this.state);
-    // axios.get(`../../senddata?${queryParams}`)
-    //   .then((response) => {
-    //     console.log(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error:', error);
-    //   });
+    // if(this.state.displayflag === true){
+    //   this.handleReSubmit();
+    // }
+    this.setState({displayflag: true});
   };
+
+  // handleReSubmit = () => {
+  //   this.setState({ displayflag: false });
+  //   setTimeout(() => {
+  //     this.setState({ displayflag: true });
+  //   }, 1500);
+  // };
 
   render() {
+
+    const wishliststartindex = 0;
     return (
     <div>
       <div style={{backgroundColor: 'rgba(33,36,41,255)', borderRadius:'8px'}} className="container col-lg-9 mt-4 align-items-center">
@@ -317,6 +326,9 @@ class ProductSearchForm extends Component {
         className="btn btn-sm">
         Wishlist
       </button>
+    </div>
+    <div>
+      {this.state.activeButton === 'results' ? this.state.displayflag === true ? this.state.displayresults === 'results' ? <ResultsTable data={this.state}/> : <ProductTable /> : '' : <WishlistTable />}
     </div>
     </div>
     );
