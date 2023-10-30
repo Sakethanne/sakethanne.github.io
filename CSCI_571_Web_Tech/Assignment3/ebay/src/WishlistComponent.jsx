@@ -134,11 +134,11 @@ class WishlistTable extends Component {
                 <tr key={index} style={{height:'70px'}} className='p-2'>
                   <td>{index + 1}</td>
                     <td>
-                      <a href={product.productimage} target='_blank' rel="noreferrer"><img src={product.productimage} alt={product.productname} style={{width: '80px', height: '80px', maxWidth:'80px', maxHeight:'80px'}}/></a>
+                      <a href={product.productimage} target='_blank' rel="noreferrer"><img src={product.productimage} alt={product.productname.replace(/%20/g, ' ')} style={{width: '80px', height: '80px', maxWidth:'80px', maxHeight:'80px'}}/></a>
                     </td>
                     {/* eslint-disable-next-line */}
-                    <td><a className='text-decoration-none' title={product.productname}><span className='d-inline-block text-truncate' style={{maxWidth: '290px'}}>
-                      {product.productname}
+                    <td><a className='text-decoration-none' title={product.productname.replace(/%20/g, ' ')}><span className='d-inline-block text-truncate' style={{maxWidth: '290px'}}>
+                      {product.productname.replace(/%20/g, ' ')}
                     </span></a></td>
                     <td>${product.productprice}</td>        
                     <td>{product.productshipping === '0.0' ? 'Free Shipping' : `$${product.productshipping}`}
