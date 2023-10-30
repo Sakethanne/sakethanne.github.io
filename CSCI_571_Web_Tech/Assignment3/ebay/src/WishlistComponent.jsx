@@ -97,7 +97,7 @@ class WishlistTable extends Component {
       <div className='container col-lg-9 mt-4 align-items-center'>
         <div className='row justify-content-center'>
           <div className='text-center'>
-            <table className="table table-dark table-striped table-hover small">
+            <table className="table table-dark table-striped table-hover table-borderless small">
               <thead className='p-1 align-items-left text-left'>
                 <tr className='p-1 align-items-left'>
                   <th>#</th>

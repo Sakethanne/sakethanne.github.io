@@ -129,7 +129,7 @@ class ResultsTable extends Component {
     return (
         <div className='row justify-content-center mt-3'>
             <div className='col-lg-9'>
-            <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+            <div className="d-grid gap-2 justify-content-end mb-3">
                 <button className="btn btn-light" 
                 style={{color: 'black'}} 
                 disabled={true}
@@ -137,7 +137,7 @@ class ResultsTable extends Component {
                  </button>
             </div>
                 <div className='text-left'>
-                <table className="table table-dark table-striped table-hover small">
+                <table className="table table-dark table-striped table-hover table-borderless small">
                     <thead className='p-1 align-items-left text-left'>
                         <tr className='p-1 align-items-left'>
                             <th>#</th>
@@ -154,7 +154,7 @@ class ResultsTable extends Component {
                         <tr key={index} style={{height:'70px'}} className='p-2'>
                             <td>{startIndex + index + 1}</td>
                             <td>
-                                <a href={product.galleryURL[0]} target='_blank' rel="noreferrer"><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '50px', height: '50px', maxWidth:'50px', maxHeight:'50px'}}/></a>
+                                <a href={product.galleryURL[0]} target='_blank' rel="noreferrer"><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '70px', height: '70px', maxWidth:'70px', maxHeight:'70px'}}/></a>
                             </td>
                             {/* eslint-disable-next-line */}
                             <td><a href='#' className='text-decoration-none' title={product.title[0]} onClick={(e) => this.sendDataToResults(e, `${startIndex + index}`)}><span className='d-inline-block text-truncate' style={{maxWidth: '250px'}}>

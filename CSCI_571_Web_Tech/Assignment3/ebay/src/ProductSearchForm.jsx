@@ -162,6 +162,11 @@ class ProductSearchForm extends Component {
     this.setState({ displayresults: 'product'});
   };
 
+  // Function to receive data from the child component
+  receiveDataFromProductTable = (data) => {
+    this.setState({displayresults: 'results'})
+  };
+
   render() {
     
     return (
@@ -323,7 +328,7 @@ class ProductSearchForm extends Component {
       </button>
     </div>
     <div>
-      {this.state.activeButton === 'results' ? this.state.displayflag === true ? this.state.displayresults === 'results' ? <ResultsTable data={this.state} sendDataToResults={this.receiveDataFromResultsTable}/> : <ProductTable data={this.state.producttopass}/> : '' : <WishlistTable />}
+      {this.state.activeButton === 'results' ? this.state.displayflag === true ? this.state.displayresults === 'results' ? <ResultsTable data={this.state} sendDataToResults={this.receiveDataFromResultsTable}/> : <ProductTable data={this.state.producttopass} setToResults={this.receiveDataFromProductTable}/> : '' : <WishlistTable />}
     </div>
     </div>
     );
