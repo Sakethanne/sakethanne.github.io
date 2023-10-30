@@ -159,7 +159,7 @@ class ProductSearchForm extends Component {
     setTimeout(() => {
       // console.log('After 1 seconds of sleep');
       this.setState({displayflag: true});
-    }, 100);
+    }, 1);
   };
 
   receiveDataFromResultsTable = (data) => {

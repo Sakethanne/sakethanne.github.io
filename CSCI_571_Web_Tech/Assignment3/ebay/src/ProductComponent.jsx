@@ -88,7 +88,7 @@ class ProductTable extends Component {
       setTimeout(() => {
         // console.log('After 1 seconds of sleep');
         this.setState({ renderDelayed: true });
-      }, 2000);
+      }, 1000);
   };
 
   productwishlist = async (event, id) => {
