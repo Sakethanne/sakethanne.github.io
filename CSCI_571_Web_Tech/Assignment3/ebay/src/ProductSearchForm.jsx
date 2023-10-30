@@ -145,6 +145,7 @@ class ProductSearchForm extends Component {
 
   handleResults = () => {
     this.setState({activeButton: 'results'});
+    this.setState({displayresults: 'results'});
   };
 
   handleWishlist = async () => {
@@ -153,8 +154,12 @@ class ProductSearchForm extends Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
+    this.setState({displayflag: false});
     this.handleResults();
-    this.setState({displayflag: true});
+    setTimeout(() => {
+      // console.log('After 1 seconds of sleep');
+      this.setState({displayflag: true});
+    }, 100);
   };
 
   receiveDataFromResultsTable = (data) => {

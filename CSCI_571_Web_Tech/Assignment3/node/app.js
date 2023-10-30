@@ -110,7 +110,7 @@ app.get("/getsingleitem", (req, res) => {
 
     oauthTokenobj.getApplicationToken()
     .then((accessToken) => {
-        console.log('Access Token:', accessToken);
+        // console.log('Access Token:', accessToken);
         var singleproducturl = 'https://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=SaiVenka-WebAppli-PRD-672a069ab-61e3ce4f&siteid=0&version=967&ItemID='
         singleproducturl+= req.query.productid
         // singleproducturl += '132961484706'
@@ -121,7 +121,6 @@ app.get("/getsingleitem", (req, res) => {
             },
           })
             .then((response) => {
-                console.log('inside func')
                 var singleproduct = response.data;
                 res.json(singleproduct);
             })

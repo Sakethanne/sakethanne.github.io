@@ -1,30 +1,43 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import './App.css';
 
+function New() {
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [selectedLink, setSelectedLink] = useState('');
 
-class WishlistTable extends Component {
-  getWishlist = async () => {
-    var products = [];
-    await axios.get(`../../getfavs`)
-      .then(async (response) => {
-        console.log('wishlists');
-        for(const product of response.data.Wishlist_Products) {
-          products.push(product);
-        }
-        // console.log(products);
-        return products;
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  }
+  const openOverlay = (link) => {
+    setSelectedLink(link);
+    setShowOverlay(true);
+    document.body.style.overflow = 'hidden'; // Disable scrolling on the background
+  };
 
-  render() {
-    return (
-      
-    );
-  }
+  const closeOverlay = () => {
+    setSelectedLink('');
+    setShowOverlay(false);
+    document.body.style.overflow = 'auto'; // Enable scrolling on the background
+  };
+
+  return (
+    <div className="App">
+      <h1>Links</h1>
+      <ul>
+        <li>
+          <a href="https://example.com" target="_blank" rel="noopener noreferrer">Link 1</a>
+          <button onClick={() => openOverlay('https://example.com')}>Open in Overlay</button>
+        </li>
+        {/* Add more links with their respective buttons */}
+      </ul>
+
+      {showOverlay && (
+        <div className="overlay-background">
+          <div className="overlay">
+            <button className="close-button" onClick={closeOverlay}>Close</button>
+            <iframe title="Overlay Content" src={selectedLink} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default WishlistTable;
+export default New;

@@ -51,7 +51,7 @@ class ResultsTable extends Component {
           setTimeout(() => {
             // console.log('After 1 seconds of sleep');
             this.setState({ renderDelayed: true });
-          }, 1500);
+          }, 1200);
       };
 
       handlePageChange = (page) => {
@@ -154,10 +154,10 @@ class ResultsTable extends Component {
                         <tr key={index} style={{height:'70px'}} className='p-2'>
                             <td>{startIndex + index + 1}</td>
                             <td>
-                                <a href={product.galleryURL[0]} target='_blank' rel="noreferrer"><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '70px', height: '70px', maxWidth:'70px', maxHeight:'70px'}}/></a>
+                                <a href={product.galleryURL[0]} target='_blank' rel="noreferrer"><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '80px', height: '80px', maxWidth:'80px', maxHeight:'80px'}}/></a>
                             </td>
                             {/* eslint-disable-next-line */}
-                            <td><a href='#' className='text-decoration-none' title={product.title[0]} onClick={(e) => this.sendDataToResults(e, `${startIndex + index}`)}><span className='d-inline-block text-truncate' style={{maxWidth: '250px'}}>
+                            <td><a href='#' className='text-decoration-none' title={product.title[0]} onClick={(e) => this.sendDataToResults(e, `${startIndex + index}`)}><span className='d-inline-block text-truncate' style={{maxWidth: '290px'}}>
                                     {product.title[0]}
                                 </span></a></td>
                             <td>${product.sellingStatus[0].currentPrice[0].__value__}</td>
@@ -172,7 +172,7 @@ class ResultsTable extends Component {
                              id={startIndex + index}
                             //  onClick={this.addtowishlist}
                             onClick={(e) => this.addtowishlist(e, `${startIndex + index}`)}
-                             ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="orange" className="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                             ><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="orange" className="bi bi-cart-plus-fill" viewBox="0 0 16 16">
                                 <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
                             </svg></button>)
                             :
@@ -182,7 +182,7 @@ class ResultsTable extends Component {
                                 id={startIndex + index}
                                //  onClick={this.addtowishlist}
                                onClick={(e) => this.addtowishlist(e, `${startIndex + index}`)}
-                                ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                                ><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-cart-plus-fill" viewBox="0 0 16 16">
                                    <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
                                </svg></button>)
                         }  
