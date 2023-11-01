@@ -29,7 +29,7 @@ class Photos extends Component {
       }
       setTimeout(() => {
         this.setState({ renderDelayed: true });    
-          }, 1000);
+          }, 2000);
       };
 
   render() {

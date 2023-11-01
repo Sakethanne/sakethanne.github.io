@@ -93,3 +93,7 @@
     opacity: 0.8; /* Change the opacity value */
   }
 }
+
+.page-item:hover{
+  text-decoration: underline;
+}

@@ -12,7 +12,8 @@ class ResultsTable extends Component {
           results: null,
           currentPage: 1,
           renderDelayed: false,
-          wishlistproductids: []
+          wishlistproductids: [],
+          indexstored: null
         };
       }
 
@@ -51,7 +52,7 @@ class ResultsTable extends Component {
           setTimeout(() => {
             // console.log('After 1 seconds of sleep');
             this.setState({ renderDelayed: true });
-          }, 1000);
+          }, 2000);
       };
 
       handlePageChange = (page) => {
@@ -92,6 +93,12 @@ class ResultsTable extends Component {
 
       sendDataToResults = (event, index) => {
         const { sendDataToResults } = this.props;
+        this.setState({indexstored: index});
+        sendDataToResults(this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[index].itemId[0]); // Call the callback function with the data
+      };
+
+      sendDataToResultsviaDetails = (event, index) => {
+        const { sendDataToResults } = this.props;
         sendDataToResults(this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[index].itemId[0]); // Call the callback function with the data
       };
 
@@ -131,8 +138,9 @@ class ResultsTable extends Component {
             <div className='col-lg-9'>
             <div className="d-grid gap-2 justify-content-end mb-3">
                 <button className="btn btn-light" 
-                style={{color: 'black'}} 
-                disabled={true}
+                style={{color: 'black'}}
+                onClick={(e) => this.sendDataToResultsviaDetails(e, `${this.state.indexstored}`)} 
+                disabled={this.state.indexstored === null}
                  type="button">Details &gt;
                  </button>
             </div>
@@ -167,24 +175,22 @@ class ResultsTable extends Component {
                             <td>{product.postalCode[0]}</td>
                             <td>
                                 {this.state.wishlistproductids.includes(product.itemId[0]) ? (<button
-                             style={{border: 'none', borderRadius:'4px'}}
+                             style={{border: 'none', borderRadius:'4px', width:'40px', height: '40px'}}
                              type='button' 
                              id={startIndex + index}
                             //  onClick={this.addtowishlist}
-                            onClick={(e) => this.addtowishlist(e, `${startIndex + index}`)}
-                             ><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="orange" className="bi bi-cart-plus-fill" viewBox="0 0 16 16">
-                                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
-                            </svg></button>)
+                            onClick={(e) => this.addtowishlist(e, `${startIndex + index}`)}>
+                            <span className="material-symbols-outlined" style={{color: 'rgba(177,135,47,255)'}}>remove_shopping_cart</span>
+                            </button>)
                             :
                             (<button
-                                style={{border: 'none', borderRadius:'4px'}}
+                                style={{border: 'none', borderRadius:'4px', width:'40px', height: '40px'}}
                                 type='button' 
                                 id={startIndex + index}
                                //  onClick={this.addtowishlist}
-                               onClick={(e) => this.addtowishlist(e, `${startIndex + index}`)}
-                                ><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-cart-plus-fill" viewBox="0 0 16 16">
-                                   <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
-                               </svg></button>)
+                               onClick={(e) => this.addtowishlist(e, `${startIndex + index}`)}>
+                                    <span className="material-symbols-outlined">add_shopping_cart</span>
+                               </button>)
                         }  
                             </td>
                         </tr>

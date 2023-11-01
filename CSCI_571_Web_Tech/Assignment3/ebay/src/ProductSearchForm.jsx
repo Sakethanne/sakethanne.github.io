@@ -194,15 +194,15 @@ class ProductSearchForm extends Component {
                 <label htmlFor="category" className="text-white col-lg-4">Category</label>
                 <div className="col-lg-4">
                   <select className="form-select" id="category" onChange={this.handleSelectChange} value={this.state.category}>
-                    <option>All Categories</option>
-                    <option>Art</option>
-                    <option>Baby</option>
-                    <option>Books</option>
-                    <option>Clothing, Shoes & Accessories</option>
-                    <option>Computers/Tablets & Networking</option>
-                    <option>Health & Beauty</option>
-                    <option>Music</option>
-                    <option>Video Games & Consoles</option>
+                    <option value={0}>All Categories</option>
+                    <option value={550}>Art</option>
+                    <option value={2948}>Baby</option>
+                    <option value={261186}>Books</option>
+                    <option value={11450}>Clothing, Shoes & Accessories</option>
+                    <option value={58058}>Computers/Tablets & Networking</option>
+                    <option value={26395}>Health & Beauty</option>
+                    <option value={11233}>Music</option>
+                    <option value={1249}>Video Games & Consoles</option>
                   </select>
                 </div>
               </div>

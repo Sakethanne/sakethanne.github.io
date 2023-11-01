@@ -2,10 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css'; // Import your custom CSS file
-import {
-  CircularProgressbar,
-  buildStyles
-} from "react-circular-progressbar";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import Photos from './Photos';
 
@@ -17,14 +14,30 @@ class ProductTable extends Component {
       productid: this.props.data,
       isMounted: false,
       results: null,
+      similarresults: null,
       renderDelayed: false,
       wishlistproducts: [],
       productdisplaystate: 'product',
       showOverlay: false,
       selectedImages: [],
-      currentIndex: 0
+      currentIndex: 0,
+      itemsToShow: 5,
+      showMore: true,
+      sortField: 'default',
+      sortDirection: 'ascending'
     };
   }
+
+  handleSortFieldChange = (event) => {
+    const sortField = event.target.value;
+    this.setState({ sortField });
+  };
+
+  handleSortDirectionChange = (event) => {
+    const sortDirection = event.target.value;
+    this.setState({ sortDirection });
+  };
+
 
   openCarousel = (images) => {
     console.log(images);
@@ -84,11 +97,24 @@ class ProductTable extends Component {
         .catch((error) => {
             console.error('Error:', error);
         });
+        console.log('getting the similar products');
+        axios.get(`../../getsimilaritems?productid=${input}`)
+            .then((response) => {
+            if('item' in response.data.getSimilarItemsResponse.itemRecommendations){
+              this.setState({similarresults: response.data.getSimilarItemsResponse.itemRecommendations.item});
+            }
+            else{
+              this.setState({similarresults: null});
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     }
       setTimeout(() => {
         // console.log('After 1 seconds of sleep');
         this.setState({ renderDelayed: true });
-      }, 1000);
+      }, 2000);
   };
 
   productwishlist = async (event, id) => {
@@ -132,6 +158,42 @@ class ProductTable extends Component {
     setToResults(value);
   };
 
+  toggleShowMore = () => {
+    this.setState((prevState) => ({
+      itemsToShow: prevState.showMore ? prevState.similarresults.length : 5, // Toggle between all items and 5 items
+      showMore: !prevState.showMore,
+    }), this.renderSortedProducts);
+    setTimeout(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    }, 0);
+  };
+
+  filterAndSortItems = () => {
+    const { sortField, sortDirection } = this.state;
+    const items = this.state.similarresults;
+    if(items === null){
+      return items;
+    }
+
+    // Sort the items based on the sortField and sortDirection
+    const sortedItems = items.slice().sort((a, b) => {
+      if (sortField === 'price') {
+        return sortDirection === 'ascending' ? a.buyItNowPrice.__value__ - b.buyItNowPrice.__value__ : b.buyItNowPrice.__value__ - a.buyItNowPrice.__value__;
+      }
+      if (sortField === 'shippingcost') {
+        return sortDirection === 'ascending' ? a.shippingCost.__value__ - b.shippingCost.__value__ : b.shippingCost.__value__ - a.shippingCost.__value__;
+      }
+      if (sortField === 'daysleft') {
+        return sortDirection === 'ascending' ? a.timeLeft.substring(a.timeLeft.indexOf("P") + 1, a.timeLeft.indexOf("D")) - b.timeLeft.substring(b.timeLeft.indexOf("P") + 1, b.timeLeft.indexOf("D")) : b.timeLeft.substring(b.timeLeft.indexOf("P") + 1, b.timeLeft.indexOf("D")) - a.timeLeft.substring(a.timeLeft.indexOf("P") + 1, a.timeLeft.indexOf("D")) ;
+      }
+      if (sortField === 'productname') {
+        return sortDirection === 'ascending' ? a.title - b.title : b.title - a.title;
+      }
+      return 0;
+    });
+    return sortedItems;
+  };
+
   render() {
     if (!this.state.renderDelayed) {
       return (<div className='row justify-content-center mt-4'>
@@ -143,6 +205,9 @@ class ProductTable extends Component {
     };
 
     const { showOverlay, selectedImages, currentIndex } = this.state;
+    const { itemsToShow, showMore} = this.state;
+    // const { sortField, sortDirection } = this.state;
+    const items = this.filterAndSortItems();
 
     return (
       <div className='row justify-content-center mt-4'>
@@ -165,19 +230,18 @@ class ProductTable extends Component {
                              type='button' 
                              id={this.state.results.Item.ItemID}
                             onClick={(e) => this.productwishlist(e, `${this.state.results.Item.ItemID}`)}
-                             ><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="orange" className="bi bi-cart-plus-fill" viewBox="0 0 16 16">
-                                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
-                            </svg></button>)
+                             >
+                            <span className="material-symbols-outlined" style={{color: 'rgba(177,135,47,255)'}}>remove_shopping_cart</span>
+                            </button>)
                             :
                             (<button
                                 style={{border: 'none', borderRadius:'2px'}}
                                 type='button' 
                                 id={this.state.results.Item.ItemID}
   
-                               onClick={(e) => this.productwishlist(e, `${this.state.results.Item.ItemID}`)}
-                                ><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-cart-plus-fill" viewBox="0 0 16 16">
-                                   <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
-                               </svg></button>)
+                               onClick={(e) => this.productwishlist(e, `${this.state.results.Item.ItemID}`)}>
+                                  <span className="material-symbols-outlined">add_shopping_cart</span>
+                               </button>)
                         }  
               </div>
             </div>
@@ -234,18 +298,18 @@ class ProductTable extends Component {
                         <div className="overlay-background">
                           <div className="overlay">
                             <button className='overlaybutton' onClick={this.prevImage} type='button'>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+                                <path fillRule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
                               </svg>
                             </button>
                               <img src={selectedImages[currentIndex]} alt={selectedImages[currentIndex]} style={{width: '400px', height: '400px', border: '7px solid black'}}/>
                             <button className="overlaybutton" onClick={this.nextImage} type='button'>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                                <path fillRule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
                               </svg>
                             </button>
                             <button className="close-button" onClick={this.closeCarousel}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-x-circle" viewBox="0 0 16 16">
                               <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                               <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                             </svg>
@@ -348,13 +412,13 @@ class ProductTable extends Component {
                                 width: 10
                               })}/></div></td>
                       </tr>
-                      <tr>
+                      {this.state.results.Item.Seller.FeedbackRatingStar.includes('None') ? (<tr><th>Feedback Rating Star</th><td>N/A</td></tr>) : <tr>
                         <th>Feedback Rating Star</th><td>
                           <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill={this.state.results.Item.Seller.FeedbackRatingStar.replace("Shooting","")} className="bi bi-star-fill" viewBox="0 0 16 16">
                           <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
                           </svg>
                           </td>
-                      </tr>
+                      </tr>}
                       <tr>
                         <th>Top Rated</th><td>{this.state.results.Item.Seller.TopRatedSeller === true ? <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
                           <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
@@ -362,21 +426,85 @@ class ProductTable extends Component {
                           <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                           </svg>}</td>
                       </tr>
-                      <tr>
+                      { 'Storefront' in this.state.results.Item ? 'StoreName' in this.state.results.Item.Storefront ? <tr>
                         <th>Store Name</th><td>{this.state.results.Item.Storefront.StoreName}</td>
-                      </tr>
-                      <tr>
+                      </tr> : '' : ''}
+                      {'Storefront' in this.state.results.Item ? 'StoreURL' in this.state.results.Item.Storefront ? <tr>
                         <th>Buy Product At</th><td><a href={this.state.results.Item.Storefront.StoreURL} target='_blank' rel="noreferrer" style={{textDecoration: 'none', color: 'rgba(101,151,149,255)'}}>Store</a></td>
-                      </tr>
+                      </tr> : '' : ''}
                     </tbody>
                   </table>
                 </div>
               </div>
               
               
-              : this.state.productdisplaystate === 'similar' ? <div>Similar</div> : ''}
-          
-          
+              : this.state.productdisplaystate === 'similar' ? 
+              <div className='row'>
+                <div className="filters">
+                  <label htmlFor="category-filter"></label>
+                  <select id="category-filter" className='p-2 m-2' style={{backgroundColor: 'lightgray', borderRadius: '5px'}} value={this.state.sortField}  onChange={this.handleSortFieldChange}>
+                    <option value="default">Default</option>
+                    <option value="productname">Product Name</option>
+                    <option value="daysleft">Days Left</option>
+                    <option value="price">Price</option>
+                    <option value="shippingcost">Shipping Cost</option>
+                  </select>
+                  <label htmlFor="order-filter"></label>
+                  <select id="order-filter" className='p-2 m-2' style={{backgroundColor: 'lightgray', borderRadius: '5px'}} value={this.state.sortDirection} onChange={this.handleSortDirectionChange}>
+                    <option value="ascending">Ascending</option>
+                    <option value="descending">Descending</option>
+                  </select>
+                </div>
+                <div className='d-flex justify-content-center'>
+                  {this.state.similarresults === null ? 
+                  (<div className='text-center'>
+                    <div className="alert alert-warning p-2" role="alert">
+                        No Items in Wishlist
+                    </div>
+                </div>)
+                   : (
+                    <div className='col-lg-12'>
+                      <div className='text-left'>
+                       {items.slice(0, itemsToShow).map((item, index) => (
+                          <div key={index} className='d-flex' style={{backgroundColor:'rgba(32,35,40,255)', marginBottom: '5px', padding: '3px'}}>
+                            <table className='table-sm'>
+                              <tbody>
+                                <tr>
+                                  <td rowSpan={4}><div style={{width: '130px', height:'130px', textAlign: 'center', alignItems: 'center'}}><a href={item.imageURL}><img className='p-2' src={item.imageURL} alt={item.title} style={{maxWidth: '130px', maxHeight: '130px', height: '130px', width: '130px'}} /></a></div></td>
+                                  <td>
+                                    {'viewItemURL' in item ? (<a href={item.viewItemURL} target='_blank' rel="noreferrer" style={{textDecoration: 'none', color: 'rgba(110,143,146,255)'}}>{item.title}</a>) : `${item.title}`}
+                                    </td>
+                                </tr>
+                                <tr>
+                                  <td style={{color: 'rgba(153,180,145,255)'}}>Price: ${item.buyItNowPrice.__value__}</td>
+                                </tr>
+                                <tr>
+                                  <td style={{color: 'rgba(201,169,127,255)'}}>Shipping Cost: ${item.shippingCost.__value__}</td>
+                                </tr>
+                                <tr>
+                                  <td style={{color: 'white'}}>Days Left: {item.timeLeft.substring(item.timeLeft.indexOf("P") + 1, item.timeLeft.indexOf("D"))}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          ))}
+                        </div>
+                       </div>
+                   )
+                  }  
+                </div>
+                <div className='btn text-center mt-3' style={{border: 'none'}}>
+                          <button 
+                          className="btn p-2" 
+                          type="button" 
+                          onClick={this.toggleShowMore} 
+                          disabled={this.state.similarresults === null}
+                          style={{backgroundColor: 'rgba(32,35,40,255)', color: 'white', borderRadius: '4px', border:'none'}}>
+                              {showMore ? 'Show More' : 'Show Less'}
+                          </button>
+                        </div>
+                </div>
+                 : ''}
           </div>
         </div>
     );

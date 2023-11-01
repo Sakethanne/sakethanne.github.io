@@ -35,6 +35,11 @@ app.get("/senddata", (req, res) => {
     ebayurl += req.query.distance;
     ebayurl += '&itemFilter(1).name=HideDuplicateItems&itemFilter(1).value=true';
     var i = 2;
+    if(req.query.category !== 'All Categories'){
+        ebayurl += '&itemFilter('+i+').name=Category&itemFilter('+i+').value='
+        ebayurl += req.query.category;
+        i = i + 1;
+    };
     if(req.query.freeshipping === 'true'){
         ebayurl += '&itemFilter('+i+').name=FreeShippingOnly&itemFilter('+i+').value=true';
         i = i + 1;
@@ -210,7 +215,9 @@ async function adddata(productid,product_name,product_price,product_shipping,pro
     const result = await favorites.insertOne(data_to_insert);
     console.log(result.insertedId);
     return result.insertedId;
-  } finally {
+  } catch (err) {
+    console.log(err);
+  }finally {
     await client.close();
   }
 };
@@ -229,7 +236,9 @@ async function getdatamongo() {
       });
     //   console.log(wishlisted_products);
       return (wishlisted_products);
-    } finally {
+    } catch (err) {
+        console.log(err);
+    }finally {
       await client.close();
     }
   };
