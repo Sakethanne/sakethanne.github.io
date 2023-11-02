@@ -13,7 +13,6 @@ class ResultsTable extends Component {
           currentPage: 1,
           renderDelayed: false,
           wishlistproductids: [],
-          indexstored: null
         };
       }
 
@@ -99,7 +98,7 @@ class ResultsTable extends Component {
 
       sendDataToResultsviaDetails = (event, index) => {
         const { sendDataToResults } = this.props;
-        sendDataToResults(this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[index].itemId[0]); // Call the callback function with the data
+        sendDataToResults(index); // Call the callback function with the data
       };
 
   render() {
@@ -139,12 +138,12 @@ class ResultsTable extends Component {
             <div className="d-grid gap-2 justify-content-end mb-3">
                 <button className="btn btn-light" 
                 style={{color: 'black'}}
-                onClick={(e) => this.sendDataToResultsviaDetails(e, `${this.state.indexstored}`)} 
-                disabled={this.state.indexstored === null}
+                onClick={(e) => this.sendDataToResultsviaDetails(e, `${this.props.data.producttopass}`)} 
+                disabled={this.props.data.producttopass === ''}
                  type="button">Details &gt;
                  </button>
             </div>
-                <div className='text-left'>
+                <div className='text-left overflow-auto'>
                 <table className="table table-dark table-striped table-hover table-borderless small">
                     <thead className='p-1 align-items-left text-left'>
                         <tr className='p-1 align-items-left'>
@@ -162,7 +161,7 @@ class ResultsTable extends Component {
                         <tr key={index} style={{height:'70px'}} className='p-2'>
                             <td>{startIndex + index + 1}</td>
                             <td>
-                                <a href={product.galleryURL[0]} target='_blank' rel="noreferrer"><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '80px', height: '80px', maxWidth:'80px', maxHeight:'80px'}}/></a>
+                                <a href={product.galleryURL[0]} target='_blank' rel="noreferrer"><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '90px', height: '100px', maxWidth:'90px', maxHeight:'100px'}}/></a>
                             </td>
                             {/* eslint-disable-next-line */}
                             <td><a href='#' className='text-decoration-none' title={product.title[0]} onClick={(e) => this.sendDataToResults(e, `${startIndex + index}`)}><span className='d-inline-block text-truncate' style={{maxWidth: '290px'}}>

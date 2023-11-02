@@ -167,6 +167,12 @@ class ProductSearchForm extends Component {
     this.setState({ displayresults: 'product'});
   };
 
+  receiveDataFromWishlistTable = (data) => {
+    this.setState({ activeButton: 'results' });
+    this.setState({ producttopass: data });
+    this.setState({ displayresults: 'product'});
+  };
+
   // Function to receive data from the child component
   receiveDataFromProductTable = (data) => {
     this.setState({displayresults: 'results'})
@@ -178,7 +184,7 @@ class ProductSearchForm extends Component {
     <div>
       <div style={{backgroundColor: 'rgba(33,36,41,255)', borderRadius:'8px'}} className="container col-lg-9 mt-4 align-items-center">
         <div className="row justify-content-center">
-          <div className="text-left col-lg-6"> {/* Background 10 columns wide on larger screens */}
+          <div className="text-left col-lg-6 fixed-element"> {/* Background 10 columns wide on larger screens */}
             <form style={{ paddingBottom:'15px', alignContent:'center'}} className='small' onSubmit={this.handleSubmit}>
               <h3 className="text-white text-left pt-4">Product Search</h3>
               <div className="form-group row pb-4 pt-4 has-validation"> {/* Use row class for label + input layout */}
@@ -333,7 +339,7 @@ class ProductSearchForm extends Component {
       </button>
     </div>
     <div>
-      {this.state.activeButton === 'results' ? this.state.displayflag === true ? this.state.displayresults === 'results' ? <ResultsTable data={this.state} sendDataToResults={this.receiveDataFromResultsTable}/> : <ProductTable data={this.state.producttopass} setToResults={this.receiveDataFromProductTable}/> : '' : <WishlistTable />}
+      {this.state.activeButton === 'results' ? this.state.displayflag === true ? this.state.displayresults === 'results' ? <ResultsTable data={this.state} sendDataToResults={this.receiveDataFromResultsTable}/> : <ProductTable data={this.state.producttopass} setToResults={this.receiveDataFromProductTable}/> : '' : <WishlistTable data={this.state.producttopass} sendDatafromWishlist={this.receiveDataFromWishlistTable}/>}
     </div>
     </div>
     );

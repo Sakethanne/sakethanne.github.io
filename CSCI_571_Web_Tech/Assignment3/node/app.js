@@ -2,7 +2,7 @@ const express = require("express");
 const axios = require('axios');
 const app = express();
 app.use(express.json());
-// import { OAuthToken } from './ebay_oauth_token.js';
+
 const OAuthToken = require('./ebay_oauth_token.js');
 const { ObjectId } = require('mongodb');
 
@@ -14,7 +14,6 @@ const oauthTokenobj = new OAuthToken(client_id, client_secret);
 
 const { MongoClient } = require("mongodb");
 
-// Replace the uri string with your connection string.
 const uri = "mongodb+srv://sakethanne:annesaketh@ebay.gtnoxu7.mongodb.net/?retryWrites=true&w=majority";
 
 const client = new MongoClient(uri);

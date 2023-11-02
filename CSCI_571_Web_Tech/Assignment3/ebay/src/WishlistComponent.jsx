@@ -83,6 +83,11 @@ class WishlistTable extends Component {
     }
   };
 
+  sendDatafromWishlist = (event, index) => {
+    const { sendDatafromWishlist } = this.props;
+    sendDatafromWishlist(index); // Call the callback function with the data
+  };
+
   render() {
     if(!this.state.renderDelayed) {
       return (<div className='row justify-content-center mt-4'>
@@ -95,11 +100,11 @@ class WishlistTable extends Component {
 
     if(this.state.wishlist.length === 0) {
       return (
-        <div className='row justify-content-center mt-4'>
+        <div className='row justify-content-center mt-2'>
             <div className='col-lg-9'>
-                <div className='text-center'>
+                <div className='text-left'>
                     <div className="alert alert-warning p-2" role="alert">
-                        No Items in Wishlist
+                        No Records
                     </div>
                 </div>
             </div>
@@ -112,11 +117,12 @@ class WishlistTable extends Component {
         <div className="d-grid gap-2 justify-content-end mb-3">
                 <button className="btn btn-light" 
                 style={{color: 'black'}} 
-                disabled={true}
+                disabled={this.props.data === ""}
+                onClick={(e) => this.sendDatafromWishlist(e, `${this.props.data}`)}
                  type="button">Details &gt;
                  </button>
             </div>
-          <div className='text-center'>
+          <div className='text-left overflow-auto'>
             <table className="table table-dark table-striped table-hover table-borderless small">
               <thead className='p-1 align-items-left text-left'>
                 <tr className='p-1 align-items-left'>
@@ -124,7 +130,7 @@ class WishlistTable extends Component {
                   <th>Image</th>
                   <th>Title</th>
                   <th>Price</th>
-                  <th>Shipping</th>
+                  <th>Shipping Option</th>
                   <th>Wishlist</th>
                 </tr>
               </thead>
@@ -134,7 +140,7 @@ class WishlistTable extends Component {
                 <tr key={index} style={{height:'70px'}} className='p-2'>
                   <td>{index + 1}</td>
                     <td>
-                      <a href={product.productimage} target='_blank' rel="noreferrer"><img src={product.productimage} alt={product.productname.replace(/%20/g, ' ')} style={{width: '80px', height: '80px', maxWidth:'80px', maxHeight:'80px'}}/></a>
+                      <a href={product.productimage} target='_blank' rel="noreferrer"><img src={product.productimage} alt={product.productname.replace(/%20/g, ' ')} style={{width: '90px', height: '100px', maxWidth:'90px', maxHeight:'100px'}}/></a>
                     </td>
                     {/* eslint-disable-next-line */}
                     <td><a className='text-decoration-none' title={product.productname.replace(/%20/g, ' ')}><span className='d-inline-block text-truncate' style={{maxWidth: '290px'}}>
