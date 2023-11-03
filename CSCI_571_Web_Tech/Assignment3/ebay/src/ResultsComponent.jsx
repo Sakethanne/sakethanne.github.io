@@ -51,7 +51,7 @@ class ResultsTable extends Component {
           setTimeout(() => {
             // console.log('After 1 seconds of sleep');
             this.setState({ renderDelayed: true });
-          }, 2000);
+          }, 2200);
       };
 
       handlePageChange = (page) => {

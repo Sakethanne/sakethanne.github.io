@@ -508,7 +508,7 @@ class ProductTable extends Component {
               <div className='row'>
                 <div className="filters">
                   <label htmlFor="category-filter"></label>
-                  <select id="category-filter" className='p-2 m-2' style={{backgroundColor: 'lightgray', borderRadius: '5px'}} value={this.state.sortField}  onChange={this.handleSortFieldChange}>
+                  <select id="category-filter" className='col-11 col-lg-2 p-2 m-2' style={{backgroundColor: 'lightgray', borderRadius: '5px'}} value={this.state.sortField}  onChange={this.handleSortFieldChange}>
                     <option value="default">Default</option>
                     <option value="productname">Product Name</option>
                     <option value="daysleft">Days Left</option>
@@ -516,7 +516,7 @@ class ProductTable extends Component {
                     <option value="shippingcost">Shipping Cost</option>
                   </select>
                   <label htmlFor="order-filter"></label>
-                  <select id="order-filter" className='p-2 m-2' style={{backgroundColor: 'lightgray', borderRadius: '5px'}} value={this.state.sortDirection} onChange={this.handleSortDirectionChange}>
+                  <select id="order-filter" className='col-11 col-lg-2 p-2 m-2' style={{backgroundColor: 'lightgray', borderRadius: '5px'}} value={this.state.sortDirection} onChange={this.handleSortDirectionChange}>
                     <option value="ascending">Ascending</option>
                     <option value="descending">Descending</option>
                   </select>
