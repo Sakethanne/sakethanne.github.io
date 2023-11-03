@@ -32,9 +32,9 @@ class ResultsTable extends Component {
       }
     
     componentDidMount(){
-        if(!this.state.isMounted) {
+        // if(!this.state.isMounted) {
             // eslint-disable-next-line
-            this.state.isMounted = true;
+            // this.state.isMounted = true;
             const input = this.props.data;
             const queryParams = new URLSearchParams(input).toString();
             console.log(queryParams)
@@ -47,7 +47,7 @@ class ResultsTable extends Component {
             .catch((error) => {
                 console.error('Error:', error);
             });
-        }
+        // }
           setTimeout(() => {
             // console.log('After 1 seconds of sleep');
             this.setState({ renderDelayed: true });
@@ -174,7 +174,7 @@ class ResultsTable extends Component {
                             <td>{product.postalCode[0]}</td>
                             <td>
                                 {this.state.wishlistproductids.includes(product.itemId[0]) ? (<button
-                             style={{border: 'none', borderRadius:'4px', width:'40px', height: '40px'}}
+                             style={{border: 'none', borderRadius:'4px', width:'40px', height: '35px'}}
                              type='button' 
                              id={startIndex + index}
                             //  onClick={this.addtowishlist}
@@ -183,7 +183,7 @@ class ResultsTable extends Component {
                             </button>)
                             :
                             (<button
-                                style={{border: 'none', borderRadius:'4px', width:'40px', height: '40px'}}
+                                style={{border: 'none', borderRadius:'4px', width:'40px', height: '35px'}}
                                 type='button' 
                                 id={startIndex + index}
                                //  onClick={this.addtowishlist}

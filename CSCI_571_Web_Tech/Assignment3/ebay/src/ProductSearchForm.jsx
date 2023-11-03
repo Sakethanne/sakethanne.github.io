@@ -297,7 +297,7 @@ class ProductSearchForm extends Component {
                 <button 
                   style={{ marginRight:'30px', backgroundColor:'rgba(249,251,253,255)', color:'rgba(136,134,133,255)', paddingLeft:'10px', paddingRight:'10px', paddingBottom:'6px', paddingTop:'6px'}}
                   type="submit"
-                  disabled={((this.state.keyword === '') || (this.state.location === 'otherlocation' && !(/^\d{5}(-\d{4})?$/.test(this.state.from))))}
+                  disabled={(((this.state.keyword === '') || (/[!@#$%^&*()_+{}\[\]:;<>,.?~\\]/.test(this.state.keyword))) || (this.state.location === 'otherlocation' && !(/^\d{5}(-\d{4})?$/.test(this.state.from))))}
                   // disabled={}
                   className="btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">

@@ -4,8 +4,6 @@ import axios from 'axios';
 import './App.css'; // Import your custom CSS file
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import Photos from './Photos';
-
 
 class ProductTable extends Component {
   constructor(props) {
@@ -14,6 +12,7 @@ class ProductTable extends Component {
       productid: this.props.data,
       isMounted: false,
       results: null,
+      imageurls: null,
       similarresults: null,
       renderDelayed: false,
       wishlistproducts: [],
@@ -110,11 +109,24 @@ class ProductTable extends Component {
         .catch((error) => {
             console.error('Error:', error);
         });
+        
     }
       setTimeout(() => {
-        // console.log('After 1 seconds of sleep');
+        console.log('getting images');
+        this.getphotos();
         this.setState({ renderDelayed: true });
       }, 2000);
+  };
+
+  getphotos = async () => {
+    await axios.get(`../../getphotos?productname=${this.state.results.Item.Title}`)
+            .then((response) => {
+              console.log(response.data.items);
+              this.setState({imageurls: response.data.items});
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
   };
 
   productwishlist = async (event, id) => {
@@ -288,54 +300,59 @@ class ProductTable extends Component {
               {this.state.productdisplaystate === 'product' ? 
               
               <div className='row'>
-                <div className='d-flex justity-content-center'>
-                  <table className='table table-dark table-striped table-hover table-borderless'>
+                <div className='d-flex justity-content-center table-responsive'>
+                  <table className='table table-dark table-striped table-hover table-borderless custom'>
                     <tbody>
                       <tr>
-                        <th>Product Images</th>
-                        <td><a href="#" onClick={() => this.openCarousel(this.state.results.Item.PictureURL)} style={{textDecoration: 'none', color: 'rgba(101,151,149,255)'}}>View Product Images Here</a>
+                        <th className='col-lg-6'>Product Images</th>
+                        <td className='col-lg-6'><a href="#" onClick={() => this.openCarousel(this.state.results.Item.PictureURL)} style={{textDecoration: 'none', color: 'rgba(101,151,149,255)'}}>View Product Images Here</a>
                         {showOverlay && (
                         <div className="overlay-background">
-                          <div className="overlay">
-                            <button className='overlaybutton' onClick={this.prevImage} type='button'>
+                        <div className="overlay">
+                          <div className="overlay-header" style={{backgroundColor: 'white', color:'black'}}>
+                            <h3 style={{backgroundColor: 'white', color:'black'}}>Product Images</h3>
+                            <button className="close-button" onClick={this.closeCarousel}>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-x-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                              </svg>
+                            </button>
+                          </div>
+                          <div className="overlay-content">
+                            <button className='overlaybutton prev-button' onClick={this.prevImage} type='button'>
                               <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-arrow-left-circle" viewBox="0 0 16 16">
                                 <path fillRule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
                               </svg>
                             </button>
-                              <img src={selectedImages[currentIndex]} alt={selectedImages[currentIndex]} style={{width: '400px', height: '400px', border: '7px solid black'}}/>
-                            <button className="overlaybutton" onClick={this.nextImage} type='button'>
+                            <img src={selectedImages[currentIndex]} alt={selectedImages[currentIndex]} style={{width: '370px', height: '400px', border: '7px solid black'}}/>
+                            <button className="overlaybutton next-button" onClick={this.nextImage} type='button'>
                               <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-arrow-right-circle" viewBox="0 0 16 16">
                                 <path fillRule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
                               </svg>
                             </button>
-                            <button className="close-button" onClick={this.closeCarousel}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-x-circle" viewBox="0 0 16 16">
-                              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                            </svg>
-                            </button>
                           </div>
                         </div>
+                      </div>
                       )}
                         </td>
                       </tr>
                       
                       <tr>
-                        <th>Price</th>
-                        <td>${this.state.results.Item.CurrentPrice.Value}</td>
+                        <th className='col-lg-6'>Price</th>
+                        <td className='col-lg-6'>${this.state.results.Item.CurrentPrice.Value}</td>
                       </tr>
                       <tr>
-                        <th>Location</th>
-                        <td>{this.state.results.Item.Location}</td>
+                        <th className='col-lg-6'>Location</th>
+                        <td className='col-lg-6'>{this.state.results.Item.Location}</td>
                       </tr>
                       <tr>
-                        <th>Return Policy (US)</th>
-                        <td>{this.state.results.Item.ReturnPolicy.ReturnsAccepted} with in {this.state.results.Item.ReturnPolicy.ReturnsWithin}</td>
+                        <th className='col-lg-6'>Return Policy (US)</th>
+                        <td className='col-lg-6'>{this.state.results.Item.ReturnPolicy.ReturnsAccepted} with in {this.state.results.Item.ReturnPolicy.ReturnsWithin}</td>
                       </tr>
                       {this.state.results.Item.ItemSpecifics.NameValueList.map((feature) => (
                   <tr key={feature.Name}>
-                    <td>{feature.Name}</td>
-                    <td>{feature.Value[0]}</td>
+                    <th className='col-lg-6'>{feature.Name}</th>
+                    <td className='col-lg-6'>{feature.Value[0]}</td>
                     </tr>))}
                     </tbody>
                   </table>
@@ -343,55 +360,94 @@ class ProductTable extends Component {
               </div>
               
               
-              : this.state.productdisplaystate === 'photos' ? <Photos data={this.state.results.Item.Title}/> : this.state.productdisplaystate === 'shipping' ? 
+              : this.state.productdisplaystate === 'photos' ? 
               
-              
-              <div className='row'>
-                <div className='d-flex justify-content-center'>
-                  <table className='table table-dark table-striped table-hover table-borderless'>
-                    <tbody>
-                    <tr className='col-lg-12'>
-                      <th>Shipping Cost</th><td>{this.state.results.Item.CurrentPrice.__value__ === '0.0' ? `$${this.state.results.Item.CurrentPrice.__value__}` : 'Free Shipping'}</td>
-                    </tr>
-                    <tr className='col-lg-12'>
-                      <th>Shipping Locations</th><td>{this.state.results.Item.ShipToLocations}</td>
-                    </tr>
-                    <tr className='col-lg-12'>
-                      <th>Handling time</th><td>{this.state.results.Item.HandlingTime} Days</td>
-                    </tr>
-                    <tr className='col-lg-12'>
-                      <th>Expedited Shipping</th><td>{this.state.results.Item.ReturnPolicy.ShippingCostPaidBy === 'Seller' ? <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
-                          <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-                          </svg> : <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
-                          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                        </svg>}</td>
-                    </tr>
-                    <tr className='col-lg-12'>
-                      <th>One Day Shipping</th><td>{this.state.results.Item.HandlingTime === '1' ? <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
-                          <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-                          </svg> : <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
-                          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                          </svg>}</td>
-                    </tr>
-                    <tr className='col-lg-12'>
-                      <th>Return Accepted</th><td>{this.state.results.Item.ReturnPolicy.ReturnsAccepted === 'Returns Accepted' ? <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
-                          <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-                          </svg> : <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
-                          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                          </svg>}</td>
-                    </tr>
-                    </tbody>
-                  </table>
-                  </div>
+              (<div className='row'>
+              <div className='col-lg-4 p-1'>
+                <a href={this.state.imageurls[0].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[0].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+                <a href={this.state.imageurls[1].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[1].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
               </div>
+              <div className='col-lg-4 p-1'>
+                <a href={this.state.imageurls[2].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[2].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+                <a href={this.state.imageurls[3].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[3].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+                <a href={this.state.imageurls[4].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[4].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+              </div>
+              <div className='col-lg-4 p-1'>
+                <a href={this.state.imageurls[5].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[5].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+                <a href={this.state.imageurls[6].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[6].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+                <a href={this.state.imageurls[7].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[7].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+              </div>
+          </div>)
+              
+              : this.state.productdisplaystate === 'shipping' ? 
+              
+              (<div className='row'>
+              <div className='d-flex justify-content-center table-responsive'>
+                <table className='table table-dark table-striped table-hover table-borderless custom'>
+                  <tbody>
+                    <tr>
+                      <th className='col-lg-6'>Shipping Cost</th>
+                      <td className='col-lg-6'>
+                        {this.state.results.Item.CurrentPrice.__value__ === '0.0' ? `$${this.state.results.Item.CurrentPrice.__value__}` : 'Free Shipping'}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th className='col-lg-6'>Shipping Locations</th>
+                      <td className='col-lg-6'>{this.state.results.Item.ShipToLocations}</td>
+                    </tr>
+                    <tr>
+                      <th className='col-lg-6'>Handling time</th>
+                      <td className='col-lg-6'>{this.state.results.Item.HandlingTime} Days</td>
+                    </tr>
+                    <tr>
+                      <th className='col-lg-6'>Expedited Shipping</th>
+                      <td className='col-lg-6'>
+                        {this.state.results.Item.ReturnPolicy.ShippingCostPaidBy === 'Seller' ? 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
+                          <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                        </svg> : 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
+                          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th className='col-lg-6'>One Day Shipping</th>
+                      <td className='col-lg-6'>
+                        {this.state.results.Item.HandlingTime === '1' ? 
+                        <svg xmlns="http://w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
+                          <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                        </svg> : 
+                        <svg xmlns="http://w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
+                          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th className='col-lg-6'>Return Accepted</th>
+                      <td className='col-lg-6'>
+                        {this.state.results.Item.ReturnPolicy.ReturnsAccepted === 'Returns Accepted' ? 
+                        <svg xmlns="http://w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
+                          <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                        </svg> : 
+                        <svg xmlns="http://w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
+                          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            )
                
                
                : this.state.productdisplaystate === 'seller' ? 
                
                
                <div className='row'>
-                <div className='col-lg-12 d-flex justify-content-center mt--4'>
-                  <table className='table table-dark table-striped table-hover table-borderless'>
+                <div className='col-lg-12 d-flex justify-content-center table-responsive mt--4'>
+                  <table className='table table-dark table-striped table-hover table-borderless custom'>
                     <thead>
                       <tr>
                         <th className='text-uppercase text-center fs-3' colSpan={2}>{this.state.results.Item.Seller.UserID}</th>
@@ -399,10 +455,12 @@ class ProductTable extends Component {
                     </thead>
                     <tbody>
                       <tr>
-                        <th>Feedback Score</th><td>{this.state.results.Item.Seller.FeedbackScore}</td>
+                        <th className='col-lg-6'>Feedback Score</th>
+                        <td className='col-lg-6'>{this.state.results.Item.Seller.FeedbackScore}</td>
                       </tr>
                       <tr>
-                        <th>Popularity</th><td><div style={{width: '40px', height: '40px'}}><CircularProgressbar
+                        <th className='col-lg-6'>Popularity</th>
+                        <td className='col-lg-6'><div style={{width: '40px', height: '40px'}}><CircularProgressbar
                               value={this.state.results.Item.Seller.PositiveFeedbackPercent}
                               text={`${this.state.results.Item.Seller.PositiveFeedbackPercent}%`}
                               styles={buildStyles({
@@ -412,25 +470,25 @@ class ProductTable extends Component {
                                 width: 10
                               })}/></div></td>
                       </tr>
-                      {this.state.results.Item.Seller.FeedbackRatingStar.includes('None') ? (<tr><th>Feedback Rating Star</th><td>N/A</td></tr>) : <tr>
-                        <th>Feedback Rating Star</th><td>
+                      {this.state.results.Item.Seller.FeedbackRatingStar.includes('None') ? (<tr><th className='col-lg-6'>Feedback Rating Star</th><td className='col-lg-6'>N/A</td></tr>) : <tr>
+                        <th className='col-lg-6'>Feedback Rating Star</th><td className='col-lg-6'>
                           <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill={this.state.results.Item.Seller.FeedbackRatingStar.replace("Shooting","")} className="bi bi-star-fill" viewBox="0 0 16 16">
                           <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
                           </svg>
                           </td>
                       </tr>}
                       <tr>
-                        <th>Top Rated</th><td>{this.state.results.Item.Seller.TopRatedSeller === true ? <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
+                        <th className='col-lg-6'>Top Rated</th><td className='col-lg-6'>{this.state.results.Item.Seller.TopRatedSeller === true ? <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
                           <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
                           </svg> : <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
                           <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                           </svg>}</td>
                       </tr>
                       { 'Storefront' in this.state.results.Item ? 'StoreName' in this.state.results.Item.Storefront ? <tr>
-                        <th>Store Name</th><td>{this.state.results.Item.Storefront.StoreName}</td>
+                        <th className='col-lg-6'>Store Name</th><td className='col-lg-6'>{this.state.results.Item.Storefront.StoreName}</td>
                       </tr> : '' : ''}
                       {'Storefront' in this.state.results.Item ? 'StoreURL' in this.state.results.Item.Storefront ? <tr>
-                        <th>Buy Product At</th><td><a href={this.state.results.Item.Storefront.StoreURL} target='_blank' rel="noreferrer" style={{textDecoration: 'none', color: 'rgba(101,151,149,255)'}}>Store</a></td>
+                        <th className='col-lg-6'>Buy Product At</th><td className='col-lg-6'><a href={this.state.results.Item.Storefront.StoreURL} target='_blank' rel="noreferrer" style={{textDecoration: 'none', color: 'rgba(101,151,149,255)'}}>Store</a></td>
                       </tr> : '' : ''}
                     </tbody>
                   </table>
@@ -463,33 +521,45 @@ class ProductTable extends Component {
                     </div>
                 </div>)
                    : (
+                    
                     <div className='col-lg-12'>
-                      <div className='text-left'>
-                       {items.slice(0, itemsToShow).map((item, index) => (
-                          <div key={index} className='d-flex' style={{backgroundColor:'rgba(32,35,40,255)', marginBottom: '5px', padding: '3px'}}>
-                            <table className='table-sm'>
-                              <tbody>
-                                <tr>
-                                  <td rowSpan={4}><div style={{width: '130px', height:'130px', textAlign: 'center', alignItems: 'center'}}><a href={item.imageURL}><img className='p-2' src={item.imageURL} alt={item.title} style={{maxWidth: '130px', maxHeight: '130px', height: '130px', width: '130px'}} /></a></div></td>
-                                  <td>
-                                    {'viewItemURL' in item ? (<a href={item.viewItemURL} target='_blank' rel="noreferrer" style={{textDecoration: 'none', color: 'rgba(110,143,146,255)'}}>{item.title}</a>) : `${item.title}`}
-                                    </td>
-                                </tr>
-                                <tr>
-                                  <td style={{color: 'rgba(153,180,145,255)'}}>Price: ${item.buyItNowPrice.__value__}</td>
-                                </tr>
-                                <tr>
-                                  <td style={{color: 'rgba(201,169,127,255)'}}>Shipping Cost: ${item.shippingCost.__value__}</td>
-                                </tr>
-                                <tr>
-                                  <td style={{color: 'white'}}>Days Left: {item.timeLeft.substring(item.timeLeft.indexOf("P") + 1, item.timeLeft.indexOf("D"))}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          ))}
-                        </div>
-                       </div>
+  <div className='text-left'>
+    {items.slice(0, itemsToShow).map((item, index) => (
+      <div key={index} className='d-flex flex-md-row flex-column' style={{ backgroundColor: 'rgba(32, 35, 40, 255)', marginBottom: '5px', padding: '3px' }}>
+        <div className='d-md-flex' style={{ width: '130px', height: '130px', textAlign: 'center', alignItems: 'center' }}>
+          <a href={item.imageURL}>
+            <img className='p-2' src={item.imageURL} alt={item.title} style={{ maxWidth: '130px', maxHeight: '130px', height: '130px', width: '130px' }} />
+          </a>
+        </div>
+        <div className='d-md-flex flex-column'>
+          <table className='table-sm'>
+            <tbody>
+              <tr>
+                <td>
+                  {'viewItemURL' in item ? (
+                    <a href={item.viewItemURL} target='_blank' rel="noreferrer" style={{ textDecoration: 'none', color: 'rgba(110, 143, 146, 255)' }}>
+                      {item.title}
+                    </a>
+                  ) : `${item.title}`}
+                </td>
+              </tr>
+              <tr>
+                <td style={{ color: 'rgba(153, 180, 145, 255)' }}>Price: ${item.buyItNowPrice.__value__}</td>
+              </tr>
+              <tr>
+                <td style={{ color: 'rgba(201, 169, 127, 255)' }}>Shipping Cost: ${item.shippingCost.__value__}</td>
+              </tr>
+              <tr>
+                <td style={{ color: 'white' }}>Days Left: {item.timeLeft.substring(item.timeLeft.indexOf("P") + 1, item.timeLeft.indexOf("D"))}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
                    )
                   }  
                 </div>

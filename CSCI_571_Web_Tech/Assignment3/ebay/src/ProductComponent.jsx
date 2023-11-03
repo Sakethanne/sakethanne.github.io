@@ -84,9 +84,9 @@ class ProductTable extends Component {
   }
 
   componentDidMount(){
-    if(!this.state.isMounted) {
-        // eslint-disable-next-line
-        this.state.isMounted = true;
+    // if(!this.state.isMounted) {
+    //     // eslint-disable-next-line
+    //     this.state.isMounted = true;
         const input = this.props.data;
         axios.get(`../../getsingleitem?productid=${input}`)
             .then((response) => {
@@ -110,7 +110,7 @@ class ProductTable extends Component {
             console.error('Error:', error);
         });
         
-    }
+    // }
       setTimeout(() => {
         console.log('getting images');
         this.getphotos();
@@ -305,33 +305,41 @@ class ProductTable extends Component {
                     <tbody>
                       <tr>
                         <th className='col-lg-6'>Product Images</th>
-                        <td className='col-lg-6'><a href="#" onClick={() => this.openCarousel(this.state.results.Item.PictureURL)} style={{textDecoration: 'none', color: 'rgba(101,151,149,255)'}}>View Product Images Here</a>
+                        <td className='col-lg-6'><a onClick={() => this.openCarousel(this.state.results.Item.PictureURL)} style={{textDecoration: 'none', color: 'rgba(101,151,149,255)', cursor: 'pointer'}}>View Product Images Here</a>
                         {showOverlay && (
                         <div className="overlay-background">
-                        <div className="overlay">
-                          <div className="overlay-header" style={{backgroundColor: 'white', color:'black'}}>
-                            <h3 style={{backgroundColor: 'white', color:'black'}}>Product Images</h3>
-                            <button className="close-button" onClick={this.closeCarousel}>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-x-circle" viewBox="0 0 16 16">
-                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                              </svg>
+                          <div className="overlay">
+                            <div className="overlay-header" style={{backgroundColor: 'white', color:'black', borderBottom: '0.7px solid black'}}>
+                              <h5 style={{backgroundColor: 'white', color:'black', border: 'none', paddingTop:'10px'}}>Product Images</h5>
+                              <button className="close-button" onClick={this.closeCarousel}>
+                              <span className="material-symbols-outlined">close</span>
                             </button>
                           </div>
-                          <div className="overlay-content">
-                            <button className='overlaybutton prev-button' onClick={this.prevImage} type='button'>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-arrow-left-circle" viewBox="0 0 16 16">
-                                <path fillRule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
-                              </svg>
-                            </button>
-                            <img src={selectedImages[currentIndex]} alt={selectedImages[currentIndex]} style={{width: '370px', height: '400px', border: '7px solid black'}}/>
-                            <button className="overlaybutton next-button" onClick={this.nextImage} type='button'>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-arrow-right-circle" viewBox="0 0 16 16">
-                                <path fillRule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-                              </svg>
-                            </button>
+                          <div className='overlay-content mt-2'>
+                            <div className="container">
+                              <div className='d-flex flex-row'>
+                                <div className='d-flex justify-content-center align-items-center'>
+                                  <button className='overlaybutton prev-button' onClick={this.prevImage} type='button'>
+                                    <span className="material-symbols-outlined">arrow_back_ios</span>
+                                  </button>
+                                </div>
+                                <div className='d-flex justify-content-center align-items-center'>
+                                  <img src={selectedImages[currentIndex]} alt={selectedImages[currentIndex]} style={{width: '320px', height: '350px', border: '5px solid black'}}/>
+                                </div>
+                                <div className='d-flex justify-content-center align-items-center'>
+                                  <button className="overlaybutton next-button" onClick={this.nextImage} type='button'>
+                                    <span className="material-symbols-outlined">arrow_forward_ios</span>
+                                  </button>
+                                </div>
+                              </div>
+                            <div>
+                          </div>
+                          </div>
+                          <div className='overlay-footer m-2 pt-2' style={{backgroundColor: 'white', color: 'black', textAlign: 'right', borderTop: '0.7px solid black'}}>
+                          <button type="button" className="btn btn-secondary" onClick={this.closeCarousel}>Close</button>
                           </div>
                         </div>
+                          </div>
                       </div>
                       )}
                         </td>
@@ -347,7 +355,7 @@ class ProductTable extends Component {
                       </tr>
                       <tr>
                         <th className='col-lg-6'>Return Policy (US)</th>
-                        <td className='col-lg-6'>{this.state.results.Item.ReturnPolicy.ReturnsAccepted} with in {this.state.results.Item.ReturnPolicy.ReturnsWithin}</td>
+                        <td className='col-lg-6'>{this.state.results.Item.ReturnPolicy.ReturnsAccepted}{this.state.results.Item.ReturnPolicy.ReturnsAccepted === 'Returns Accepted' ? `with in ${this.state.results.Item.ReturnPolicy.ReturnsWithin}` : ''}</td>
                       </tr>
                       {this.state.results.Item.ItemSpecifics.NameValueList.map((feature) => (
                   <tr key={feature.Name}>
@@ -364,18 +372,18 @@ class ProductTable extends Component {
               
               (<div className='row'>
               <div className='col-lg-4 p-1'>
-                <img src={this.state.imageurls[0].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/>
-                <img src={this.state.imageurls[1].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/>
+                <a href={this.state.imageurls[0].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[0].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+                <a href={this.state.imageurls[1].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[1].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
               </div>
               <div className='col-lg-4 p-1'>
-              <img src={this.state.imageurls[2].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/>
-              <img src={this.state.imageurls[3].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/>
-              <img src={this.state.imageurls[4].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/>
+                <a href={this.state.imageurls[2].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[2].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+                <a href={this.state.imageurls[3].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[3].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+                <a href={this.state.imageurls[4].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[4].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
               </div>
               <div className='col-lg-4 p-1'>
-              <img src={this.state.imageurls[5].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/>
-              <img src={this.state.imageurls[6].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/>
-              <img src={this.state.imageurls[7].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/>
+                <a href={this.state.imageurls[5].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[5].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+                <a href={this.state.imageurls[6].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[6].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+                <a href={this.state.imageurls[7].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[7].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
               </div>
           </div>)
               
@@ -414,7 +422,7 @@ class ProductTable extends Component {
                     <tr>
                       <th className='col-lg-6'>One Day Shipping</th>
                       <td className='col-lg-6'>
-                        {this.state.results.Item.HandlingTime === '1' ? 
+                        {parseInt(this.state.results.Item.HandlingTime) === 1 ? 
                         <svg xmlns="http://w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
                           <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
                         </svg> : 
@@ -517,17 +525,16 @@ class ProductTable extends Component {
                   {this.state.similarresults === null ? 
                   (<div className='text-center'>
                     <div className="alert alert-warning p-2" role="alert">
-                        No Items in Wishlist
+                        No Records
                     </div>
                 </div>)
-                   : (
-                    
+                   : ( 
                     <div className='col-lg-12'>
   <div className='text-left'>
     {items.slice(0, itemsToShow).map((item, index) => (
       <div key={index} className='d-flex flex-md-row flex-column' style={{ backgroundColor: 'rgba(32, 35, 40, 255)', marginBottom: '5px', padding: '3px' }}>
         <div className='d-md-flex' style={{ width: '130px', height: '130px', textAlign: 'center', alignItems: 'center' }}>
-          <a href={item.imageURL}>
+          <a href={item.imageURL} target='_blank' rel='noreferrer'>
             <img className='p-2' src={item.imageURL} alt={item.title} style={{ maxWidth: '130px', maxHeight: '130px', height: '130px', width: '130px' }} />
           </a>
         </div>
