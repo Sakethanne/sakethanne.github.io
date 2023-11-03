@@ -144,7 +144,7 @@ class ProductTable extends Component {
               }));
     }
     else{
-        var product_name = this.state.results.Item.Title;
+        var product_name = this.state.results.Item.Title.replace('#', '');
         var product_price = this.state.results.Item.CurrentPrice.Value;
         var product_shipping = '0.0';
         var product_img = this.state.results.Item.PictureURL[0];
@@ -355,7 +355,7 @@ class ProductTable extends Component {
                       </tr>
                       <tr>
                         <th className='col-lg-6'>Return Policy (US)</th>
-                        <td className='col-lg-6'>{this.state.results.Item.ReturnPolicy.ReturnsAccepted}{this.state.results.Item.ReturnPolicy.ReturnsAccepted === 'Returns Accepted' ? `with in ${this.state.results.Item.ReturnPolicy.ReturnsWithin}` : ''}</td>
+                        <td className='col-lg-6'>{this.state.results.Item.ReturnPolicy.ReturnsAccepted}{this.state.results.Item.ReturnPolicy.ReturnsAccepted === 'Returns Accepted' ? ` with in ${this.state.results.Item.ReturnPolicy.ReturnsWithin}` : ''}</td>
                       </tr>
                       {this.state.results.Item.ItemSpecifics.NameValueList.map((feature) => (
                   <tr key={feature.Name}>

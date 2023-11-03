@@ -66,7 +66,7 @@ class WishlistTable extends Component {
               }));
     }
     else{
-        var product_name = this.state.wishlist[index].productname;
+        var product_name = this.state.wishlist[index].productname.replace('#', '');
         var product_price = this.state.wishlist[index].productprice;
         var product_shipping = this.state.wishlist[index].productshipping;
         var product_img = this.state.wishlist[index].productimage;

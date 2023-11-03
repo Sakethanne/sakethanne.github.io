@@ -73,7 +73,7 @@ class ResultsTable extends Component {
                   }));
         }
         else{
-            var product_name = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].title[0];
+            var product_name = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].title[0].replace('#', '');
             var product_price = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].sellingStatus[0].currentPrice[0].__value__;
             var product_shipping = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].shippingInfo[0].shippingServiceCost[0].__value__;
             var product_img = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].galleryURL[0];
