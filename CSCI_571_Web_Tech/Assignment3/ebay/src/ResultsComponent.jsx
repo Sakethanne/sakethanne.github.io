@@ -143,7 +143,8 @@ class ResultsTable extends Component {
                  type="button">Details &gt;
                  </button>
             </div>
-                <div className='text-left overflow-auto'>
+                <div className='text-left'>
+                <div className='overflow-auto'>
                 <table className="table table-dark table-striped table-hover table-borderless small">
                     <thead className='p-1 align-items-left text-left'>
                         <tr className='p-1 align-items-left'>
@@ -196,6 +197,7 @@ class ResultsTable extends Component {
                         ))}
                     </tbody>
                 </table>
+                </div>
 
                 <div className="pagination justify-content-center">
                     <ul className="pagination justify-content-center pagination-sm">
