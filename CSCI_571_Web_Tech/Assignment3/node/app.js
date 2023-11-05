@@ -1,7 +1,10 @@
 const express = require("express");
 const axios = require('axios');
 const app = express();
+var cors = require('cors');
+app.use(cors());
 app.use(express.json());
+app.set('trust proxy', true);
 
 const OAuthToken = require('./ebay_oauth_token.js');
 const { ObjectId } = require('mongodb');
@@ -118,7 +121,7 @@ app.get("/getsingleitem", (req, res) => {
         var singleproducturl = 'https://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=SaiVenka-WebAppli-PRD-672a069ab-61e3ce4f&siteid=0&version=967&ItemID='
         singleproducturl+= req.query.productid
         // singleproducturl += '132961484706'
-        singleproducturl += '&IncludeSelector=Description,Details,ItemSpecifics'
+        singleproducturl += '&IncludeSelector=Description,Details,ItemSpecifics,ShippingCosts'
         axios.get(singleproducturl, {
             headers: {
             'X-EBAY-API-IAF-TOKEN': accessToken,

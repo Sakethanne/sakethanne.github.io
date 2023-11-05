@@ -18,7 +18,7 @@ class ResultsTable extends Component {
 
     getWishlist = async () => {
         var products = [];
-        await axios.get(`../../getfavs`)
+        await axios.get(`https://ebaynodejs.wl.r.appspot.com/getfavs`)
           .then(async (response) => {
             for(const product of response.data.Wishlist_Products) {
                 var newprod = JSON.parse(product);
@@ -44,7 +44,7 @@ class ResultsTable extends Component {
             const input = this.props.data;
             const queryParams = new URLSearchParams(input).toString();
             console.log(queryParams)
-            axios.get(`../../senddata?${queryParams}`)
+            axios.get(`https://ebaynodejs.wl.r.appspot.com/senddata?${queryParams}`)
                 .then((response) => {
                 console.log(response.data);
                 this.setState({results: response.data});
@@ -67,7 +67,7 @@ class ResultsTable extends Component {
       addtowishlist = async (event, id) => {
         var product_id = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].itemId[0];
         if(this.state.wishlistproductids.includes(product_id)){
-            await axios.get(`../../deletefav?productid=${product_id}`)
+            await axios.get(`https://ebaynodejs.wl.r.appspot.com/deletefav?productid=${product_id}`)
                 .then((response) => {
                     console.log(response.data);
                 })
@@ -83,7 +83,7 @@ class ResultsTable extends Component {
             var product_price = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].sellingStatus[0].currentPrice[0].__value__;
             var product_shipping = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].shippingInfo[0].shippingServiceCost[0].__value__;
             var product_img = this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[id].galleryURL[0];
-            await axios.get(`../../addfav?productid=${product_id}&product_name=${product_name}&product_price=${product_price}&product_shipping=${product_shipping}&product_img_url=${product_img}`)
+            await axios.get(`https://ebaynodejs.wl.r.appspot.com/addfav?productid=${product_id}&product_name=${product_name}&product_price=${product_price}&product_shipping=${product_shipping}&product_img_url=${product_img}`)
                 .then((response) => {
                     console.log(response.data);
                 })
@@ -99,7 +99,7 @@ class ResultsTable extends Component {
       sendDataToResults = (event, index) => {
         const { sendDataToResults } = this.props;
         this.setState({indexstored: index});
-        sendDataToResults(this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[index].itemId[0]); // Call the callback function with the data
+        sendDataToResults(this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[index].itemId[0], index); // Call the callback function with the data
       };
 
       sendDataToResultsviaDetails = (event, index) => {
@@ -166,7 +166,7 @@ class ResultsTable extends Component {
                     </thead>
                     <tbody className='p-1'>
                             {currentProducts.map((product, index) => (
-                        <tr key={index} style={{height:'70px'}} className='p-2'>
+                        <tr key={index} style={{height:'70px'}} className={`p-2 ${parseInt(this.state.inputdata.prodindex) === (startIndex + index) ? 'table-primary' : ''}`}>
                             <td>{startIndex + index + 1}</td>
                             <td>
                                 <a href={product.galleryURL[0]} target='_blank' rel="noreferrer"><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '90px', height: '100px', maxWidth:'90px', maxHeight:'100px'}}/></a>
@@ -204,6 +204,13 @@ class ResultsTable extends Component {
                         ))}
                     </tbody>
                 </table>
+                <style>
+                     {`
+                        .highlighted-row {
+                        background-color: yellow !important; /* Customize the background color as needed */
+                    }
+                    `}
+                </style>
                 </div>
 
                 <div className="pagination justify-content-center">

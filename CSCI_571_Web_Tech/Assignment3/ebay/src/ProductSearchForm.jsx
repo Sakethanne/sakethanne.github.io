@@ -27,6 +27,7 @@ class ProductSearchForm extends Component {
       displayflag: null,
       displayresults: 'results',
       producttopass: '',
+      prodindex: '',
       backtores: false
     };
   }
@@ -52,12 +53,13 @@ class ProductSearchForm extends Component {
       displayflag: null,
       displayresults: 'results',
       producttopass: '',
+      prodindex: '',
       backtores: false
     })
   };
 
   callGeoNamesApi = (zip) => {
-    axios.get(`../../geonames?zip=${zip}`)
+    axios.get(`https://ebaynodejs.wl.r.appspot.com/geonames?zip=${zip}`)
       .then((response) => {
         console.log(response);
         let zips = [];
@@ -165,8 +167,9 @@ class ProductSearchForm extends Component {
     }, 1);
   };
 
-  receiveDataFromResultsTable = (data) => {
+  receiveDataFromResultsTable = (data, index) => {
     this.setState({ producttopass: data });
+    this.setState({ prodindex: index});
     this.setState({ displayresults: 'product'});
   };
 

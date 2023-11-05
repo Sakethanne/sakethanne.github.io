@@ -17,7 +17,7 @@ class WishlistTable extends Component {
   getWishlist = async () => {
     var products = [];
     var total = 0.0;
-    await axios.get(`../../getfavs`)
+    await axios.get(`https://ebaynodejs.wl.r.appspot.com/getfavs`)
       .then(async (response) => {
         for(const product of response.data.Wishlist_Products) {
             var newprod = JSON.parse(product);
@@ -54,7 +54,7 @@ class WishlistTable extends Component {
       var total = this.state.total;
       total = total - parseFloat(this.state.wishlist[index].productprice);
       this.setState({total: total});
-        await axios.get(`../../deletefav?productid=${product_id}`)
+        await axios.get(`https://ebaynodejs.wl.r.appspot.com/deletefav?productid=${product_id}`)
             .then((response) => {
                 console.log(response.data);
             })
@@ -70,7 +70,7 @@ class WishlistTable extends Component {
         var product_price = this.state.wishlist[index].productprice;
         var product_shipping = this.state.wishlist[index].productshipping;
         var product_img = this.state.wishlist[index].productimage;
-        await axios.get(`../../addfav?productid=${product_id}&product_name=${product_name}&product_price=${product_price}&product_shipping=${product_shipping}&product_img_url=${product_img}`)
+        await axios.get(`https://ebaynodejs.wl.r.appspot.com/addfav?productid=${product_id}&product_name=${product_name}&product_price=${product_price}&product_shipping=${product_shipping}&product_img_url=${product_img}`)
             .then((response) => {
                 console.log(response.data);
             })

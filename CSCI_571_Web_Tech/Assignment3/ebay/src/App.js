@@ -16,3 +16,6 @@ class App extends Component {
 }
 
 export default App;
+
+// "proxy": "http://localhost:8080",
+// "proxy": "https://ebaynodejs.wl.r.appspot.com",

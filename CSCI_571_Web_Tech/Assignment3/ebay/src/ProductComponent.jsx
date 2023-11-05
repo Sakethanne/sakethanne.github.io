@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css'; // Import your custom CSS file
+import facebook from './facebook.png'; // Import the image
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
@@ -12,7 +13,7 @@ class ProductTable extends Component {
       productid: this.props.data,
       isMounted: false,
       results: null,
-      imageurls: null,
+      imageurls: [],
       similarresults: null,
       renderDelayed: false,
       wishlistproducts: [],
@@ -70,7 +71,7 @@ class ProductTable extends Component {
 
   getWishlist = async () => {
     var products = [];
-    await axios.get(`../../getfavs`)
+    await axios.get(`https://ebaynodejs.wl.r.appspot.com/getfavs`)
       .then(async (response) => {
         for(const product of response.data.Wishlist_Products) {
             var newprod = JSON.parse(product);
@@ -88,7 +89,7 @@ class ProductTable extends Component {
     //     // eslint-disable-next-line
     //     this.state.isMounted = true;
         const input = this.props.data;
-        axios.get(`../../getsingleitem?productid=${input}`)
+        axios.get(`https://ebaynodejs.wl.r.appspot.com/getsingleitem?productid=${input}`)
             .then((response) => {
             this.setState({results: response.data});
             this.getWishlist();
@@ -97,7 +98,7 @@ class ProductTable extends Component {
             console.error('Error:', error);
         });
         console.log('getting the similar products');
-        axios.get(`../../getsimilaritems?productid=${input}`)
+        axios.get(`https://ebaynodejs.wl.r.appspot.com/getsimilaritems?productid=${input}`)
             .then((response) => {
             if('item' in response.data.getSimilarItemsResponse.itemRecommendations){
               this.setState({similarresults: response.data.getSimilarItemsResponse.itemRecommendations.item});
@@ -119,10 +120,15 @@ class ProductTable extends Component {
   };
 
   getphotos = async () => {
-    await axios.get(`../../getphotos?productname=${this.state.results.Item.Title}`)
+    await axios.get(`https://ebaynodejs.wl.r.appspot.com/getphotos?productname=${this.state.results.Item.Title}`)
             .then((response) => {
               console.log(response.data.items);
-              this.setState({imageurls: response.data.items});
+              if('items' in response.data){
+                this.setState({imageurls: response.data.items});
+              }
+              else{
+                this.setState({imageurls: null});
+              }
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -132,7 +138,7 @@ class ProductTable extends Component {
   productwishlist = async (event, id) => {
     var product_id = id;
     if(this.state.wishlistproducts.includes(product_id)){
-        await axios.get(`../../deletefav?productid=${product_id}`)
+        await axios.get(`https://ebaynodejs.wl.r.appspot.com/deletefav?productid=${product_id}`)
             .then((response) => {
                 console.log(response.data);
             })
@@ -146,9 +152,15 @@ class ProductTable extends Component {
     else{
         var product_name = this.state.results.Item.Title.replace('#', '');
         var product_price = this.state.results.Item.CurrentPrice.Value;
-        var product_shipping = '0.0';
+        if('ShippingPrice' in this.state.results.Item){
+          var product_shipping = this.state.results.Item.ShippingPrice.Value;
+        }
+        else{
+          var product_shipping = '0.0';
+        }
+        
         var product_img = this.state.results.Item.PictureURL[0];
-        await axios.get(`../../addfav?productid=${product_id}&product_name=${product_name}&product_price=${product_price}&product_shipping=${product_shipping}&product_img_url=${product_img}`)
+        await axios.get(`https://ebaynodejs.wl.r.appspot.com/addfav?productid=${product_id}&product_name=${product_name}&product_price=${product_price}&product_shipping=${product_shipping}&product_img_url=${product_img}`)
             .then((response) => {
                 console.log(response.data);
             })
@@ -234,9 +246,12 @@ class ProductTable extends Component {
                 <button className="btn btn-light" style={{color: 'black'}} type="button" onClick={(e) => this.setToResults(e, `true`)}>&lt; List</button>
               </div>
               <div className="col-lg-6 d-flex justify-content-end">
-                <a href={`https://www.facebook.com/share.php?u=${this.state.results.Item.ViewItemURLForNaturalSearch}`} target='_blank' rel='noreferrer'><button className="btn"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="rgba(13,110,253,255)" className="bi bi-facebook" viewBox="0 0 16 16">
+                <a href={`https://www.facebook.com/share.php?u=${this.state.results.Item.ViewItemURLForNaturalSearch}`} target='_blank' rel='noreferrer'><button className="btn" style={{padding: 'none', border: 'none'}}>
+                  {/* <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="rgba(13,110,253,255)" className="bi bi-facebook" viewBox="0 0 16 16">
                   <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
-                </svg></button></a>
+                </svg> */}
+                <img src={facebook} style={{width: '40px', height: '40px'}} />
+                </button></a>
                 {this.state.wishlistproducts.includes(this.state.results.Item.ItemID) ? (<button
                              style={{border: 'none', borderRadius:'2px'}}
                              type='button' 
@@ -299,7 +314,7 @@ class ProductTable extends Component {
             </div>
               {this.state.productdisplaystate === 'product' ? 
               
-              <div className='row'>
+              <div className='row' style={{marginTop: '-10px'}}>
                 <div className='d-flex justity-content-center table-responsive'>
                   <table className='table table-dark table-striped table-hover table-borderless custom'>
                     <tbody>
@@ -369,27 +384,33 @@ class ProductTable extends Component {
               
               
               : this.state.productdisplaystate === 'photos' ? 
+
+              this.state.imageurls !== null ?
               
-              (<div className='row'>
+              (<div className='row' style={{marginTop: '-10px'}}>
               <div className='col-lg-4 p-1'>
-                <a href={this.state.imageurls[0].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[0].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[1].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[1].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[0].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[0].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[1].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[1].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
               </div>
               <div className='col-lg-4 p-1'>
-                <a href={this.state.imageurls[2].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[2].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[3].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[3].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[4].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[4].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[2].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[2].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[3].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[3].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[4].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[4].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
               </div>
               <div className='col-lg-4 p-1'>
-                <a href={this.state.imageurls[5].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[5].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[6].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[6].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[7].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[7].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[5].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[5].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[6].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[6].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[7].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[7].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
               </div>
-          </div>)
+          </div>) : (<div className='text-center'>
+                    <div className="alert alert-warning p-2" role="alert">
+                        No Images Found on Google Search API
+                    </div>
+                </div>) 
               
               : this.state.productdisplaystate === 'shipping' ? 
               
-              (<div className='row'>
+              (<div className='row' style={{marginTop: '-10px'}}>
               <div className='d-flex justify-content-center table-responsive'>
                 <table className='table table-dark table-striped table-hover table-borderless custom'>
                   <tbody>
@@ -405,7 +426,7 @@ class ProductTable extends Component {
                     </tr>
                     <tr>
                       <th className='col-lg-6'>Handling time</th>
-                      <td className='col-lg-6'>{this.state.results.Item.HandlingTime} Days</td>
+                      <td className='col-lg-6'>{this.state.results.Item.HandlingTime}{this.state.results.Item.HandlingTime === 1 ? ' Day' : ' Days'}</td>
                     </tr>
                     <tr>
                       <th className='col-lg-6'>Expedited Shipping</th>
@@ -422,7 +443,7 @@ class ProductTable extends Component {
                     <tr>
                       <th className='col-lg-6'>One Day Shipping</th>
                       <td className='col-lg-6'>
-                        {parseInt(this.state.results.Item.HandlingTime) === 1 ? 
+                        {parseInt(this.state.results.Item.HandlingTime) <= 1 ? 
                         <svg xmlns="http://w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
                           <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
                         </svg> : 
@@ -453,7 +474,7 @@ class ProductTable extends Component {
                : this.state.productdisplaystate === 'seller' ? 
                
                
-               <div className='row'>
+               <div className='row' style={{marginTop: '-10px'}}>
                 <div className='col-lg-12 d-flex justify-content-center table-responsive mt--4'>
                   <table className='table table-dark table-striped table-hover table-borderless custom'>
                     <thead>
@@ -483,13 +504,14 @@ class ProductTable extends Component {
                           <span class="material-symbols-outlined" style={{color: `${this.state.results.Item.Seller.FeedbackRatingStar.replace("Shooting","")}`}}>stars</span>
                           </td>
                       </tr>}
-                      <tr>
-                        <th className='col-lg-6'>Top Rated</th><td className='col-lg-6'>{this.state.results.Item.Seller.TopRatedSeller === true ? <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
+                      
+                        {'TopRatedSeller' in this.state.results.Item.Seller ? <tr><th className='col-lg-6'>Top Rated</th><td className='col-lg-6'>{this.state.results.Item.Seller.TopRatedSeller === true ? <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
                           <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
                           </svg> : <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
                           <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                           </svg>}</td>
-                      </tr>
+                      </tr> : ''}
+                        
                       { 'Storefront' in this.state.results.Item ? 'StoreName' in this.state.results.Item.Storefront ? <tr>
                         <th className='col-lg-6'>Store Name</th><td className='col-lg-6'>{this.state.results.Item.Storefront.StoreName}</td>
                       </tr> : '' : ''}
@@ -503,7 +525,7 @@ class ProductTable extends Component {
               
               
               : this.state.productdisplaystate === 'similar' ? 
-              <div className='row'>
+              <div className='row' style={{marginTop: '-10px'}}>
                 <div className="filters">
                   <label htmlFor="category-filter"></label>
                   <select id="category-filter" className='col-11 col-lg-2 p-2 m-2' style={{backgroundColor: 'lightgray', borderRadius: '5px'}} value={this.state.sortField}  onChange={this.handleSortFieldChange}>
