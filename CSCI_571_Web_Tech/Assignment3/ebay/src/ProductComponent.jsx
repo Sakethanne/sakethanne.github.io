@@ -372,18 +372,18 @@ class ProductTable extends Component {
               
               (<div className='row'>
               <div className='col-lg-4 p-1'>
-                <a href={this.state.imageurls[0].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[0].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
-                <a href={this.state.imageurls[1].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[1].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+                <a href={this.state.imageurls[0].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[0].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[1].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[1].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
               </div>
               <div className='col-lg-4 p-1'>
-                <a href={this.state.imageurls[2].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[2].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
-                <a href={this.state.imageurls[3].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[3].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
-                <a href={this.state.imageurls[4].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[4].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+                <a href={this.state.imageurls[2].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[2].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[3].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[3].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[4].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[4].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
               </div>
               <div className='col-lg-4 p-1'>
-                <a href={this.state.imageurls[5].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[5].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
-                <a href={this.state.imageurls[6].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[6].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
-                <a href={this.state.imageurls[7].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[7].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-1' style={{width: '100%', border: '5px solid #000'}}/></a>
+                <a href={this.state.imageurls[5].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[5].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[6].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[6].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[7].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[7].image.thumbnailLink} alt={this.props.data} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
               </div>
           </div>)
               
@@ -480,9 +480,7 @@ class ProductTable extends Component {
                       </tr>
                       {this.state.results.Item.Seller.FeedbackRatingStar.includes('None') ? (<tr><th className='col-lg-6'>Feedback Rating Star</th><td className='col-lg-6'>N/A</td></tr>) : <tr>
                         <th className='col-lg-6'>Feedback Rating Star</th><td className='col-lg-6'>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill={this.state.results.Item.Seller.FeedbackRatingStar.replace("Shooting","")} className="bi bi-star-fill" viewBox="0 0 16 16">
-                          <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                          </svg>
+                          <span class="material-symbols-outlined" style={{color: `${this.state.results.Item.Seller.FeedbackRatingStar.replace("Shooting","")}`}}>stars</span>
                           </td>
                       </tr>}
                       <tr>

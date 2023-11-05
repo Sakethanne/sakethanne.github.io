@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import ProductSearchForm from './ProductSearchForm';
-// import New from './text'
+// import AutocompleteBox from './testing';
 
 
 class App extends Component {
@@ -10,7 +10,7 @@ class App extends Component {
   render() {
     return (
         <ProductSearchForm />
-        // <New />
+        // <AutocompleteBox />
     );
   }
 }

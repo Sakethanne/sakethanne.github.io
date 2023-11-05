@@ -26,7 +26,8 @@ class ProductSearchForm extends Component {
       activeButton: 'results',
       displayflag: null,
       displayresults: 'results',
-      producttopass: ''
+      producttopass: '',
+      backtores: false
     };
   }
 
@@ -50,7 +51,8 @@ class ProductSearchForm extends Component {
       activeButton: 'results',
       displayflag: null,
       displayresults: 'results',
-      producttopass: ''
+      producttopass: '',
+      backtores: false
     })
   };
 
@@ -155,6 +157,7 @@ class ProductSearchForm extends Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     this.setState({displayflag: false});
+    this.setState({backtores: false});
     this.handleResults();
     setTimeout(() => {
       // console.log('After 1 seconds of sleep');
@@ -175,7 +178,14 @@ class ProductSearchForm extends Component {
 
   // Function to receive data from the child component
   receiveDataFromProductTable = (data) => {
-    this.setState({displayresults: 'results'})
+    this.setState({displayresults: 'results'});
+    this.setState({backtores: true});
+  };
+
+  handleSuggestionClick = (suggestion) => {
+    this.setState({from: suggestion});
+    this.setState({listofzips: []});
+    this.setState({zipcodevalid: true});
   };
 
   render() {
@@ -279,14 +289,21 @@ class ProductSearchForm extends Component {
                         list="zipsuggestions"
                         value={this.state.from}
                         onChange={this.handleInputChange}
+                        autoComplete="off"
                         disabled={this.state.location === 'currentlocation'}/>
-                        <datalist id="zipsuggestions"> 
-                          <option value={this.state.listofzips[0]} />
-                          <option value={this.state.listofzips[1]} />
-                          <option value={this.state.listofzips[2]} />
-                          <option value={this.state.listofzips[3]} />
-                          <option value={this.state.listofzips[4]} />
-                        </datalist>
+                        {this.state.listofzips.length > 0 && (
+        <div className="col-lg-7 col-11 suggestions-box">
+          {this.state.listofzips.map((suggestion, index) => (
+            <div
+              key={index}
+              onClick={() => this.handleSuggestionClick(suggestion)}
+              className="suggestion"
+            >
+              {suggestion}
+            </div>
+          ))}
+        </div>
+      )}
                         <div className="invalid-feedback">
                           Please enter a zipcode.
                         </div>

@@ -32,6 +32,12 @@ class ResultsTable extends Component {
       }
     
     componentDidMount(){
+        if(this.state.inputdata.backtores === true){
+            this.setState({ renderDelayed: true });
+        }
+        else{
+            this.setState({ renderDelayed: false });
+        }
         // if(!this.state.isMounted) {
             // eslint-disable-next-line
             // this.state.isMounted = true;
@@ -101,6 +107,7 @@ class ResultsTable extends Component {
         sendDataToResults(index); // Call the callback function with the data
       };
 
+
   render() {
 
     if (!this.state.renderDelayed) {
@@ -112,7 +119,7 @@ class ResultsTable extends Component {
             </div>); // Render progress bar until the delay is over
       };
     
-    if(parseInt(this.state.results.findItemsAdvancedResponse[0].searchResult[0]['@count']) === 0){
+    if((this.state.results === null) || (parseInt(this.state.results.findItemsAdvancedResponse[0].searchResult[0]['@count']) === 0)){
         // console.log(typeof parseInt(this.state.results.findItemsAdvancedResponse[0].searchResult[0]['@count']));
         return (
             <div className='row justify-content-center mt-4'>
