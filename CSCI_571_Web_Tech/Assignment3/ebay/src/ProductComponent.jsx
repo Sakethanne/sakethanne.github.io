@@ -10,7 +10,7 @@ class ProductTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productid: this.props.data,
+      productid: this.props.data.itemId[0],
       isMounted: false,
       results: null,
       imageurls: [],
@@ -88,7 +88,7 @@ class ProductTable extends Component {
     // if(!this.state.isMounted) {
     //     // eslint-disable-next-line
     //     this.state.isMounted = true;
-        const input = this.props.data;
+        const input = this.props.data.itemId[0];
         axios.get(`https://ebaynodejs.wl.r.appspot.com/getsingleitem?productid=${input}`)
             .then((response) => {
             this.setState({results: response.data});
@@ -414,56 +414,50 @@ class ProductTable extends Component {
               <div className='d-flex justify-content-center table-responsive'>
                 <table className='table table-dark table-striped table-hover table-borderless custom'>
                   <tbody>
-                    <tr>
-                      <th className='col-lg-6'>Shipping Cost</th>
+                    {'shippingInfo' in this.props.data ? 'shippingServiceCost' in this.props.data.shippingInfo[0] ? this.props.data.shippingInfo[0].shippingServiceCost[0].__value__ === "0.0" ? <tr><th className='col-lg-6'>Shipping Cost</th>
                       <td className='col-lg-6'>
-                        {this.state.results.Item.CurrentPrice.__value__ === '0.0' ? `$${this.state.results.Item.CurrentPrice.__value__}` : 'Free Shipping'}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th className='col-lg-6'>Shipping Locations</th>
-                      <td className='col-lg-6'>{this.state.results.Item.ShipToLocations}</td>
-                    </tr>
-                    <tr>
-                      <th className='col-lg-6'>Handling time</th>
-                      <td className='col-lg-6'>{this.state.results.Item.HandlingTime}{this.state.results.Item.HandlingTime === 1 ? ' Day' : ' Days'}</td>
-                    </tr>
-                    <tr>
-                      <th className='col-lg-6'>Expedited Shipping</th>
+                        Free Shipping
+                      </td></tr> : <tr><th className='col-lg-6'>Shipping Cost</th>
                       <td className='col-lg-6'>
-                        {this.state.results.Item.ReturnPolicy.ShippingCostPaidBy === 'Seller' ? 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
+                        {this.props.data.shippingInfo[0].shippingServiceCost[0].__value__}
+                      </td></tr> : '' : ''}
+
+                      {'shippingInfo' in this.props.data ? 'shipToLocations' in this.props.data.shippingInfo[0] ? <tr><th className='col-lg-6'>Shipping Locations</th>
+                      <td className='col-lg-6'>
+                        {this.props.data.shippingInfo[0].shipToLocations[0]}
+                      </td></tr> :  '' : ''}
+
+                      {'shippingInfo' in this.props.data ? 'handlingTime' in this.props.data.shippingInfo[0] ? <tr><th className='col-lg-6'>Handling time</th>
+                      <td className='col-lg-6'>
+                      {this.props.data.shippingInfo[0].handlingTime[0]}{parseInt(this.props.data.shippingInfo[0].handlingTime[0]) === 1 ? ' Day' : ' Days'}
+                      </td></tr> :  '' : ''}
+
+                      {'shippingInfo' in this.props.data ? 'expeditedShipping' in this.props.data.shippingInfo[0] ? <tr><th className='col-lg-6'>Expedited Shipping</th>
+                      <td className='col-lg-6'>
+                      {this.props.data.shippingInfo[0].expeditedShipping[0] === "true" ? (<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
                           <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-                        </svg> : 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
+                        </svg>) : (<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
                           <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                        </svg>}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th className='col-lg-6'>One Day Shipping</th>
+                        </svg>)}
+                      </td></tr> :  '' : ''}
+
+                      {'shippingInfo' in this.props.data ? 'oneDayShippingAvailable' in this.props.data.shippingInfo[0] ? <tr><th className='col-lg-6'>One Day Shipping</th>
                       <td className='col-lg-6'>
-                        {parseInt(this.state.results.Item.HandlingTime) <= 1 ? 
-                        <svg xmlns="http://w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
+                      {this.props.data.shippingInfo[0].oneDayShippingAvailable[0] === "true" ? (<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
                           <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-                        </svg> : 
-                        <svg xmlns="http://w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
+                        </svg>) : (<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
                           <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                        </svg>}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th className='col-lg-6'>Return Accepted</th>
+                        </svg>)}
+                      </td></tr> :  '' : ''}
+
+                      {'returnsAccepted' in this.props.data ? <tr><th className='col-lg-6'>Return Accepted</th>
                       <td className='col-lg-6'>
-                        {this.state.results.Item.ReturnPolicy.ReturnsAccepted === 'Returns Accepted' ? 
-                        <svg xmlns="http://w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
+                      {this.props.data.returnsAccepted[0] === "true" ? (<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
                           <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-                        </svg> : 
-                        <svg xmlns="http://w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
+                        </svg>) : (<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
                           <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                        </svg>}
-                      </td>
-                    </tr>
+                        </svg>)}
+                      </td></tr> :  '' }
                   </tbody>
                 </table>
               </div>
@@ -500,12 +494,11 @@ class ProductTable extends Component {
                               })}/></div></td>
                       </tr>
                       {this.state.results.Item.Seller.FeedbackRatingStar.includes('None') ? (<tr><th className='col-lg-6'>Feedback Rating Star</th><td className='col-lg-6'>N/A</td></tr>) : <tr>
-                        <th className='col-lg-6'>Feedback Rating Star</th><td className='col-lg-6'>
-                          <span class="material-symbols-outlined" style={{color: `${this.state.results.Item.Seller.FeedbackRatingStar.replace("Shooting","")}`}}>stars</span>
+                        <th className='col-lg-6'>Feedback Rating Star</th><td className='col-lg-6'> {this.state.results.Item.Seller.FeedbackScore > 10000 ? <span className="material-symbols-outlined" style={{color: `${this.state.results.Item.Seller.FeedbackRatingStar.replace("Shooting","")}`}}>stars</span> : <span className="material-symbols-outlined" style={{color: `${this.state.results.Item.Seller.FeedbackRatingStar.replace("Shooting","")}`}}>star</span>}
                           </td>
                       </tr>}
                       
-                        {'TopRatedSeller' in this.state.results.Item.Seller ? <tr><th className='col-lg-6'>Top Rated</th><td className='col-lg-6'>{this.state.results.Item.Seller.TopRatedSeller === true ? <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
+                        {'TopRatedSeller' in this.state.results.Item.Seller ? <tr><th className='col-lg-6'>Top Rated Seller</th><td className='col-lg-6'>{this.state.results.Item.Seller.TopRatedSeller === true ? <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green" className="bi bi-check" viewBox="0 0 16 16">
                           <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
                           </svg> : <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" className="bi bi-x" viewBox="0 0 16 16">
                           <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
@@ -536,7 +529,7 @@ class ProductTable extends Component {
                     <option value="shippingcost">Shipping Cost</option>
                   </select>
                   <label htmlFor="order-filter"></label>
-                  <select id="order-filter" className='col-11 col-lg-2 p-2 m-2' style={{backgroundColor: 'lightgray', borderRadius: '5px'}} value={this.state.sortDirection} onChange={this.handleSortDirectionChange}>
+                  <select id="order-filter" className='col-11 col-lg-2 p-2 m-2' style={{backgroundColor: 'lightgray', borderRadius: '5px'}} value={this.state.sortDirection} onChange={this.handleSortDirectionChange} disabled={this.state.sortField === 'default'}>
                     <option value="ascending">Ascending</option>
                     <option value="descending">Descending</option>
                   </select>

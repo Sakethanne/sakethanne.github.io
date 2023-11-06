@@ -99,12 +99,15 @@ class ResultsTable extends Component {
       sendDataToResults = (event, index) => {
         const { sendDataToResults } = this.props;
         this.setState({indexstored: index});
-        sendDataToResults(this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[index].itemId[0], index); // Call the callback function with the data
+        sendDataToResults(this.state.results.findItemsAdvancedResponse[0].searchResult[0].item[index], index); // Call the callback function with the data
       };
 
       sendDataToResultsviaDetails = (event, index) => {
         const { sendDataToResults } = this.props;
-        sendDataToResults(index); // Call the callback function with the data
+        const datatosend = {
+            itemId: [index]
+        }
+        sendDataToResults(datatosend); // Call the callback function with the data
       };
 
 
@@ -145,7 +148,7 @@ class ResultsTable extends Component {
             <div className="d-grid gap-2 justify-content-end mb-3">
                 <button className="btn btn-light" 
                 style={{color: 'black'}}
-                onClick={(e) => this.sendDataToResultsviaDetails(e, `${this.props.data.producttopass}`)} 
+                onClick={(e) => this.sendDataToResultsviaDetails(e, `${this.props.data.producttopass.itemId[0]}`)} 
                 disabled={this.props.data.producttopass === ''}
                  type="button">Details &gt;
                  </button>
@@ -235,6 +238,7 @@ class ResultsTable extends Component {
                     </ul>
                 </div>
             </div>
+            <div>{JSON.stringify(this.props.data.producttopass)}</div>
         </div> 
     </div>
     );

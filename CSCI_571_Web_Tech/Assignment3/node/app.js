@@ -33,15 +33,14 @@ app.get("/senddata", (req, res) => {
     else if(req.query.location === 'otherlocation'){
         ebayurl += req.query.from;
     }
+    if((req.query.category !== 'All Categories') && (parseInt(req.query.category) !== 0)){
+        ebayurl += '&categoryId='
+        ebayurl += req.query.category;
+    };
     ebayurl += '&itemFilter(0).name=MaxDistance&itemFilter(0).value=';
     ebayurl += req.query.distance;
     ebayurl += '&itemFilter(1).name=HideDuplicateItems&itemFilter(1).value=true';
     var i = 2;
-    if(req.query.category !== 'All Categories'){
-        ebayurl += '&itemFilter('+i+').name=Category&itemFilter('+i+').value='
-        ebayurl += req.query.category;
-        i = i + 1;
-    };
     if(req.query.freeshipping === 'true'){
         ebayurl += '&itemFilter('+i+').name=FreeShippingOnly&itemFilter('+i+').value=true';
         i = i + 1;
