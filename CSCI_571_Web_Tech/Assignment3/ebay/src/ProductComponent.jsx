@@ -156,9 +156,8 @@ class ProductTable extends Component {
           var product_shipping = this.state.results.Item.ShippingPrice.Value;
         }
         else{
-          var product_shipping = '0.0';
+          var product_shipping = this.props.data.shippingInfo[0].shippingServiceCost[0].__value__;
         }
-        
         var product_img = this.state.results.Item.PictureURL[0];
         await axios.get(`https://ebaynodejs.wl.r.appspot.com/addfav?productid=${product_id}&product_name=${product_name}&product_price=${product_price}&product_shipping=${product_shipping}&product_img_url=${product_img}`)
             .then((response) => {
@@ -389,22 +388,22 @@ class ProductTable extends Component {
               
               (<div className='row' style={{marginTop: '-10px'}}>
               <div className='col-lg-4 p-1'>
-                <a href={this.state.imageurls[0].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[0].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[1].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[1].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[0].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[0].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[1].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[1].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
               </div>
               <div className='col-lg-4 p-1'>
-                <a href={this.state.imageurls[2].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[2].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[3].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[3].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[4].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[4].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[2].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[2].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[3].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[3].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[4].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[4].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
               </div>
               <div className='col-lg-4 p-1'>
-                <a href={this.state.imageurls[5].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[5].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[6].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[6].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[7].image.thumbnailLink} target='_blank' rel='noreferrer'><img src={this.state.imageurls[7].image.thumbnailLink} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[5].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[5].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[6].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[6].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                <a href={this.state.imageurls[7].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[7].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
               </div>
           </div>) : (<div className='text-center'>
                     <div className="alert alert-warning p-2" role="alert">
-                        No Images Found on Google Search API
+                        No Images Found on Google Search API or the API exceeded 100 daily limit
                     </div>
                 </div>) 
               
@@ -419,7 +418,7 @@ class ProductTable extends Component {
                         Free Shipping
                       </td></tr> : <tr><th className='col-lg-6'>Shipping Cost</th>
                       <td className='col-lg-6'>
-                        {this.props.data.shippingInfo[0].shippingServiceCost[0].__value__}
+                        ${this.props.data.shippingInfo[0].shippingServiceCost[0].__value__}
                       </td></tr> : '' : ''}
 
                       {'shippingInfo' in this.props.data ? 'shipToLocations' in this.props.data.shippingInfo[0] ? <tr><th className='col-lg-6'>Shipping Locations</th>

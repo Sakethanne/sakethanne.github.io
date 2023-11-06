@@ -85,7 +85,7 @@ class WishlistTable extends Component {
 
   sendDatafromWishlist = (event, index) => {
     const { sendDatafromWishlist } = this.props;
-    sendDatafromWishlist(index); // Call the callback function with the data
+    sendDatafromWishlist(this.props.data); // Call the callback function with the data
   };
 
   render() {
@@ -117,7 +117,7 @@ class WishlistTable extends Component {
         <div className="d-grid gap-2 justify-content-end mb-3">
                 <button className="btn btn-light" 
                 style={{color: 'black'}} 
-                disabled={this.props.data === ""}
+                disabled={this.props.data === null}
                 onClick={(e) => this.sendDatafromWishlist(e, `${this.props.data}`)}
                  type="button">Details &gt;
                  </button>

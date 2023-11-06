@@ -104,10 +104,7 @@ class ResultsTable extends Component {
 
       sendDataToResultsviaDetails = (event, index) => {
         const { sendDataToResults } = this.props;
-        const datatosend = {
-            itemId: [index]
-        }
-        sendDataToResults(datatosend); // Call the callback function with the data
+        sendDataToResults(this.props.data.producttopass); // Call the callback function with the data
       };
 
 
@@ -149,7 +146,7 @@ class ResultsTable extends Component {
                 <button className="btn btn-light" 
                 style={{color: 'black'}}
                 onClick={(e) => this.sendDataToResultsviaDetails(e, `${this.props.data.producttopass.itemId[0]}`)} 
-                disabled={this.props.data.producttopass === ''}
+                disabled={this.state.inputdata.producttopass === null}
                  type="button">Details &gt;
                  </button>
             </div>
@@ -169,7 +166,7 @@ class ResultsTable extends Component {
                     </thead>
                     <tbody className='p-1'>
                             {currentProducts.map((product, index) => (
-                        <tr key={index} style={{height:'70px'}} className={`p-2 ${parseInt(this.state.inputdata.prodindex) === (startIndex + index) ? 'table-primary' : ''}`}>
+                        <tr key={index} style={{height:'70px'}} className={`p-2 ${this.state.inputdata.producttopass !== null ? this.state.inputdata.producttopass.itemId[0] === (product.itemId[0]) ? 'table-primary' : '' : ''}`}>
                             <td>{startIndex + index + 1}</td>
                             <td>
                                 <a href={product.galleryURL[0]} target='_blank' rel="noreferrer"><img src={product.galleryURL[0]} alt={product.title[0]} style={{width: '90px', height: '100px', maxWidth:'90px', maxHeight:'100px'}}/></a>
@@ -238,8 +235,7 @@ class ResultsTable extends Component {
                     </ul>
                 </div>
             </div>
-            <div>{JSON.stringify(this.props.data.producttopass)}</div>
-        </div> 
+        </div>
     </div>
     );
   }

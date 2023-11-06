@@ -26,7 +26,7 @@ class ProductSearchForm extends Component {
       activeButton: 'results',
       displayflag: null,
       displayresults: 'results',
-      producttopass: '',
+      producttopass: null,
       prodindex: '',
       backtores: false
     };
@@ -52,7 +52,7 @@ class ProductSearchForm extends Component {
       activeButton: 'results',
       displayflag: null,
       displayresults: 'results',
-      producttopass: '',
+      producttopass: null,
       prodindex: '',
       backtores: false
     })
@@ -99,6 +99,8 @@ class ProductSearchForm extends Component {
     
     if((id === 'from') && (value.length >= 3)){
       this.callGeoNamesApi(value);
+    }else if((id === 'from') && (value.length < 3)){
+      this.setState({listofzips: []});
     }
     
     if(((id === 'from') && (value === '')) || ((id === 'from') && !(/^\d{5}?$/.test(value)))){
@@ -143,6 +145,7 @@ class ProductSearchForm extends Component {
     });
     if(event.target.value === 'currentlocation'){
       this.setState({zipcodevalid: true});
+      this.setState({listofzips: []});
       this.setState({from: ''});
     }
   };
@@ -195,7 +198,7 @@ class ProductSearchForm extends Component {
     
     return (
     <div>
-      <div style={{backgroundColor: 'rgba(33,36,41,255)', borderRadius:'8px'}} className="container col-lg-9 mt-4 align-items-center">
+      <div style={{backgroundColor: 'rgba(33,36,41,255)', borderRadius:'2px'}} className="container col-lg-9 mt-4 align-items-center">
         <div className="row justify-content-center">
           <div className="text-left col-lg-6 fixed-element"> {/* Background 10 columns wide on larger screens */}
             <form style={{ paddingBottom:'15px', alignContent:'center'}} className='small' onSubmit={this.handleSubmit}>
@@ -295,7 +298,7 @@ class ProductSearchForm extends Component {
                         autoComplete="off"
                         disabled={this.state.location === 'currentlocation'}/>
                         {this.state.listofzips.length > 0 && (
-        <div className="col-lg-7 col-11 suggestions-box">
+        <div className="suggestions-box">
           {this.state.listofzips.map((suggestion, index) => (
             <div
               key={index}

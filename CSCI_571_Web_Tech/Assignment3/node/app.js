@@ -142,7 +142,7 @@ app.get("/getsingleitem", (req, res) => {
 app.get("/getphotos", (req, res) => {
     var googlesearchurl = 'https://www.googleapis.com/customsearch/v1?q='
     googlesearchurl+= req.query.productname
-    googlesearchurl += '&cx=24c220cea25034c3d&imgSize=huge&num=8&searchType=image&key=AIzaSyAcXUA4w1kSAwfL5T3ea1t1qdJ1itSwbtg'
+    googlesearchurl += '&cx=24c220cea25034c3d&imgSize=huge&num=10&searchType=image&key=AIzaSyAcXUA4w1kSAwfL5T3ea1t1qdJ1itSwbtg'
     console.log(googlesearchurl)
     axios.get(googlesearchurl)
         .then((response) => {

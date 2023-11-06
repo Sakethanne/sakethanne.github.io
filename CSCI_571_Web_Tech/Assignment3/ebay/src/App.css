@@ -102,6 +102,15 @@
     display: block;
     width: 100%;
   }
+  .suggestions-box{
+    width: 93%;
+  }
+}
+
+@media (min-width: 768px) {
+  .suggestions-box{
+    width: 62%;
+  }
 }
 
 .fixed-element {
@@ -113,10 +122,12 @@
   position: absolute;
   background-color: white;
   border: 1px solid #ccc;
+  border-radius: 3px;
   border-top: none;
   max-height: 150px;
   overflow-y: auto;
-  z-index: 1; /* Place the overlay above other content */
+
+  z-index: 1;
 }
 
 .suggestion {
