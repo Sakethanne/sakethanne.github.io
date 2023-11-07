@@ -198,7 +198,7 @@ class ProductSearchForm extends Component {
     
     return (
     <div>
-      <div style={{backgroundColor: 'rgba(33,36,41,255)', borderRadius:'2px'}} className="container col-lg-9 mt-4 align-items-center">
+      <div style={{backgroundColor: 'rgba(33,36,41,255)', borderRadius:'2px'}} className="container col-lg-9 mt-4 align-items-center mobilecont">
         <div className="row justify-content-center">
           <div className="text-left col-lg-6 fixed-element"> {/* Background 10 columns wide on larger screens */}
             <form style={{ paddingBottom:'15px', alignContent:'center'}} className='small' onSubmit={this.handleSubmit}>

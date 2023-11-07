@@ -105,6 +105,9 @@
   .suggestions-box{
     width: 93%;
   }
+  body{
+    margin: 1% !important;
+  }
 }
 
 @media (min-width: 768px) {

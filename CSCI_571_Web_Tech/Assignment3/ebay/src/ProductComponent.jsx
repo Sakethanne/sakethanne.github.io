@@ -5,11 +5,13 @@ import './App.css'; // Import your custom CSS file
 import facebook from './facebook.png'; // Import the image
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { Modal, Carousel, Button } from 'react-bootstrap';
 
 class ProductTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showModal: false, // Whether the modal is open
       productid: this.props.data.itemId[0],
       isMounted: false,
       results: null,
@@ -27,6 +29,9 @@ class ProductTable extends Component {
       sortDirection: 'ascending'
     };
   }
+  toggleModal = () => {
+    this.setState({ showModal: !this.state.showModal });
+  };
 
   handleSortFieldChange = (event) => {
     const sortField = event.target.value;
@@ -36,37 +41,6 @@ class ProductTable extends Component {
   handleSortDirectionChange = (event) => {
     const sortDirection = event.target.value;
     this.setState({ sortDirection });
-  };
-
-
-  openCarousel = (images) => {
-    console.log(images);
-    this.setState({
-      showOverlay: true,
-      selectedImages: images,
-    });
-    document.body.style.overflow = 'hidden';
-  };
-
-  closeCarousel = () => {
-    this.setState({
-      showOverlay: false,
-      selectedImages: [],
-      currentIndex: 0,
-    });
-    document.body.style.overflow = 'auto';
-  };
-
-  prevImage = () => {
-    this.setState((prevState) => ({
-      currentIndex: (prevState.currentIndex - 1 + prevState.selectedImages.length) % prevState.selectedImages.length,
-    }));
-  };
-
-  nextImage = () => {
-    this.setState((prevState) => ({
-      currentIndex: (prevState.currentIndex + 1) % prevState.selectedImages.length,
-    }));
   };
 
   getWishlist = async () => {
@@ -210,7 +184,7 @@ class ProductTable extends Component {
         return sortDirection === 'ascending' ? a.timeLeft.substring(a.timeLeft.indexOf("P") + 1, a.timeLeft.indexOf("D")) - b.timeLeft.substring(b.timeLeft.indexOf("P") + 1, b.timeLeft.indexOf("D")) : b.timeLeft.substring(b.timeLeft.indexOf("P") + 1, b.timeLeft.indexOf("D")) - a.timeLeft.substring(a.timeLeft.indexOf("P") + 1, a.timeLeft.indexOf("D")) ;
       }
       if (sortField === 'productname') {
-        return sortDirection === 'ascending' ? a.title - b.title : b.title - a.title;
+        return sortDirection === 'ascending' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title);
       }
       return 0;
     });
@@ -227,7 +201,7 @@ class ProductTable extends Component {
           </div>); // Render progress bar until the delay is over
     };
 
-    const { showOverlay, selectedImages, currentIndex } = this.state;
+    // const { showOverlay, selectedImages, currentIndex } = this.state;
     const { itemsToShow, showMore} = this.state;
     // const { sortField, sortDirection } = this.state;
     const items = this.filterAndSortItems();
@@ -319,43 +293,38 @@ class ProductTable extends Component {
                     <tbody>
                       <tr>
                         <th className='col-lg-6'>Product Images</th>
-                        <td className='col-lg-6'><a onClick={() => this.openCarousel(this.state.results.Item.PictureURL)} style={{textDecoration: 'none', color: 'rgba(101,151,149,255)', cursor: 'pointer'}}>View Product Images Here</a>
-                        {showOverlay && (
-                        <div className="overlay-background">
-                          <div className="overlay">
-                            <div className="overlay-header" style={{backgroundColor: 'white', color:'black', borderBottom: '0.7px solid black'}}>
-                              <h5 style={{backgroundColor: 'white', color:'black', border: 'none', paddingTop:'10px'}}>Product Images</h5>
-                              <button className="close-button" onClick={this.closeCarousel}>
-                              <span className="material-symbols-outlined">close</span>
-                            </button>
-                          </div>
-                          <div className='overlay-content mt-2'>
-                            <div className="container">
-                              <div className='d-flex flex-row'>
-                                <div className='d-flex justify-content-center align-items-center'>
-                                  <button className='overlaybutton prev-button' onClick={this.prevImage} type='button'>
-                                    <span className="material-symbols-outlined">arrow_back_ios</span>
-                                  </button>
-                                </div>
-                                <div className='d-flex justify-content-center align-items-center'>
-                                  <img src={selectedImages[currentIndex]} alt={selectedImages[currentIndex]} style={{width: '320px', height: '350px', border: '5px solid black'}}/>
-                                </div>
-                                <div className='d-flex justify-content-center align-items-center'>
-                                  <button className="overlaybutton next-button" onClick={this.nextImage} type='button'>
-                                    <span className="material-symbols-outlined">arrow_forward_ios</span>
-                                  </button>
-                                </div>
-                              </div>
-                            <div>
-                          </div>
-                          </div>
-                          <div className='overlay-footer m-2 pt-2' style={{backgroundColor: 'white', color: 'black', textAlign: 'right', borderTop: '0.7px solid black'}}>
-                          <button type="button" className="btn btn-secondary" onClick={this.closeCarousel}>Close</button>
-                          </div>
-                        </div>
-                          </div>
-                      </div>
-                      )}
+                        <td className='col-lg-6'>
+                          <Button onClick={this.toggleModal}
+                          style={{textDecoration: 'none', color: 'rgba(101,151,149,255)', cursor: 'pointer', backgroundColor: 'rgba(45,48,53,255)', border: 'none'}}
+                          >View Product Images Here</Button>
+                          <Modal
+                              show={this.state.showModal}
+                              onHide={this.toggleModal}
+                              centered // Center the modal horizontally and vertically
+                              >
+                              <Modal.Header closeButton>
+                              <Modal.Title>Product Images</Modal.Title>
+                              </Modal.Header>
+                              <Modal.Body>
+                              <Carousel>
+                              {this.state.results.Item.PictureURL.map((image, index) => (
+                              <Carousel.Item key={index}>
+                                  <img
+                                    className="d-block w-100"
+                                    src={image}
+                                    alt={`Image ${index}`}
+                                    style={{width: '200px', height: '400px', border: '7px solid black'}}
+                                  />
+                              </Carousel.Item>
+                              ))}
+                              </Carousel>
+                              </Modal.Body>
+                              <Modal.Footer>
+                              <Button variant="secondary" onClick={this.toggleModal}>
+                                Close
+                              </Button>
+                              </Modal.Footer>
+                          </Modal>
                         </td>
                       </tr>
                       
