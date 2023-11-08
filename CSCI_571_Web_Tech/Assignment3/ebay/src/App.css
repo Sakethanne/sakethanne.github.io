@@ -138,3 +138,17 @@
   cursor: pointer;
   border-bottom: 1px solid #ccc;
 }
+
+
+/* ImageCarouselModal.css */
+
+/* Style the carousel control arrows */
+.carousel-control-prev-icon, .carousel-control-next-icon {
+  background-color: black !important; /* Change the background color of the arrows to black */
+  color: white !important; /* Set the text color of the arrows to white */
+}
+
+/* Optional: Adjust the size of the arrows */
+.carousel-control-prev-icon::before, .carousel-control-next-icon::before {
+  font-size: 30px !important; /* Adjust the size of the arrow icons */
+}
