@@ -357,18 +357,18 @@ class ProductTable extends Component {
               
               (<div className='row' style={{marginTop: '-10px'}}>
               <div className='col-lg-4 p-1'>
-                <a href={this.state.imageurls[0].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[0].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[1].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[1].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                {this.state.imageurls.length > 0 ? <a href={this.state.imageurls[0].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[0].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a> : ''}
+                {this.state.imageurls.length > 1 ? <a href={this.state.imageurls[1].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[1].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a> : ''}
               </div>
               <div className='col-lg-4 p-1'>
-                <a href={this.state.imageurls[2].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[2].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[3].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[3].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[4].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[4].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                {this.state.imageurls.length > 2 ? <a href={this.state.imageurls[2].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[2].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a> : ''}
+                {this.state.imageurls.length > 3 ? <a href={this.state.imageurls[3].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[3].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a> : ''}
+                {this.state.imageurls.length > 4 ? <a href={this.state.imageurls[4].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[4].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a> : ''}
               </div>
               <div className='col-lg-4 p-1'>
-                <a href={this.state.imageurls[5].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[5].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[6].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[6].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
-                <a href={this.state.imageurls[7].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[7].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a>
+                {this.state.imageurls.length > 5 ? <a href={this.state.imageurls[5].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[5].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a> : ''}
+                {this.state.imageurls.length > 6 ? <a href={this.state.imageurls[6].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[6].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a> : ''}
+                {this.state.imageurls.length > 7 ? <a href={this.state.imageurls[7].link} target='_blank' rel='noreferrer'><img src={this.state.imageurls[7].link} alt={this.state.results.Item.Title} className='img-fluid mb-2' style={{width: '100%', border: '7px solid #000'}}/></a> : ''}
               </div>
           </div>) : (<div className='text-center'>
                     <div className="alert alert-warning p-2" role="alert">
