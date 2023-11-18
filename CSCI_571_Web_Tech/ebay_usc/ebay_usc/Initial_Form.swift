@@ -13,6 +13,7 @@ struct SearchFormView: View {
     @State var customLocation: String = ""
     @State var showingFavorites: Bool = false
     @State var isShowingErrorMessage: Bool = false
+    @State var displayresults: Bool = false
     
     func usedtoggle(){usedCondition = !usedCondition}
     func newtoggle(){newCondition = !newCondition}
@@ -141,11 +142,14 @@ struct SearchFormView: View {
                 )
     }
     
+    
+    
     private func printFormData() {
         if keyword.isEmpty || (customLocationToggle == true && customLocation.isEmpty) {
             isShowingErrorMessage = true
             hideErrorMessageAfterDelay()
         } else {
+            displayresults = true
             print("Keyword: \(keyword)")
             print("Category: \(selectedCategory)")
             print("Used: \(usedCondition)")
@@ -157,6 +161,7 @@ struct SearchFormView: View {
             print("Custom Location: \(customLocation)")
         }
     }
+    
     
     private func clearFormData() {
         keyword = ""
@@ -230,17 +235,6 @@ struct CheckboxView: View {
         }
         .onTapGesture {
             isChecked.toggle()
-        }
-    }
-}
-
-struct FavoritesView: View {
-    var body: some View {
-        VStack {
-            Text("Favorites")
-                .font(.title)
-                .padding()
-            Spacer()
         }
     }
 }

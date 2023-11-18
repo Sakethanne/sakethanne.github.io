@@ -187,6 +187,7 @@ app.get("/getfavs", (req, res) => {
 
 app.get("/deletefav", (req, res) => {
     try{
+        console.log('Inside delete')
         const productid = req.query.productid;
         const deleteid = deletedata(productid);
         res.json({'Status': 200});
