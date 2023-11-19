@@ -14,36 +14,36 @@ struct FavoritesView: View {
     
     var body: some View {
         NavigationView {
-            
+            VStack{
                 if isFetchingData {
                     ProgressView("Loading...")
                     .progressViewStyle(CircularProgressViewStyle())
-                    } else {
-                        
-                            List {
-                                HStack{
-                                    Text("Wishlist total(\(wishlistProducts.count)) Items:")
-                                            .font(.headline)
-                                    Spacer()
-                                    Text("$\(String(format: "%.2f", totalCost))")
-                                            .font(.headline)
-                                }
-                                ForEach(wishlistProducts) { product in
-                                    WishlistProductRow(product: product)
-                                }
-                                    .onDelete(perform: deleteItem)
-                            }.listStyle(InsetGroupedListStyle())
-                            .navigationBarTitle("Favorites")
-                            .navigationBarTitleDisplayMode(.automatic)
+                } else {
+                    List {
+                       HStack{
+                            Text("Wishlist total(\(wishlistProducts.count)) Items:")
+                                .font(.headline)
+                    Spacer()
+                    Text("$\(String(format: "%.2f", totalCost))")
+                                .font(.headline)
+                            }
+                    ForEach(wishlistProducts) { product in
+                        WishlistProductRow(product: product)
+                        }
+                        .onDelete(perform: deleteItem)
                 }
-        }
+                }
+            }
+        }.navigationBarTitle("Favorites")
+        .navigationBarTitleDisplayMode(.automatic)
         .onAppear {
             getwishlistItems()
         }
+        
     }
     
     var totalCost: Double {
-        wishlistProducts.reduce(0) { $0 + (Double($1.productprice) ?? 0.0) } // Assuming productprice is a String
+        wishlistProducts.reduce(0) { $0 + (Double($1.productprice) ?? 0.0) }
         }
         
     func deleteItem(at offsets: IndexSet) {
