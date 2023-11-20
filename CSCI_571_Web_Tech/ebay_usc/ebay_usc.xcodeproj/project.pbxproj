@@ -18,6 +18,7 @@
 		E218E5B92B0827950087FD93 /* Initial_Form.swift in Sources */ = {isa = PBXBuildFile; fileRef = E218E5B82B0827950087FD93 /* Initial_Form.swift */; };
 		E218E5BB2B0829F90087FD93 /* Loading_view.swift in Sources */ = {isa = PBXBuildFile; fileRef = E218E5BA2B0829F90087FD93 /* Loading_view.swift */; };
 		E218E5BD2B089E550087FD93 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E218E5BC2B089E550087FD93 /* FavoritesView.swift */; };
+		E218E5BF2B0B4D840087FD93 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E218E5BE2B0B4D840087FD93 /* ResultsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		E218E5B82B0827950087FD93 /* Initial_Form.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Initial_Form.swift; sourceTree = "<group>"; };
 		E218E5BA2B0829F90087FD93 /* Loading_view.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading_view.swift; sourceTree = "<group>"; };
 		E218E5BC2B089E550087FD93 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
+		E218E5BE2B0B4D840087FD93 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				E218E5902B0824840087FD93 /* Item.swift */,
 				E218E5922B0824850087FD93 /* Assets.xcassets */,
 				E218E5942B0824850087FD93 /* Preview Content */,
+				E218E5BE2B0B4D840087FD93 /* ResultsView.swift */,
 			);
 			path = ebay_usc;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				E218E5912B0824840087FD93 /* Item.swift in Sources */,
 				E218E5BD2B089E550087FD93 /* FavoritesView.swift in Sources */,
 				E218E5B92B0827950087FD93 /* Initial_Form.swift in Sources */,
+				E218E5BF2B0B4D840087FD93 /* ResultsView.swift in Sources */,
 				E218E58D2B0824840087FD93 /* ebay_uscApp.swift in Sources */,
 				E218E5BB2B0829F90087FD93 /* Loading_view.swift in Sources */,
 			);
