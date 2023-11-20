@@ -10,8 +10,6 @@ struct ContentView: View {
             } else {
                 SearchFormView()
             }
-//            SearchFormView()
-//            FavoritesView()
         }
         .onAppear {
             // Simulate loading time (you can replace this with your actual data loading logic)

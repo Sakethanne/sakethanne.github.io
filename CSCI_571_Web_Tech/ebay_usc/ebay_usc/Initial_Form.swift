@@ -14,6 +14,9 @@ struct SearchFormView: View {
     @State var showingFavorites: Bool = false
     @State var isShowingErrorMessage: Bool = false
     @State var displayresults: Bool = false
+    @State var autopostalCode: String = ""
+    @State var pinCodeSuggestions: [String] = []
+    @State var isSheetPresented = false
     
     func usedtoggle(){usedCondition = !usedCondition}
     func newtoggle(){newCondition = !newCondition}
@@ -82,12 +85,18 @@ struct SearchFormView: View {
                     
                     Toggle(isOn: $customLocationToggle) {
                         Text("Custom Location")
+                    }.onAppear {
+                        fetchautoloc()
                     }
                     
                     if customLocationToggle {
                         HStack{
                             Text("ZipCode:")
                             TextField("Required", text: $customLocation)
+                                .onChange(of: customLocation) { _ in
+                                                        // Call API when text field content changes
+                                                        fetchPinCodes()
+                                                    }
                         }
                     }
                     
@@ -120,6 +129,9 @@ struct SearchFormView: View {
                             .buttonStyle(BorderlessButtonStyle())
                         Spacer()
                     }
+                }.sheet(isPresented: $isSheetPresented) {
+                    // Display pin code suggestions in a sheet
+                    PinCodeSuggestionsSheet(pinCodes: pinCodeSuggestions, searchText: $customLocation)
                 }
             }
             .navigationBarTitle("Product Search")
@@ -142,7 +154,72 @@ struct SearchFormView: View {
                 )
     }
     
+    func fetchPinCodes() {
+            guard customLocation.count >= 3 && customLocation.count < 5 else {
+                // Skip API call if the text length is less than 3
+                return
+            }
+
+            guard let url = URL(string: "http://localhost:8080/geonames?zip=\(customLocation)") else {
+                return
+            }
+
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
+                    return
+                }
+
+                guard let data = data else {
+                    print("Error: No data received from the API.")
+                    return
+                }
+
+                do {
+                    // Decode the array of strings directly
+                    let decodedResponse = try JSONDecoder().decode([String].self, from: data)
+
+                    // Update the UI on the main thread
+                    DispatchQueue.main.async {
+                        self.pinCodeSuggestions = decodedResponse
+                        self.isSheetPresented = true
+                    }
+                } catch {
+                    print("Error decoding JSON: \(error.localizedDescription)")
+                }
+            }.resume()
+        }
+
     
+    func fetchautoloc() {
+            guard let url = URL(string: "https://ipinfo.io/json?token=f141f67b70d679") else {
+                return
+            }
+
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
+                    return
+                }
+
+                if let data = data {
+                    do {
+                        let decoder = JSONDecoder()
+                        let ipInfo = try decoder.decode(IPInfo.self, from: data)
+
+                        // Extract the postal code
+                        let postal = ipInfo.postal
+
+                        // Update the UI on the main thread
+                        DispatchQueue.main.async {
+                            self.autopostalCode = postal
+                        }
+                    } catch {
+                        print("Error decoding JSON: \(error.localizedDescription)")
+                    }
+                }
+            }.resume()
+        }
     
     private func printFormData() {
         if keyword.isEmpty || (customLocationToggle == true && customLocation.isEmpty) {
@@ -159,6 +236,8 @@ struct SearchFormView: View {
             print("Free Shipping: \(freeShipping)")
             print("Distance: \(distance)")
             print("Custom Location: \(customLocation)")
+            print("Custom location Toggle: \(customLocationToggle)")
+            print("Auto Location: \(autopostalCode)")
         }
     }
     
@@ -175,6 +254,8 @@ struct SearchFormView: View {
         distance = "10"
         customLocationToggle = false
         customLocation = ""
+        autopostalCode = ""
+        displayresults = false
     }
     
     @ViewBuilder
@@ -242,5 +323,38 @@ struct CheckboxView: View {
 struct SearchFormView_Previews: PreviewProvider {
     static var previews: some View {
         SearchFormView()
+    }
+}
+
+struct IPInfo: Decodable {
+    let postal: String
+    // Add other properties as needed
+}
+
+struct PinCodeSuggestionsSheet: View {
+    var pinCodes: [String]
+    @Binding var searchText: String
+    @Environment(\.presentationMode) var presentationMode
+
+    var body: some View {
+        NavigationView {
+            VStack{
+                Text("Pincode suggestions")
+                    .font(.largeTitle)
+                    .cornerRadius(10)
+                    .fontWeight(.bold)
+                    .padding(.all)
+                    .padding(.vertical)
+                List(pinCodes, id: \.self) { pinCode in
+                    Text(pinCode)
+                        .onTapGesture {
+                            // Update the search text and dismiss the sheet
+                            searchText = pinCode
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                }
+                Spacer()
+            }
+        }
     }
 }

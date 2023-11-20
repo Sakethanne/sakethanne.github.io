@@ -13,34 +13,46 @@ struct FavoritesView: View {
     @State var isFetchingData = false
     
     var body: some View {
-        NavigationView {
-            VStack{
-                if isFetchingData {
-                    ProgressView("Loading...")
-                    .progressViewStyle(CircularProgressViewStyle())
-                } else {
-                    List {
-                       HStack{
-                            Text("Wishlist total(\(wishlistProducts.count)) Items:")
-                                .font(.headline)
-                    Spacer()
-                    Text("$\(String(format: "%.2f", totalCost))")
-                                .font(.headline)
-                            }
-                    ForEach(wishlistProducts) { product in
-                        WishlistProductRow(product: product)
-                        }
-                        .onDelete(perform: deleteItem)
+        VStack {
+            Text("")
+                .onAppear {
+                    getwishlistItems()
                 }
+
+            if isFetchingData {
+                ProgressView("Loading...")
+                    .progressViewStyle(CircularProgressViewStyle())
+            } else {
+                NavigationView {
+                    if wishlistProducts.isEmpty {
+                        // Display a message when there are no items in the wishlist
+                        Text("No items in Wishlist")
+                            .foregroundColor(.primary)
+                            .font(.headline)
+                            .padding()
+                    } else {
+                        // Display the list of items when there are items in the wishlist
+                        List {
+                            HStack {
+                                Text("Wishlist total(\(wishlistProducts.count)) Items:")
+                                    .font(.headline)
+                                Spacer()
+                                Text("$\(String(format: "%.2f", totalCost))")
+                                    .font(.headline)
+                            }
+                            ForEach(wishlistProducts) { product in
+                                WishlistProductRow(product: product)
+                            }
+                            .onDelete(perform: deleteItem)
+                        }
+                    }
                 }
             }
-        }.navigationBarTitle("Favorites")
-        .navigationBarTitleDisplayMode(.automatic)
-        .onAppear {
-            getwishlistItems()
         }
-        
+        .navigationBarTitle("Favorites")
+        .navigationBarTitleDisplayMode(.automatic)
     }
+
     
     var totalCost: Double {
         wishlistProducts.reduce(0) { $0 + (Double($1.productprice) ?? 0.0) }
@@ -84,9 +96,9 @@ struct FavoritesView: View {
         do {
         let decoder = JSONDecoder()
         let apiResponse = try decoder.decode(APIResponse.self, from: data)
-        if let jsonString = String(data: data, encoding: .utf8) {
+//        if let jsonString = String(data: data, encoding: .utf8) {
 //                print("Raw JSON Data: \(jsonString)")
-            }
+//            }
         let processedProducts = apiResponse.wishlistProducts.compactMap { product in
                     processInnerJSONString(product)
             }
@@ -121,6 +133,8 @@ struct FavoritesView: View {
             let productprice = json?["productprice"] as? String ?? ""
             let productshipping = json?["productshipping"] as? String ?? ""
             let productimage = json?["productimage"] as? String ?? ""
+            let productcondition = json?["productcondition"] as? String ?? ""
+            let productzip = json?["productzip"] as? String ?? ""
 
             return WishlistProduct(
                 _id: _id,
@@ -128,7 +142,9 @@ struct FavoritesView: View {
                 productname: productname,
                 productprice: productprice,
                 productshipping: productshipping,
-                productimage: productimage
+                productimage: productimage,
+                productcondition: productcondition,
+                productzip: productzip
             )
         } catch {
             print("Error processing inner JSON: \(error.localizedDescription)")
@@ -145,12 +161,37 @@ struct WishlistProductRow: View {
 
     var body: some View {
         HStack {
-            // Display product information here
-            Text(product.productname)
-            Spacer()
-            Text("$\(product.productprice)")
+            AsyncImage(url: URL(string: product.productimage)) { image in
+                image.resizable()
+            } placeholder: {
+                ProgressView()
+            }
+            .frame(width: 90, height: 100)
+            .cornerRadius(8)
+            VStack(alignment: .leading){
+                Text(product.productname)
+                .lineLimit(1)
+                .truncationMode(.tail)
+                .foregroundColor(.primary)
+                Spacer()
+                Text("$\(product.productprice)")
+                .foregroundColor(.blue)
+                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                Spacer()
+                Text(product.productshipping == "0.0" ? "FREE SHIPPING" : "$\(product.productshipping)" )
+                .foregroundColor(.secondary)
+                Spacer()
+                HStack{
+                    Text(product.productzip)
+                    .foregroundColor(.secondary)
+                    Spacer()
+                    Text(product.productcondition)
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+            }
         }
-        .padding()
+        .padding(.all, 0) // Add padding for better spacing
     }
 }
 
@@ -179,6 +220,8 @@ struct WishlistProduct: Identifiable {
     let productprice: String
     let productshipping: String
     let productimage: String
+    let productcondition: String
+    let productzip: String
 
     // Computed property for inner product name
     var innerProductName: String {

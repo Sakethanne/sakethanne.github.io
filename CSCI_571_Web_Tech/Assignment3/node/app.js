@@ -82,6 +82,7 @@ app.get("/senddata", (req, res) => {
 app.get("/geonames", (req, res) => {
     console.log('inside geo function')
     console.log(req.query);
+    var zips = []
     var geonames = 'http://api.geonames.org/postalCodeSearchJSON?postalcode_startsWith='
     geonames += req.query.zip
     geonames += '&maxRows=5&username=sakethanne&country=US';
@@ -89,8 +90,11 @@ app.get("/geonames", (req, res) => {
     axios.get(geonames)
         .then((response) => {
             console.log('inside response')
-            var geo = response.data;
-            res.json(geo);
+            for (let i = 0; i < response.data.postalCodes.length; i++) {
+                zips[i] = response.data.postalCodes[i].postalCode;
+              }
+            // var geo = response.data;
+            res.json(zips);
         })
         .catch((error) => {
             console.error('API request error:', error);
@@ -210,7 +214,7 @@ async function adddata(productid,product_name,product_price,product_shipping,pro
   try {
     await client.connect();
     const database = client.db('ebay');
-    const favorites = database.collection('favorites');
+    const favorites = database.collection('favorites-ios');
 
     // Query for a movie that has the title 'Back to the Future'
     const data_to_insert = { productid: productid, productname: product_name, productprice: product_price, productshipping: product_shipping, productimage: product_img_url };
@@ -229,7 +233,7 @@ async function getdatamongo() {
     try {
       await client.connect();
       const database = client.db('ebay');
-      const favorites = database.collection('favorites');
+      const favorites = database.collection('favorites-ios');
 
       const allData = await favorites.find({}).toArray();
       wishlisted_products = [];
@@ -249,7 +253,7 @@ async function getdatamongo() {
     try {
       await client.connect();
       const database = client.db('ebay');
-      const favorites = database.collection('favorites');
+      const favorites = database.collection('favorites-ios');
 
       const query = { productid: productid};
       const deleteresults = await favorites.deleteOne({ productid: productid});
