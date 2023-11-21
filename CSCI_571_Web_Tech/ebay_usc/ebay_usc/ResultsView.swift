@@ -488,10 +488,50 @@ struct ProductDetailView: View {
                                     Image(systemName: favoriteproducts.contains(product.productid) ? "heart.fill" : "heart")
                                         .foregroundColor(.red)
                                         .font(.title)
+                                        .onTapGesture {
+                                            checkandaddwishlistProduct(product: product)
+                                                        }
+                                    
                                 }
                             }
                         )
         
+    }
+    
+    
+    func checkandaddwishlistProduct(product: Product){
+        if(favoriteproducts.contains(product.productid)){
+            favoriteproducts.removeAll{ $0 == product.productid }
+            guard let url = URL(string: "http://localhost:8080/deletefav?productid=\(product.productid)") else {
+                return
+                }
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                    return
+                }
+            guard let data = data else {
+                print("No data received")
+                return
+                }
+        }.resume()
+        }
+        else{
+            favoriteproducts.append(product.productid)
+            guard let url = URL(string: "http://localhost:8080/addfav?productid=\(product.productid)&product_name=\(product.productname)&product_price=\(product.productprice)&product_shipping=\(product.productshippingcost)&product_img_url=\(product.productimage)&product_zip=\(product.productzipcode)&product_condition=\(product.productconditionid)") else {
+                return
+                }
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                    return
+                }
+            guard let data = data else {
+                print("No data received")
+                return
+                }
+        }.resume()
+        }
     }
     
     func getSimilarItems() {
