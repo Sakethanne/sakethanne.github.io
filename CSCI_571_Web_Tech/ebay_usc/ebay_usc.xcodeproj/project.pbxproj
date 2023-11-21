@@ -108,11 +108,11 @@
 				E218E58E2B0824840087FD93 /* ContentView.swift */,
 				E218E5B82B0827950087FD93 /* Initial_Form.swift */,
 				E218E5BC2B089E550087FD93 /* FavoritesView.swift */,
+				E218E5BE2B0B4D840087FD93 /* ResultsView.swift */,
 				E218E5BA2B0829F90087FD93 /* Loading_view.swift */,
 				E218E5902B0824840087FD93 /* Item.swift */,
 				E218E5922B0824850087FD93 /* Assets.xcassets */,
 				E218E5942B0824850087FD93 /* Preview Content */,
-				E218E5BE2B0B4D840087FD93 /* ResultsView.swift */,
 			);
 			path = ebay_usc;
 			sourceTree = "<group>";

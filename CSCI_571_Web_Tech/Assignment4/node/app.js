@@ -183,10 +183,23 @@ app.get("/getsimilaritems", (req, res) => {
     var similarproductsurl = 'https://svcs.ebay.com/MerchandisingService?OPERATION-NAME=getSimilarItems&SERVICE-NAME=MerchandisingService&SERVICE-VERSION=1.1.0&CONSUMER-ID=SaiVenka-WebAppli-PRD-672a069ab-61e3ce4f&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&itemId='
     similarproductsurl+= req.query.productid
     similarproductsurl += '&maxResults=20'
+    var similaritems = []
     axios.get(similarproductsurl)
         .then((response) => {
             var similarproducts = response.data;
-            res.json(similarproducts);
+            if('item' in similarproducts.getSimilarItemsResponse.itemRecommendations)
+            for(let i =0; i < similarproducts.getSimilarItemsResponse.itemRecommendations.item.length; i++){
+                var simitem = {};
+                simitem['name'] = similarproducts.getSimilarItemsResponse.itemRecommendations.item[i].title
+                simitem['picture'] = similarproducts.getSimilarItemsResponse.itemRecommendations.item[i].imageURL
+                simitem['price'] = similarproducts.getSimilarItemsResponse.itemRecommendations.item[i].buyItNowPrice.__value__
+                simitem['shipping'] = similarproducts.getSimilarItemsResponse.itemRecommendations.item[i].shippingCost.__value__
+                simitem['remaining'] = similarproducts.getSimilarItemsResponse.itemRecommendations.item[i].timeLeft.substring(similarproducts.getSimilarItemsResponse.itemRecommendations.item[i].timeLeft.indexOf("P") + 1, similarproducts.getSimilarItemsResponse.itemRecommendations.item[i].timeLeft.indexOf("D"))
+                simitem['link'] = similarproducts.getSimilarItemsResponse.itemRecommendations.item[i].viewItemURL
+                simitem['id'] = similarproducts.getSimilarItemsResponse.itemRecommendations.item[i].itemId
+                similaritems.push(simitem)
+        }
+            res.json(similaritems);
         })
         .catch((error) => {
             console.error('API request error:', error);
@@ -223,12 +236,16 @@ app.get("/getsingleitem", (req, res) => {
 app.get("/getphotos", (req, res) => {
     var googlesearchurl = 'https://www.googleapis.com/customsearch/v1?q='
     googlesearchurl+= req.query.productname
-    googlesearchurl += '&cx=24c220cea25034c3d&imgSize=huge&num=10&searchType=image&key=AIzaSyAcXUA4w1kSAwfL5T3ea1t1qdJ1itSwbtg'
+    googlesearchurl += '&cx=24c220cea25034c3d&imgSize=huge&num=8&searchType=image&key=AIzaSyAcXUA4w1kSAwfL5T3ea1t1qdJ1itSwbtg'
     console.log(googlesearchurl)
+    var imageslist = []
     axios.get(googlesearchurl)
         .then((response) => {
             var googleimageres = response.data;
-            res.json(googleimageres);
+            for(let i=0; i<googleimageres.items.length; i++){
+                imageslist.push(googleimageres.items[i].link)
+            }
+            res.json(imageslist);
         })
         .catch((error) => {
             console.error('API request error:', error);
@@ -242,7 +259,9 @@ app.get("/addfav", (req, res) => {
         const product_price = req.query.product_price;
         const product_shipping = req.query.product_shipping;
         const product_img_url = req.query.product_img_url;
-        const insertid = adddata(productid,product_name,product_price,product_shipping,product_img_url);
+        const product_zip = req.query.product_zip;
+        const product_condition = req.query.product_condition;
+        const insertid = adddata(productid,product_name,product_price,product_shipping,product_img_url,product_condition,product_zip);
         console.log(insertid);
         res.json({'Status': 200});
     }catch (err) {
@@ -287,14 +306,14 @@ app.listen(PORT, console.log(`Server started on port ${PORT}`));
 // AIzaSyAcXUA4w1kSAwfL5T3ea1t1qdJ1itSwbtg
 // https://www.facebook.com/share.php?u=hubspot.com
 
-async function adddata(productid,product_name,product_price,product_shipping,product_img_url) {
+async function adddata(productid,product_name,product_price,product_shipping,product_img_url,product_condition,product_zip) {
   try {
     await client.connect();
     const database = client.db('ebay');
     const favorites = database.collection('favorites-ios');
 
     // Query for a movie that has the title 'Back to the Future'
-    const data_to_insert = { productid: productid, productname: product_name, productprice: product_price, productshipping: product_shipping, productimage: product_img_url };
+    const data_to_insert = { productid: productid, productname: product_name, productprice: product_price, productshipping: product_shipping, productimage: product_img_url, productcondition: product_condition, productzip: product_zip };
     const result = await favorites.insertOne(data_to_insert);
     console.log(result.insertedId);
     return result.insertedId;

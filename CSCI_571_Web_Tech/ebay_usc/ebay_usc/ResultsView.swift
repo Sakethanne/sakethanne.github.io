@@ -21,8 +21,12 @@ struct ResultsView: View {
     @Binding var autopostalCode: String
 
     @State var errorfindingresults: Bool = false
+    @State var isAddedToWishlist: Bool = false
+    @State var isRemovedFromWishlist: Bool = false
     @State var isLoading: Bool = true
     @State var products: [Product] = []
+    @State var favoriteproducts: [String] = []
+    @State var wishlistProducts: [NewWishlistProduct] = []
     
     
     var body: some View {
@@ -30,6 +34,7 @@ struct ResultsView: View {
             Text("")
                 .onAppear {
                     fetchData()
+                    getwishlistItems()
                 }
             NavigationView {
                 List {
@@ -53,17 +58,81 @@ struct ResultsView: View {
                             })
                         } else {
                             ForEach(products) { product in
-                                NavigationLink(destination: ProductDetailView(product: product)) {
-                                    ProductRow(product: product)
+                                NavigationLink(destination: ProductDetailView(favoriteproducts: $favoriteproducts, product: product)) {
+//                                    ProductRow(product: product, favoriteproducts: $favoriteproducts)
+                                    ProductRow(product: product, favoriteproducts: $favoriteproducts, isAddedToWishlist: $isAddedToWishlist, isRemovedFromWishlist: $isRemovedFromWishlist)
                                 }
                             }
                         }
                     }
                 }
-            }
+            }.overlay(
+                VStack {
+                    Spacer()
+                    HStack {
+                        if isAddedToWishlist || isRemovedFromWishlist {
+                            Text(isAddedToWishlist ? "Added to Wishlist" : "Removed from Wishlist")
+                                .foregroundColor(.white)
+                                .padding()
+                                .padding(.horizontal)
+                                .background(Color.black)
+                                .cornerRadius(10)
+                                .onAppear {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                        // Hide the message after 2 seconds
+                                        isAddedToWishlist = false
+                                        isRemovedFromWishlist = false
+                                    }
+                                }
+                                .onTapGesture {
+                                    isAddedToWishlist = false
+                                    isRemovedFromWishlist = false
+                                }
+                        }
+                    }
+                }
+            )
         }
     }
+    
+    func getwishlistItems() {
+        guard let url = URL(string: "http://localhost:8080/getfavs") else {
+            return
+            }
 
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+        if let error = error {
+            print("Error: \(error.localizedDescription)")
+                return
+            }
+        guard let data = data else {
+            print("No data received")
+            return
+            }
+        do {
+        let decoder = JSONDecoder()
+        let apiResponse = try decoder.decode(WishListAPIResponse.self, from: data)
+//        if let jsonString = String(data: data, encoding: .utf8) {
+//                print("Raw JSON Data: \(jsonString)")
+//            }
+        let processedProducts = apiResponse.wishlistProducts.compactMap { product in
+            processInnerJSONStringNew(product)
+            }
+//        print("JSON Data \(processedProducts)")
+        DispatchQueue.main.async {
+            self.wishlistProducts = processedProducts
+//            print(self.wishlistProducts)
+            }
+            // Extract product ids and print them
+            let productIds = processedProducts.map { $0.productid }
+            favoriteproducts.append(contentsOf: productIds)
+        } catch {
+            print("Error decoding JSON: \(error.localizedDescription)")
+        }
+    }.resume()
+    }
+    
+    
     func fetchData() {
         var apiurl = "http://localhost:8080/senddata?keyword=\(keyword)&category=\(selectedCategory)&distance=\(distance)&freeshipping=\(freeShipping)&localpickup=\(localPickup)&conditionnew=\(newCondition)&conditionused=\(usedCondition)&conditionunspecified=\(unspecifiedCondition)&from=\(customLocation)&autolocation=\(autopostalCode)"
         
@@ -127,9 +196,48 @@ struct ResultsView: View {
     }
 }
 
+// Function to process the inner JSON strings manually
+    func processInnerJSONStringNew(_ jsonString: String) -> NewWishlistProduct? {
+        // Remove the escaping characters and create a valid JSON string
+        let cleanedString = jsonString.replacingOccurrences(of: "\\\"", with: "\"")
+
+        guard let jsonData = cleanedString.data(using: .utf8) else {
+            return nil
+        }
+
+        do {
+            let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]
+
+            // Extract values manually from the JSON dictionary
+            let _id = json?["_id"] as? String ?? ""
+            let productid = json?["productid"] as? String ?? ""
+            let productname = json?["productname"] as? String ?? ""
+            let productprice = json?["productprice"] as? String ?? ""
+            let productshipping = json?["productshipping"] as? String ?? ""
+            let productimage = json?["productimage"] as? String ?? ""
+            let productcondition = json?["productcondition"] as? String ?? ""
+            let productzip = json?["productzip"] as? String ?? ""
+
+            return NewWishlistProduct(
+                _id: _id,
+                productid: productid,
+                productname: productname,
+                productprice: productprice,
+                productshipping: productshipping,
+                productimage: productimage,
+                productcondition: productcondition,
+                productzip: productzip
+            )
+        } catch {
+            print("Error processing inner JSON: \(error.localizedDescription)")
+            return nil
+        }
+    }
+
+
 #Preview {
     ResultsView(
-        keyword: .constant("dasdassadasd"),
+        keyword: .constant("iphone"),
         selectedCategory: .constant("All Categories"),
         usedCondition: .constant(false),
         newCondition: .constant(false),
@@ -147,6 +255,9 @@ struct ResultsView: View {
 
 struct ProductRow: View {
     let product: Product
+    @Binding var favoriteproducts: [String]
+    @Binding var isAddedToWishlist: Bool
+    @Binding var isRemovedFromWishlist: Bool
 
     var body: some View {
         HStack{
@@ -155,58 +266,306 @@ struct ProductRow: View {
             } placeholder: {
                 ProgressView()
             }
-            .frame(width: 90, height: 100)
+            .frame(width: 80, height: 85)
             .cornerRadius(8)
         }
         VStack(alignment: .leading) {
+            Spacer()
             Text(product.productname)
                 .lineLimit(1)
                 .truncationMode(.tail)
                 .foregroundColor(.primary)
-            Spacer()
             HStack{
                 VStack(alignment: .leading){
                     Spacer()
                     Text("$\(product.productprice)")
-                    .foregroundColor(.blue)
-                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                        .foregroundColor(.blue)
+                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                     Spacer()
                     Text(product.productshippingcost == "0.0" ? "FREE SHIPPING" : "$\(product.productshippingcost)" )
-                    .foregroundColor(.secondary)
+                        .foregroundColor(.secondary)
                     Spacer()
                 }
                 Spacer()
-                Image(systemName: "heart")
+                Image(systemName: favoriteproducts.contains(product.productid) ? "heart.fill" : "heart")
                     .foregroundColor(.red)
                     .font(.title)
-                
+                    .onTapGesture {
+                        checkandaddwishlist(product: product)
+                                    }
             }
-            Spacer()
             HStack{
                 Text(product.productzipcode)
-                .foregroundColor(.secondary)
+                    .foregroundColor(.secondary)
                 Spacer()
                 Text(product.productconditionid == "1000" ? "NEW" : product.productconditionid == "2000" ? "REFURBISHED" : product.productconditionid == "2500" ? "REFURBISHED" : product.productconditionid == "3000" ? "USED" : product.productconditionid == "4000" ? "USED" : product.productconditionid == "5000" ? "USED" :product.productconditionid == "6000" ? "USED" : "N/A")
                     .foregroundColor(.secondary)
             }
+            Spacer()
         }
-        .padding()
+        }
+    
+    func checkandaddwishlist(product: Product){
+        if(favoriteproducts.contains(product.productid)){
+            isRemovedFromWishlist = true
+            favoriteproducts.removeAll{ $0 == product.productid }
+            guard let url = URL(string: "http://localhost:8080/deletefav?productid=\(product.productid)") else {
+                return
+                }
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                    return
+                }
+            guard let data = data else {
+                print("No data received")
+                return
+                }
+        }.resume()
+        }
+        else{
+            isAddedToWishlist = true
+            favoriteproducts.append(product.productid)
+            guard let url = URL(string: "http://localhost:8080/addfav?productid=\(product.productid)&product_name=\(product.productname)&product_price=\(product.productprice)&product_shipping=\(product.productshippingcost)&product_img_url=\(product.productimage)&product_zip=\(product.productzipcode)&product_condition=\(product.productconditionid)") else {
+                return
+                }
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                    return
+                }
+            guard let data = data else {
+                print("No data received")
+                return
+                }
+        }.resume()
+        }
     }
-}
+    
+    }
+
 
 struct ProductDetailView: View {
+    @State var productviewisloading: Bool = true
+    @State var photos: [String] = []
+    @State var sortOptions: [String] = ["Default", "Name", "Price", "Shipping", "Days Left"]
+    @State var selectedSortOption: String = "Default"
+        
+    @State var sortOrders: [String] = ["Ascending", "Descending"]
+    @State var selectedSortOrder: String = "Ascending"
+        
+    @State var similarItems: [SimilarItem] = []
+    
+    @Binding var favoriteproducts: [String]
     let product: Product
-
+    
     var body: some View {
-        VStack {
-            Text(product.productname)
-                .font(.title)
+        TabView{
+            VStack{
+                if(productviewisloading){
+                    ProgressView("Loading...")
+                        .progressViewStyle(CircularProgressViewStyle())
+                }
+                else{
+                    Text("Info")
+                }
+            }.tabItem {
+                Image(systemName: "info.circle.fill")
+                Text("Info")
+            }
+            VStack{
+                Text("Shipping")
+            }
+            .tabItem {
+                Image(systemName: "shippingbox.fill")
+                Text("Shipping")
+            }
+            VStack{
+                HStack{
+                    Spacer()
+                    Text("Powered by ")
+                        .font(.headline)
+                        .onAppear {
+                        }
+                    Image("google")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 100, height: 100)
+                    Spacer()
+                }
+                .padding(.all)
+                ScrollView{
+                    LazyVStack{
+                        ForEach(photos, id: \.self) { photoURL in
+                            AsyncImage(url: URL(string: photoURL)) { image in
+                                image.resizable()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 350)
+                            .cornerRadius(8)
+                        }
+                    }
+                    .padding(.horizontal,30)
+                }
+            }
+            .tabItem {
+                Image(systemName: "photo.stack.fill")
+                Text("Photos")
+            }
+            VStack{
+                HStack{
+                    Text("Sort By")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                    Spacer()
+                }.padding(.horizontal, 20)
+                
+                        Picker("Sort By", selection: $selectedSortOption) {
+                            ForEach(sortOptions, id: \.self) { option in
+                                Text(option)
+                            }
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .padding()
+                if(selectedSortOption=="Default"){
+                    Text("")
+                }
+                else{
+                    HStack{
+                        Text("Order")
+                            .font(.headline)
+                            .fontWeight(.bold)
+                        Spacer()
+                    }.padding(.horizontal, 20)
+                    
+                    Picker("Sort Order", selection: $selectedSortOrder) {
+                        ForEach(sortOrders, id: \.self) { order in
+                            Text(order)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
                 .padding()
-            // Add other details as needed
-        }
-        .navigationTitle(product.productname)
+                }
+                        
+                ScrollView {
+                                LazyVGrid(columns: [GridItem(), GridItem()], spacing: 16) {
+                                    ForEach(sortedSimilarItems()) { item in
+                                        SimilarItemView(item: item)
+                                    }
+                                }
+                                .padding()
+                            }
+            }
+            .tabItem {
+                Image(systemName: "list.bullet.indent")
+                Text("Similar")
+            }
+        }.onAppear(
+            //                perform: productphotos
+            perform: getSimilarItems
+        )
+        .toolbarBackground(Color.secondary)
+        .toolbarTitleDisplayMode(.automatic)
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarItems(trailing:
+                            HStack {
+                                Spacer()
+                                Button(action: {
+                                    if let url = URL(string: "https://www.example.com") {
+                                                    UIApplication.shared.open(url)
+                                                }
+                                }) {
+                                    Image("fb")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                }
+
+                                Button(action: {
+                                    // Action for the second button
+                                    print("Second Button Tapped")
+                                }) {
+                                    Image(systemName: favoriteproducts.contains(product.productid) ? "heart.fill" : "heart")
+                                        .foregroundColor(.red)
+                                        .font(.title)
+                                }
+                            }
+                        )
+        
     }
+    
+    func getSimilarItems() {
+        guard let url = URL(string: "http://localhost:8080/getsimilaritems?productid=\(product.productid)") else {
+                return
+            }
+
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data {
+                    do {
+                        let decoder = JSONDecoder()
+                        let items = try decoder.decode([SimilarItem].self, from: data)
+                        DispatchQueue.main.async {
+                            self.similarItems = items
+                        }
+                    } catch {
+                        print("Error decoding JSON: \(error.localizedDescription)")
+                    }
+                }
+            }.resume()
+        }
+    
+    // Function to sort similar items based on selected options
+        func sortedSimilarItems() -> [SimilarItem] {
+            var sortedItems = similarItems
+
+            switch selectedSortOption {
+            case "Name":
+                sortedItems.sort { $0.name < $1.name }
+            case "Price":
+                sortedItems.sort { Double($0.price) ?? 0 < Double($1.price) ?? 0 }
+            case "Shipping":
+                sortedItems.sort { Double($0.shipping) ?? 0 < Double($1.shipping) ?? 0 }
+            case "Remaining":
+                sortedItems.sort { Int($0.remaining) ?? 0 < Int($1.remaining) ?? 0 }
+            default:
+                break
+            }
+
+            if selectedSortOrder == "Descending" {
+                sortedItems.reverse()
+            }
+
+            return sortedItems
+        }
+    
+    func productphotos() {
+        guard let url = URL(string: "http://localhost:8080/getphotos?productname=\(product.productname)") else {
+                return
+            }
+
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    print("Error fetching data: \(error.localizedDescription)")
+                    return
+                }
+
+                guard let data = data else {
+                    print("No data received")
+                    return
+                }
+
+                do {
+                    let decoder = JSONDecoder()
+                    let photoURLs = try decoder.decode([String].self, from: data)
+                    DispatchQueue.main.async {
+                        self.photos = photoURLs
+                        print(photos)
+                    }
+                } catch {
+                    print("Error decoding JSON: \(error.localizedDescription)")
+                }
+            }.resume()
+        }
 }
 
 struct ProductResponse: Codable {
@@ -232,4 +591,104 @@ struct Product: Codable, Identifiable {
     enum CodingKeys: String, CodingKey {
             case productid, productname, productimage, productzipcode, productshippingcost, productshippingtype, productshippinglocations, productshippingexpedited, productshippingoneday, productshippinghandling, productprice, productcondition, productconditionid
         }
+}
+
+struct WishListAPIResponse: Decodable {
+    let status: Int
+    let wishlistProducts: [String]
+
+    enum CodingKeys: String, CodingKey {
+        case status = "Status"
+        case wishlistProducts = "Wishlist_Products"
+    }
+}
+
+struct NewWishlistProduct: Identifiable {
+    let id = UUID()
+    let _id: String
+    let productid: String
+    let productname: String
+    let productprice: String
+    let productshipping: String
+    let productimage: String
+    let productcondition: String
+    let productzip: String
+
+    // Computed property for inner product name
+    var innerProductName: String {
+        processInnerJSONStringNew(productname)?.productname ?? ""
+    }
+}
+
+struct SimilarItem: Decodable, Identifiable {
+    let id: String
+    let name: String
+    let picture: String
+    let price: String
+    let shipping: String
+    let remaining: String
+    let link: String
+}
+
+struct SimilarItemView: View {
+    let item: SimilarItem
+    
+    var body: some View {
+        VStack {
+            // Image
+            RemoteImage(url: item.picture)
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 200)
+                .cornerRadius(15)
+            
+            // Name
+            Text(item.name)
+                .font(.headline)
+                .multilineTextAlignment(.leading)
+                .lineLimit(2)
+                .truncationMode(.tail)
+                .foregroundColor(.primary)
+            
+            HStack{
+                // Shipping
+                Text("$\(item.shipping)")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                Spacer()
+                // Remaining
+                Text("\(item.remaining) Days Left")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            HStack{
+                Spacer()
+                // Price
+                Text("$\(item.price)")
+                    .font(.headline)
+                    .foregroundColor(.blue)
+                    .fontWeight(.bold)
+            }
+            
+        }
+        .frame(width: 165, height: 300)
+        .padding(.all, 5)
+        .background(Color.gray.opacity(0.1))
+        .padding(.horizontal, 3)
+        .cornerRadius(15)
+    }
+}
+
+struct RemoteImage: View {
+    let url: String
+
+    var body: some View {
+        if let imageUrl = URL(string: url), let imageData = try? Data(contentsOf: imageUrl), let uiImage = UIImage(data: imageData) {
+            Image(uiImage: uiImage)
+                .resizable()
+                .cornerRadius(15)
+        } else {
+            Image(systemName: "photo")
+                .resizable()
+        }
+    }
 }

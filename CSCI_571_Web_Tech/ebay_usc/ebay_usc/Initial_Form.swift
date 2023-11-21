@@ -30,119 +30,123 @@ struct SearchFormView: View {
     var body: some View {
         NavigationView {
             VStack {
-                VStack {
-                    Form{
-                        HStack{
-                            Text("Keyword: ")
-                            TextField("Required", text: $keyword)
+                    Section {
+                        Form{
+                            HStack{
+                                Text("Keyword: ")
+                                TextField("Required", text: $keyword)
+                                
+                                
+                            }
+                            Picker("Category", selection: $selectedCategory) {
+                                Text("All").tag("All Categories")
+                                Text("Art").tag("550")
+                                Text("Baby").tag("2948")
+                                Text("Books").tag("261186")
+                                Text("Clothing, Shoes & Accessories").tag("11450")
+                                Text("Computers/Tablets & Networking").tag("58058")
+                                Text("Health & Beauty").tag("26395")
+                                Text("Music").tag("11233")
+                                Text("Video Games & Consoles").tag("1249")
+                            }
+                            .pickerStyle(MenuPickerStyle())
+                            .padding(.vertical, 5)
+                            VStack{
+                                HStack{
+                                    Text("Condition")
+                                    Spacer()
+                                }
+                                HStack{
+                                    Spacer()
+                                    CheckboxView(isChecked: $usedCondition, label: "Used")
+                                    Spacer()
+                                    CheckboxView(isChecked: $newCondition, label: "New")
+                                    Spacer()
+                                    CheckboxView(isChecked: $unspecifiedCondition, label: "Unspecified")
+                                    Spacer()
+                                }
+                                .padding(.top)
+                            }
                             
+                            VStack{
+                                HStack{
+                                    Text("Shipping")
+                                    Spacer()
+                                }
+                                HStack{
+                                    Spacer()
+                                    CheckboxView(isChecked: $localPickup, label: "PickUp")
+                                    Spacer()
+                                    CheckboxView(isChecked: $freeShipping, label: "Free Shipping")
+                                    Spacer()
+                                }
+                                .padding(.top)
+                            }
+                            HStack {
+                                Text("Distance:")
+                                TextField("10", text: $distance)
+                                    .keyboardType(.numberPad)
+                            }
                             
-                        }
-                        Picker("Category", selection: $selectedCategory) {
-                            Text("All").tag("All Categories")
-                            Text("Art").tag("550")
-                            Text("Baby").tag("2948")
-                            Text("Books").tag("261186")
-                            Text("Clothing, Shoes & Accessories").tag("11450")
-                            Text("Computers/Tablets & Networking").tag("58058")
-                            Text("Health & Beauty").tag("26395")
-                            Text("Music").tag("11233")
-                            Text("Video Games & Consoles").tag("1249")
-                        }
-                        .pickerStyle(MenuPickerStyle())
-                        .padding(.vertical, 5)
-                        VStack{
-                            HStack{
-                                Text("Condition")
-                                Spacer()
+                            Toggle(isOn: $customLocationToggle) {
+                                Text("Custom Location")
+                            }.onAppear {
+                                fetchautoloc()
                             }
+                            
+                            if customLocationToggle {
+                                HStack{
+                                    Text("ZipCode:")
+                                    TextField("Required", text: $customLocation)
+                                        .onChange(of: customLocation) { _ in
+                                            // Call API when text field content changes
+                                            fetchPinCodes()
+                                        }
+                                }
+                            }
+                            
                             HStack{
                                 Spacer()
-                                CheckboxView(isChecked: $usedCondition, label: "Used")
+                                Button("Submit"){
+                                    printFormData()
+                                }.font(.headline)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .padding(.horizontal, 20)
+                                    .background (
+                                        Color.blue
+                                            .cornerRadius(10)
+                                    )
+                                    .buttonStyle(BorderlessButtonStyle())
                                 Spacer()
-                                CheckboxView(isChecked: $newCondition, label: "New")
-                                Spacer()
-                                CheckboxView(isChecked: $unspecifiedCondition, label: "Unspecified")
+                                Button("Clear"){
+                                    clearFormData()
+                                }.font(.headline)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .padding(.horizontal, 20)
+                                    .background (
+                                        Color.blue
+                                            .cornerRadius(10)
+                                    )
+                                    .buttonStyle(BorderlessButtonStyle())
                                 Spacer()
                             }
-                            .padding(.top)
-                        }
-                        
-                        VStack{
-                            HStack{
-                                Text("Shipping")
-                                Spacer()
-                            }
-                            HStack{
-                                Spacer()
-                                CheckboxView(isChecked: $localPickup, label: "PickUp")
-                                Spacer()
-                                CheckboxView(isChecked: $freeShipping, label: "Free Shipping")
-                                Spacer()
-                            }
-                            .padding(.top)
-                        }
-                        HStack {
-                            Text("Distance:")
-                            TextField("10", text: $distance)
-                                .keyboardType(.numberPad)
-                        }
-                        
-                        Toggle(isOn: $customLocationToggle) {
-                            Text("Custom Location")
-                        }.onAppear {
-                            fetchautoloc()
-                        }
-                        
-                        if customLocationToggle {
-                            HStack{
-                                Text("ZipCode:")
-                                TextField("Required", text: $customLocation)
-                                    .onChange(of: customLocation) { _ in
-                                        // Call API when text field content changes
-                                        fetchPinCodes()
-                                    }
-                            }
-                        }
-                        
-                        HStack{
-                            Spacer()
-                            Button("Submit"){
-                                printFormData()
-                            }.font(.headline)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .padding()
-                                .padding(.horizontal, 20)
-                                .background (
-                                    Color.blue
-                                        .cornerRadius(10)
-                                )
-                                .buttonStyle(BorderlessButtonStyle())
-                            Spacer()
-                            Button("Clear"){
-                                clearFormData()
-                            }.font(.headline)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .padding()
-                                .padding(.horizontal, 20)
-                                .background (
-                                    Color.blue
-                                        .cornerRadius(10)
-                                )
-                                .buttonStyle(BorderlessButtonStyle())
-                            Spacer()
-                        }
-                        
-                    }.sheet(isPresented: $isSheetPresented) {
-                        // Display pin code suggestions in a sheet
-                        PinCodeSuggestionsSheet(pinCodes: pinCodeSuggestions, searchText: $customLocation)
+                            
+                        }.sheet(isPresented: $isSheetPresented) {
+                            // Display pin code suggestions in a sheet
+                            PinCodeSuggestionsSheet(pinCodes: pinCodeSuggestions, searchText: $customLocation)
                     }
-                    if displayresults {
-                        ResultsView(keyword: $keyword,selectedCategory: $selectedCategory, usedCondition: $usedCondition,newCondition: $newCondition,unspecifiedCondition:$unspecifiedCondition, localPickup: $localPickup,freeShipping:$freeShipping,distance:$distance,customLocationToggle:$customLocationToggle,customLocation:$customLocation,autopostalCode:$autopostalCode )
                     }
-                }.overlay(
+                    Section{
+                        if displayresults {
+                            ResultsView(keyword: $keyword,selectedCategory: $selectedCategory, usedCondition: $usedCondition,newCondition: $newCondition,unspecifiedCondition:$unspecifiedCondition, localPickup: $localPickup,freeShipping:$freeShipping,distance:$distance,customLocationToggle:$customLocationToggle,customLocation:$customLocation,autopostalCode:$autopostalCode )
+                        }
+                    }
+                    
+                .overlay(
                     errorMessageView()
                 )
                 
@@ -238,17 +242,17 @@ struct SearchFormView: View {
                 hideErrorMessageAfterDelay()
             } else {
                 displayresults = true
-                print("Keyword: \(keyword)")
-                print("Category: \(selectedCategory)")
-                print("Used: \(usedCondition)")
-                print("New: \(newCondition)")
-                print("Unspecified: \(unspecifiedCondition)")
-                print("Local Pickup: \(localPickup)")
-                print("Free Shipping: \(freeShipping)")
-                print("Distance: \(distance)")
-                print("Custom Location: \(customLocation)")
-                print("Custom location Toggle: \(customLocationToggle)")
-                print("Auto Location: \(autopostalCode)")
+//                print("Keyword: \(keyword)")
+//                print("Category: \(selectedCategory)")
+//                print("Used: \(usedCondition)")
+//                print("New: \(newCondition)")
+//                print("Unspecified: \(unspecifiedCondition)")
+//                print("Local Pickup: \(localPickup)")
+//                print("Free Shipping: \(freeShipping)")
+//                print("Distance: \(distance)")
+//                print("Custom Location: \(customLocation)")
+//                print("Custom location Toggle: \(customLocationToggle)")
+//                print("Auto Location: \(autopostalCode)")
             }
         }
     

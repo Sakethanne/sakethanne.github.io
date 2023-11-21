@@ -185,7 +185,7 @@ struct WishlistProductRow: View {
                     Text(product.productzip)
                     .foregroundColor(.secondary)
                     Spacer()
-                    Text(product.productcondition)
+                    Text(product.productcondition == "1000" ? "NEW" : product.productcondition == "2000" ? "REFURBISHED" : product.productcondition == "2500" ? "REFURBISHED" : product.productcondition == "3000" ? "USED" : product.productcondition == "4000" ? "USED" : product.productcondition == "5000" ? "USED" :product.productcondition == "6000" ? "USED" : "N/A")
                         .foregroundColor(.secondary)
                 }
                 Spacer()
