@@ -137,8 +137,24 @@ app.get("/senddata", (req, res) => {
                             item['productshippinghandling'] = ""
                         }
                         item['productprice'] = results.findItemsAdvancedResponse[0].searchResult[0].item[i].sellingStatus[0].currentPrice[0].__value__
-                        item['productcondition'] = results.findItemsAdvancedResponse[0].searchResult[0].item[i].condition[0].conditionDisplayName[0]
-                        item['productconditionid'] = results.findItemsAdvancedResponse[0].searchResult[0].item[i].condition[0].conditionId[0]
+                        if('condition' in results.findItemsAdvancedResponse[0].searchResult[0].item[i]){
+                            if('conditionDisplayName' in results.findItemsAdvancedResponse[0].searchResult[0].item[i].condition[0]){
+                                item['productcondition'] = results.findItemsAdvancedResponse[0].searchResult[0].item[i].condition[0].conditionDisplayName[0]
+                            }else{
+                                item['productcondition'] = ""
+                            }
+                        }else{
+                            item['productcondition'] = ""
+                        }
+                        if('condition' in results.findItemsAdvancedResponse[0].searchResult[0].item[i]){
+                            if('conditionId' in results.findItemsAdvancedResponse[0].searchResult[0].item[i].condition[0]){
+                                item['productconditionid'] = results.findItemsAdvancedResponse[0].searchResult[0].item[i].condition[0].conditionId[0]
+                            }else{
+                                item['productconditionid'] = ""
+                            }
+                        }else{
+                            item['productconditionid'] = ""
+                        }
                         items.push(item);
                       } 
                       res.json({Results: items})    
@@ -221,8 +237,128 @@ app.get("/getsingleitem", (req, res) => {
             },
           })
             .then((response) => {
+                var singleitemdetails = {}
                 var singleproduct = response.data;
-                res.json(singleproduct);
+                if(singleproduct.Ack === 'Success'){
+                    if('Description' in singleproduct.Item){
+                        // singleitemdetails['description'] = singleproduct.Item.Description
+                        singleitemdetails['description'] = ""
+                    }else{
+                        singleitemdetails['description'] = ""
+                    }
+                    if('Title' in singleproduct.Item){
+                        singleitemdetails['title'] = singleproduct.Item.Title
+                    }else{
+                        singleitemdetails['title'] = ""
+                    }
+                    if('ViewItemURLForNaturalSearch' in singleproduct.Item){
+                        singleitemdetails['ebayurl'] = singleproduct.Item.ViewItemURLForNaturalSearch
+                    }else{
+                        singleitemdetails['ebayurl'] = ""
+                    }
+                    if('PictureURL' in singleproduct.Item){
+                        singleitemdetails['pictures'] = singleproduct.Item.PictureURL
+                    }else{
+                        singleitemdetails['pictures'] = ""
+                    }
+                    if('Seller' in singleproduct.Item){
+                        if('UserID' in singleproduct.Item.Seller){
+                            singleitemdetails['sellername'] = singleproduct.Item.Seller.UserID
+                        }else{
+                            singleitemdetails['sellername'] = ""
+                        }
+                    }else{
+                        singleitemdetails['sellername'] = ""
+                    }
+                    if('Seller' in singleproduct.Item){
+                        if('FeedbackScore' in singleproduct.Item.Seller){
+                            singleitemdetails['sellerfeedbackscore'] = singleproduct.Item.Seller.FeedbackScore
+                        }else{
+                            singleitemdetails['sellerfeedbackscore'] = ""
+                        }
+                    }else{
+                        singleitemdetails['sellerfeedbackscore'] = ""
+                    }
+                    if('Seller' in singleproduct.Item){
+                        if('PositiveFeedbackPercent' in singleproduct.Item.Seller){
+                            singleitemdetails['sellerpopularity'] = singleproduct.Item.Seller.PositiveFeedbackPercent
+                        }else{
+                            singleitemdetails['sellerpopularity'] = ""
+                        }
+                    }else{
+                        singleitemdetails['sellerpopularity'] = ""
+                    }
+                    if('ItemSpecifics' in singleproduct.Item){
+                        if('NameValueList' in singleproduct.Item.ItemSpecifics){
+                            singleitemdetails['itemspecifics'] = singleproduct.Item.ItemSpecifics.NameValueList
+                        }else{
+                            singleitemdetails['itemspecifics'] = ""
+                        }
+                    }else{
+                        singleitemdetails['itemspecifics'] = ""
+                    }
+                    if('Storefront' in singleproduct.Item){
+                        if('StoreName' in singleproduct.Item.Storefront){
+                            singleitemdetails['storename'] = singleproduct.Item.Storefront.StoreName
+                        }else{
+                            singleitemdetails['storename'] = ""
+                        }
+                    }else{
+                        singleitemdetails['storename'] = ""
+                    }
+                    if('Storefront' in singleproduct.Item){
+                        if('StoreURL' in singleproduct.Item.Storefront){
+                            singleitemdetails['storeurl'] = singleproduct.Item.Storefront.StoreURL
+                        }else{
+                            singleitemdetails['storeurl'] = ""
+                        }
+                    }else{
+                        singleitemdetails['storeurl'] = ""
+                    }
+                    if('GlobalShipping' in singleproduct.Item){
+                        singleitemdetails['globalshipping'] = singleproduct.Item.GlobalShipping
+                    }else{
+                        singleitemdetails['globalshipping'] = ""
+                    }
+                    if('ReturnPolicy' in singleproduct.Item){
+                        if('ReturnsAccepted' in singleproduct.Item.ReturnPolicy){
+                            singleitemdetails['returnpolicy'] = singleproduct.Item.ReturnPolicy.ReturnsAccepted
+                        }
+                        else{
+                            singleitemdetails['returnpolicy'] = ""
+                        }
+                    }else{
+                        singleitemdetails['returnpolicy'] = ""
+                    }
+                    if('ReturnPolicy' in singleproduct.Item){
+                        if('Refund' in singleproduct.Item.ReturnPolicy){
+                            singleitemdetails['returnmode'] = singleproduct.Item.ReturnPolicy.Refund
+                        }else{
+                            singleitemdetails['returnmode'] = ""
+                        }
+                    }else{
+                        singleitemdetails['returnmode'] = ""
+                    }
+                    if('ReturnPolicy' in singleproduct.Item){
+                        if('ReturnsWithin' in singleproduct.Item.ReturnPolicy){
+                            singleitemdetails['returnwithin'] = singleproduct.Item.ReturnPolicy.ReturnsWithin
+                        }else{
+                            singleitemdetails['returnwithin'] = ""
+                        }
+                    }else{
+                        singleitemdetails['returnwithin'] = ""
+                    }
+                    if('ReturnPolicy' in singleproduct.Item){
+                        if('ShippingCostPaidBy' in singleproduct.Item.ReturnPolicy){
+                            singleitemdetails['returnshipcost'] = singleproduct.Item.ReturnPolicy.ShippingCostPaidBy
+                        }else{
+                            singleitemdetails['returnshipcost'] = ""
+                        }
+                    }else{
+                        singleitemdetails['returnshipcost'] = ""
+                    }
+                }
+                res.json(singleitemdetails);
             })
             .catch((error) => {
                 console.error('API request error:', error);

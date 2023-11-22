@@ -243,7 +243,7 @@ struct SearchFormView: View {
             } else {
                 displayresults = true
 //                print("Keyword: \(keyword)")
-//                print("Category: \(selectedCategory)")
+                print("Category: \(selectedCategory)")
 //                print("Used: \(usedCondition)")
 //                print("New: \(newCondition)")
 //                print("Unspecified: \(unspecifiedCondition)")
@@ -252,7 +252,7 @@ struct SearchFormView: View {
 //                print("Distance: \(distance)")
 //                print("Custom Location: \(customLocation)")
 //                print("Custom location Toggle: \(customLocationToggle)")
-//                print("Auto Location: \(autopostalCode)")
+                print("Auto Location: \(autopostalCode)")
             }
         }
     
@@ -260,7 +260,7 @@ struct SearchFormView: View {
     private func clearFormData() {
         keyword = ""
         isShowingErrorMessage = false
-        selectedCategory = ""
+        selectedCategory = "All Categories"
         usedCondition = false
         newCondition = false
         unspecifiedCondition = false
@@ -269,7 +269,6 @@ struct SearchFormView: View {
         distance = "10"
         customLocationToggle = false
         customLocation = ""
-        autopostalCode = ""
         displayresults = false
     }
     

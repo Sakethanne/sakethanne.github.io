@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct ResultsView: View {
     @Binding var keyword: String
@@ -59,7 +60,6 @@ struct ResultsView: View {
                         } else {
                             ForEach(products) { product in
                                 NavigationLink(destination: ProductDetailView(favoriteproducts: $favoriteproducts, product: product)) {
-//                                    ProductRow(product: product, favoriteproducts: $favoriteproducts)
                                     ProductRow(product: product, favoriteproducts: $favoriteproducts, isAddedToWishlist: $isAddedToWishlist, isRemovedFromWishlist: $isRemovedFromWishlist)
                                 }
                             }
@@ -355,6 +355,7 @@ struct ProductDetailView: View {
     @State var selectedSortOrder: String = "Ascending"
         
     @State var similarItems: [SimilarItem] = []
+    @State var productData: ProductData?
     
     @Binding var favoriteproducts: [String]
     let product: Product
@@ -362,19 +363,171 @@ struct ProductDetailView: View {
     var body: some View {
         TabView{
             VStack{
-                if(productviewisloading){
+                if let productData = productData{Text("")
+                    ScrollView {
+                        VStack(alignment: .leading){
+                            TabView {
+                                    ForEach(productData.pictures, id: \.self) { imageUrl in
+                                                // Assuming you have a function to load images from URLs
+                                                AsyncImage(url: URL(string: imageUrl)) { phase in
+                                                    switch phase {
+                                                    case .success(let image):
+                                                        image
+                                                            .resizable()
+                                                            .frame(maxWidth:.infinity, minHeight: 350)
+                                                    case .empty:
+                                                        ProgressView("Loading...")
+                                                            .progressViewStyle(CircularProgressViewStyle())
+                                                    case .failure:
+                                                        // Error view
+                                                        Image(systemName: "exclamationmark.icloud.fill")
+                                                    @unknown default:
+                                                        // Handle future cases
+                                                        EmptyView()
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+                                        .frame(maxWidth:.infinity, minHeight: 350)
+                                        .cornerRadius(15)
+                                    .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                                .padding(.horizontal,30)
+                            Text(productData.title)
+                                .font(.headline)
+                                .padding(.horizontal,20)
+                                .padding(.vertical)
+                            Text("$\(product.productprice)")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .foregroundColor(Color.blue)
+                                .padding(.horizontal,20)
+                            HStack{
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(.black)
+                                Text("Description")
+                                Spacer()
+                            }.padding(.horizontal,30)
+                                .padding(.bottom,30)
+                            ForEach(productData.itemspecifics!, id: \.self) { spec in
+                                HStack(alignment: .center){
+                                    Text(spec.Name)
+                                    Spacer()
+                                    ForEach(spec.Value, id: \.self) { value in
+                                                    Text(value)
+                                                        .font(.body)
+                                                }
+                                }.padding(.horizontal,30)
+                                Divider()
+                            }
+                        }
+                    }
+                }else {
                     ProgressView("Loading...")
                         .progressViewStyle(CircularProgressViewStyle())
-                }
-                else{
-                    Text("Info")
-                }
+                        }
+                    
             }.tabItem {
                 Image(systemName: "info.circle.fill")
                 Text("Info")
             }
             VStack{
-                Text("Shipping")
+                if let productData = productData{Text("")
+                    ScrollView{
+                        Spacer()
+                        Divider()
+                        HStack{
+                            Image(systemName: "storefront")
+                                .foregroundColor(.black)
+                            Text("Seller")
+                            Spacer()
+                        }
+                        Divider()
+                        HStack(alignment:.center){
+                            Text(productData.storename!.count > 0 ? "Store Name" : "")
+                            Spacer()
+                            Button(action: {
+                                if let url = URL(string: productData.storeurl!) {
+                                    UIApplication.shared.open(url)
+                                }
+                            }) {
+                                Text(productData.storename!.count > 0 ? productData.storename! : "")
+                                    .foregroundColor(.blue)
+                            }
+                            
+                        }.padding(.horizontal,50)
+                        HStack{
+                            Text(productData.sellerfeedbackscore! > 0 ? "Feedback Score" : "")
+                            Spacer()
+                            Text(productData.sellerfeedbackscore! > 0 ? "\(productData.sellerfeedbackscore!)" : "")
+                        }.padding(.horizontal,50)
+                        HStack{
+                            Text(productData.sellerpopularity! > 0 ? "Popularity" : "")
+                            Spacer()
+                            Text(productData.sellerpopularity! > 0 ? "\(productData.sellerpopularity!)" : "")
+                        }.padding(.horizontal,50)
+                            .padding(.bottom,15)
+                        Divider()
+                        HStack{
+                            Image(systemName: "sailboat")
+                                .foregroundColor(.black)
+                            Text("Shipping Info")
+                            Spacer()
+                        }
+                        Divider()
+                        HStack{
+                            Text(product.productshippingcost.count > 0 ? "Shipping Cost" : "")
+                            Spacer()
+                            Text(product.productshippingcost.count > 0 ? product.productshippingcost == "0.0" ? "Free Shipping" : "\(product.productshippingcost)" : "")
+                        }.padding(.horizontal,50)
+                        HStack{
+                            Text("Global Shipping")
+                            Spacer()
+                            Text(productData.globalshipping! ? "Yes" : "No")
+                        }.padding(.horizontal,50)
+                        HStack{
+                            Text(product.productshippinghandling.count > 0 ? "Handling Time" : "")
+                            Spacer()
+                            Text(product.productshippinghandling.count > 0 ? "\(product.productshippinghandling.count) Days" : "")
+                        }.padding(.horizontal,50)
+                            .padding(.bottom,15)
+                        Divider()
+                        HStack{
+                            Image(systemName: "return")
+                                .foregroundColor(.black)
+                            Text("Return policy")
+                            Spacer()
+                        }
+                        Divider()
+                        HStack{
+                            Text(productData.returnpolicy!.count > 0 ? "Policy" : "")
+                            Spacer()
+                            Text(productData.returnpolicy!.count > 0 ? productData.returnpolicy! : "")
+                        }.padding(.horizontal,50)
+                        HStack{
+                            Text(productData.returnmode!.count > 0 ? "Refund Mode" : "")
+                            Spacer()
+                            Text(productData.returnmode!.count > 0 ? productData.returnmode! : "")
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+                        }.padding(.horizontal,50)
+                        HStack{
+                            Text(productData.returnwithin!.count > 0 ? "Refund Within" : "")
+                            Spacer()
+                            Text(productData.returnwithin!.count > 0 ? productData.returnwithin! : "")
+                        }.padding(.horizontal,50)
+                        HStack{
+                            Text(productData.returnshipcost!.count > 0 ? "Shipping Cost Paid By" : "")
+                            Spacer()
+                            Text(productData.returnshipcost!.count > 0 ? productData.returnshipcost! : "")
+                        }.padding(.horizontal,50)
+                            .padding(.bottom,15)
+                    }
+                }else {
+                    ProgressView("Loading...")
+                        .progressViewStyle(CircularProgressViewStyle())
+                }
+                Spacer()
             }
             .tabItem {
                 Image(systemName: "shippingbox.fill")
@@ -463,7 +616,10 @@ struct ProductDetailView: View {
             }
         }.onAppear(
             //                perform: productphotos
-            perform: getSimilarItems
+//            perform: getSimilarItems
+            perform: loadData
+//            productviewisloading = false
+            
         )
         .toolbarBackground(Color.secondary)
         .toolbarTitleDisplayMode(.automatic)
@@ -472,7 +628,7 @@ struct ProductDetailView: View {
                             HStack {
                                 Spacer()
                                 Button(action: {
-                                    if let url = URL(string: "https://www.example.com") {
+                                    if let url = URL(string: "https://www.facebook.com/share.php?u=\(productData!.ebayurl)") {
                                                     UIApplication.shared.open(url)
                                                 }
                                 }) {
@@ -606,6 +762,39 @@ struct ProductDetailView: View {
                 }
             }.resume()
         }
+    
+    func loadData() {
+        guard let url = URL(string: "http://localhost:8080/getsingleitem?productid=\(product.productid)") else {
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                return
+            }
+
+            // Print the raw JSON data
+//            if let jsonString = String(data: data, encoding: .utf8) {
+//                print("Raw JSON Data: \(jsonString)")
+//            }
+
+            do {
+                let decoder = JSONDecoder()
+                let productData = try decoder.decode(ProductData.self, from: data)
+                DispatchQueue.main.async {
+                    self.productData = productData
+                }
+            } catch {
+                print("Error decoding JSON: \(error.localizedDescription)")
+            }
+        }.resume()
+    }
 }
 
 struct ProductResponse: Codable {
@@ -731,4 +920,45 @@ struct RemoteImage: View {
                 .resizable()
         }
     }
+}
+
+struct ProductData: Decodable {
+    let description: String?
+    let title: String
+    let ebayurl: String
+    let pictures: [String]
+    let sellername: String?
+    let sellerfeedbackscore: Int?
+    let sellerpopularity: Double?
+    let itemspecifics: [ItemSpecific]?
+    let storename: String?
+    let storeurl: String?
+    let globalshipping: Bool?
+    let returnpolicy: String?
+    let returnmode: String?
+    let returnwithin: String?
+    let returnshipcost: String?
+
+    private enum CodingKeys: String, CodingKey {
+        case description
+        case title
+        case ebayurl
+        case pictures
+        case sellername
+        case sellerfeedbackscore
+        case sellerpopularity
+        case itemspecifics
+        case storename
+        case storeurl
+        case globalshipping
+        case returnpolicy
+        case returnmode
+        case returnwithin
+        case returnshipcost
+    }
+}
+
+struct ItemSpecific: Decodable, Hashable {
+    let Name: String
+    let Value: [String]
 }
