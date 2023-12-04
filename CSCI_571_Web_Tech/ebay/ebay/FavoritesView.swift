@@ -8,19 +8,13 @@
 import SwiftUI
 
 struct FavoritesView: View {
-    
     @State var wishlistProducts: [WishlistProduct] = []
     @State var isFetchingData = false
     
     var body: some View {
-        VStack {
-            Text("")
-                .onAppear {
-                    getwishlistItems()
-                }
-
+        NavigationView{
             if isFetchingData {
-                ProgressView()
+                ProgressView("Loading...")
                     .progressViewStyle(CircularProgressViewStyle())
             } else {
                 NavigationView {
@@ -49,10 +43,13 @@ struct FavoritesView: View {
                 }
             }
         }
-        .navigationBarTitle("Favorites")
+        .padding(.top, -25)
+        .navigationTitle("Favorites")
         .navigationBarTitleDisplayMode(.automatic)
-    }
-
+        .onAppear{
+            getwishlistItems()
+        }
+        }
     
     var totalCost: Double {
         wishlistProducts.reduce(0) { $0 + (Double($1.productprice) ?? 0.0) }
@@ -61,7 +58,7 @@ struct FavoritesView: View {
     func deleteItem(at offsets: IndexSet) {
         for index in offsets {
                 let deletedProductId = wishlistProducts[index].productid
-            guard let url = URL(string: "https://ebayios.uw.r.appspot.com/deletefav?productid=\(deletedProductId)") else {
+            guard let url = URL(string: "http://localhost:8080/deletefav?productid=\(deletedProductId)") else {
                 return
                 }
             URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -80,7 +77,7 @@ struct FavoritesView: View {
     
     func getwishlistItems() {
         isFetchingData = true
-        guard let url = URL(string: "https://ebayios.uw.r.appspot.com/getfavs") else {
+        guard let url = URL(string: "http://localhost:8080/getfavs") else {
             return
             }
 
@@ -152,10 +149,6 @@ struct FavoritesView: View {
         }
     }
 
-#Preview {
-    FavoritesView()
-}
-
 struct WishlistProductRow: View {
     var product: WishlistProduct
 
@@ -170,7 +163,6 @@ struct WishlistProductRow: View {
             .cornerRadius(8)
             VStack(alignment: .leading){
                 Text(product.productname)
-                .fontWeight(.bold)
                 .lineLimit(1)
                 .truncationMode(.tail)
                 .foregroundColor(.primary)

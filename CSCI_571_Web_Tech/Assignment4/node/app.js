@@ -290,6 +290,13 @@ app.get("/getsingleitem", (req, res) => {
                     }
                     if('ItemSpecifics' in singleproduct.Item){
                         if('NameValueList' in singleproduct.Item.ItemSpecifics){
+                            // itemspecslist = [];
+                            // for(var i=0;i<singleproduct.Item.ItemSpecifics.NameValueList.length;i++){
+                            //     itemspec = {};
+                            //     itemspec['Name'] = singleproduct.Item.ItemSpecifics.NameValueList[i].Name;
+                            //     itemspec['Value'] = singleproduct.Item.ItemSpecifics.NameValueList[i].Value[0];
+                            //     itemspecslist.push(itemspec);
+                            // }
                             singleitemdetails['itemspecifics'] = singleproduct.Item.ItemSpecifics.NameValueList
                         }else{
                             singleitemdetails['itemspecifics'] = ""

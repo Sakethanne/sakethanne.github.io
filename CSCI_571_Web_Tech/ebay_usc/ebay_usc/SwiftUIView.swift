@@ -5,8 +5,6 @@
 //  Created by Saketh Anne on 2023-11-20.
 //
 
-import SwiftUI
-import Foundation
 
 struct ResultsView: View {
     @Binding var keyword: String
@@ -31,69 +29,81 @@ struct ResultsView: View {
     
     
     var body: some View {
-//        NavigationView {
-            List {
-                Text("Results")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .onAppear {
-                        fetchData()
-                        getwishlistItems()
-                    }
-
+        VStack {
+//            NavigationView{
+            
+                HStack{
+                    Text("Results")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                    Spacer()
+                }
                 if isLoading {
                     HStack(alignment: .center, content: {
                         Spacer()
-                        ProgressView()
+                        ProgressView("Loading...")
                         Spacer()
                     })
                 } else {
                     if errorfindingresults {
-                        HStack(content: {
-                            Text("No results found.")
+                        HStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/, content: {
+                            Spacer()
+                            Text("No results found")
                                 .foregroundColor(.red)
                             Spacer()
+                            
                         })
                     } else {
+                        List {
                         ForEach(products) { product in
-                            NavigationLink(destination: ProductDetailView(favoriteproducts: $favoriteproducts, product: product)) {
-                                ProductRow(product: product, favoriteproducts: $favoriteproducts, isAddedToWishlist: $isAddedToWishlist, isRemovedFromWishlist: $isRemovedFromWishlist)
-                            }
+                            
+                            ProductRow(product: product, favoriteproducts: $favoriteproducts, isAddedToWishlist: $isAddedToWishlist, isRemovedFromWishlist: $isRemovedFromWishlist)
+                            
+                            
+//                            NavigationLink(destination: ProductDetailView(favoriteproducts: $favoriteproducts, product: product))
+//                            {
+//
+//                            }
                         }
                     }
                 }
             }
+//        }
+                }.onAppear {
+                    fetchData()
+                    getwishlistItems()
+                }
+                .ignoresSafeArea(.all)
         .overlay(
-            VStack {
-                Spacer()
-                HStack {
-                    if isAddedToWishlist || isRemovedFromWishlist {
-                        Text(isAddedToWishlist ? "Added to Wishlist" : "Removed from Wishlist")
-                            .foregroundColor(.white)
-                            .padding()
-                            .padding(.horizontal)
-                            .background(Color.black)
-                            .cornerRadius(10)
-                            .onAppear {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                    // Hide the message after 2 seconds
-                                    isAddedToWishlist = false
-                                    isRemovedFromWishlist = false
+                        VStack {
+                            Spacer()
+                            HStack {
+                                if isAddedToWishlist || isRemovedFromWishlist {
+                                    Text(isAddedToWishlist ? "Added to Wishlist" : "Removed from Wishlist")
+                                        .foregroundColor(.white)
+                                        .padding()
+                                        .padding(.horizontal)
+                                        .background(Color.black)
+                                        .cornerRadius(10)
+                                        .onAppear {
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                                // Hide the message after 2 seconds
+                                                isAddedToWishlist = false
+                                                isRemovedFromWishlist = false
+                                            }
+                                        }
+                                        .onTapGesture {
+                                            isAddedToWishlist = false
+                                            isRemovedFromWishlist = false
+                                        }
                                 }
                             }
-                            .onTapGesture {
-                                isAddedToWishlist = false
-                                isRemovedFromWishlist = false
-                            }
-                    }
-                }
-            }
-    )
-//        }
-}
+                        }
+                    )
+    }
     
     func getwishlistItems() {
-        guard let url = URL(string: "https://ebayios.uw.r.appspot.com/getfavs") else {
+        guard let url = URL(string: "http://localhost:8080/getfavs") else {
             return
             }
 
@@ -131,7 +141,7 @@ struct ResultsView: View {
     
     
     func fetchData() {
-        var apiurl = "https://ebayios.uw.r.appspot.com/senddata?keyword=\(keyword)&category=\(selectedCategory)&distance=\(distance)&freeshipping=\(freeShipping)&localpickup=\(localPickup)&conditionnew=\(newCondition)&conditionused=\(usedCondition)&conditionunspecified=\(unspecifiedCondition)&from=\(customLocation)&autolocation=\(autopostalCode)"
+        var apiurl = "http://localhost:8080/senddata?keyword=\(keyword)&category=\(selectedCategory)&distance=\(distance)&freeshipping=\(freeShipping)&localpickup=\(localPickup)&conditionnew=\(newCondition)&conditionused=\(usedCondition)&conditionunspecified=\(unspecifiedCondition)&from=\(customLocation)&autolocation=\(autopostalCode)"
         
         if customLocationToggle == true{
             apiurl += "&location=otherlocation"
@@ -234,7 +244,7 @@ struct ResultsView: View {
 
 #Preview {
     ResultsView(
-        keyword: .constant("iphone"),
+        keyword: .constant("iphone14"),
         selectedCategory: .constant("All Categories"),
         usedCondition: .constant(false),
         newCondition: .constant(false),
@@ -245,7 +255,6 @@ struct ResultsView: View {
         customLocationToggle: .constant(false),
         customLocation:.constant(""),
         autopostalCode:.constant("90037")
-    
     )
 }
 
@@ -257,56 +266,60 @@ struct ProductRow: View {
     @Binding var isRemovedFromWishlist: Bool
 
     var body: some View {
-        HStack{
-            AsyncImage(url: URL(string: product.productimage)) { image in
-                image.resizable()
-            } placeholder: {
-                ProgressView()
-            }
-            .frame(width: 80, height: 95)
-            .cornerRadius(8)
-        }
-        VStack(alignment: .leading) {
-            Spacer()
-            Text(product.productname)
-                .lineLimit(1)
-                .truncationMode(.tail)
-                .foregroundColor(.primary)
+        NavigationLink(destination: ProductDetailView(favoriteproducts: $favoriteproducts, product: product)) {
             HStack{
-                VStack(alignment: .leading){
+                HStack{
+                    AsyncImage(url: URL(string: product.productimage)) { image in
+                        image.resizable()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .frame(width: 80, height: 85)
+                    .cornerRadius(8)
+                }
+                VStack(alignment: .leading) {
                     Spacer()
-                    Text("$\(product.productprice)")
-                        .foregroundColor(.blue)
-                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                    Spacer()
-                    Text(product.productshippingcost == "0.0" ? "FREE SHIPPING" : "$\(product.productshippingcost)" )
-                        .foregroundColor(.secondary)
+                    Text(product.productname)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .foregroundColor(.primary)
+                    HStack{
+                        VStack(alignment: .leading){
+                            Spacer()
+                            Text("$\(product.productprice)")
+                                .foregroundColor(.blue)
+                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                            Spacer()
+                            Text(product.productshippingcost == "0.0" ? "FREE SHIPPING" : "$\(product.productshippingcost)" )
+                                .foregroundColor(.secondary)
+                            Spacer()
+                        }
+                        Spacer()
+                        Image(systemName: favoriteproducts.contains(product.productid) ? "heart.fill" : "heart")
+                            .foregroundColor(.red)
+                            .font(.title)
+                            .onTapGesture {
+                                checkandaddwishlist(product: product)
+                                            }
+                    }
+                    HStack{
+                        Text(product.productzipcode)
+                            .foregroundColor(.secondary)
+                        Spacer()
+                        Text(product.productconditionid == "1000" ? "NEW" : product.productconditionid == "2000" ? "REFURBISHED" : product.productconditionid == "2500" ? "REFURBISHED" : product.productconditionid == "3000" ? "USED" : product.productconditionid == "4000" ? "USED" : product.productconditionid == "5000" ? "USED" :product.productconditionid == "6000" ? "USED" : "N/A")
+                            .foregroundColor(.secondary)
+                    }
                     Spacer()
                 }
-                Spacer()
             }
-            HStack{
-                Text(product.productzipcode)
-                    .foregroundColor(.secondary)
-                Spacer()
-                Text(product.productconditionid == "1000" ? "NEW" : product.productconditionid == "2000" ? "REFURBISHED" : product.productconditionid == "2500" ? "REFURBISHED" : product.productconditionid == "3000" ? "USED" : product.productconditionid == "4000" ? "USED" : product.productconditionid == "5000" ? "USED" :product.productconditionid == "6000" ? "USED" : "N/A")
-                    .foregroundColor(.secondary)
-            }
-            Spacer()
         }
-        Image(systemName: favoriteproducts.contains(product.productid) ? "heart.fill" : "heart")
-            .foregroundColor(.red)
-            .font(.title)
-            .onTapGesture {
-                checkandaddwishlist(product: product)
-                            }
         }
     
     func checkandaddwishlist(product: Product){
         if(favoriteproducts.contains(product.productid)){
             isRemovedFromWishlist = true
             favoriteproducts.removeAll{ $0 == product.productid }
-            guard let url = URL(string: "https://ebayios.uw.r.appspot.com/deletefav?productid=\(product.productid)") else {
+            guard let url = URL(string: "http://localhost:8080/deletefav?productid=\(product.productid)") else {
                 return
                 }
             URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -314,16 +327,16 @@ struct ProductRow: View {
                 print("Error: \(error.localizedDescription)")
                     return
                 }
-//            guard let data = data else {
-//                print("No data received")
-//                return
-//                }
+            guard let data = data else {
+                print("No data received")
+                return
+                }
         }.resume()
         }
         else{
             isAddedToWishlist = true
             favoriteproducts.append(product.productid)
-            guard let url = URL(string: "https://ebayios.uw.r.appspot.com/addfav?productid=\(product.productid)&product_name=\(product.productname)&product_price=\(product.productprice)&product_shipping=\(product.productshippingcost)&product_img_url=\(product.productimage)&product_zip=\(product.productzipcode)&product_condition=\(product.productconditionid)") else {
+            guard let url = URL(string: "http://localhost:8080/addfav?productid=\(product.productid)&product_name=\(product.productname)&product_price=\(product.productprice)&product_shipping=\(product.productshippingcost)&product_img_url=\(product.productimage)&product_zip=\(product.productzipcode)&product_condition=\(product.productconditionid)") else {
                 return
                 }
             URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -331,10 +344,10 @@ struct ProductRow: View {
                 print("Error: \(error.localizedDescription)")
                     return
                 }
-//            guard let data = data else {
-//                print("No data received")
-//                return
-//                }
+            guard let data = data else {
+                print("No data received")
+                return
+                }
         }.resume()
         }
     }
@@ -361,7 +374,7 @@ struct ProductDetailView: View {
         TabView{
             VStack{
                 if let productData = productData{Text("")
-//                    ScrollView {
+                    ScrollView {
                         VStack(alignment: .leading){
                             TabView {
                                     ForEach(productData.pictures, id: \.self) { imageUrl in
@@ -371,9 +384,9 @@ struct ProductDetailView: View {
                                                     case .success(let image):
                                                         image
                                                             .resizable()
-                                                            .frame(maxWidth:200, maxHeight: 250)
+                                                            .frame(maxWidth:.infinity, minHeight: 350)
                                                     case .empty:
-                                                        ProgressView()
+                                                        ProgressView("Loading...")
                                                             .progressViewStyle(CircularProgressViewStyle())
                                                     case .failure:
                                                         // Error view
@@ -385,8 +398,7 @@ struct ProductDetailView: View {
                                                 }
                                             }
                                         }
-                            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-                            .background(Color.clear)
+                                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
                                         .frame(maxWidth:.infinity, minHeight: 350)
                                         .cornerRadius(15)
                                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
@@ -400,39 +412,28 @@ struct ProductDetailView: View {
                                 .fontWeight(.bold)
                                 .foregroundColor(Color.blue)
                                 .padding(.horizontal,20)
-                                .padding(.bottom, 10)
                             HStack{
                                 Image(systemName: "magnifyingglass")
                                     .foregroundColor(.black)
                                 Text("Description")
                                 Spacer()
-                            }.padding(.horizontal,20)
-                                .padding(.bottom,10)
-                            ScrollView {
-                                ForEach(productData.itemspecifics!, id: \.self) { spec in
-                                    HStack(alignment: .center){
-                                        Text(spec.Name)
-                                            .frame(width: 150, alignment: .leading)
-                                        Spacer()
-                                        Text(spec.Value.first!)
-                                            .font(.body)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-//                                    ForEach(spec.Value, id: \.self) { value in
-    //                                        Text(value)
-    //                                            .font(.body)
-    //                                            .frame(maxWidth: .infinity, alignment: .trailing)
-    //                                            .lineLimit(1)
-    //                                            .truncationMode(.tail)
-    //                                        }
-                                    }.padding(.vertical,-4)
-                                    .padding(.horizontal,20)
-                                    Divider()
-                                }
+                            }.padding(.horizontal,30)
+                                .padding(.bottom,30)
+                            ForEach(productData.itemspecifics!, id: \.self) { spec in
+                                HStack(alignment: .center){
+                                    Text(spec.Name)
+                                    Spacer()
+                                    ForEach(spec.Value, id: \.self) { value in
+                                                    Text(value)
+                                                        .font(.body)
+                                                }
+                                }.padding(.horizontal,30)
+                                Divider()
                             }
                         }
-//                    }
+                    }
                 }else {
-                    ProgressView()
+                    ProgressView("Loading...")
                         .progressViewStyle(CircularProgressViewStyle())
                         }
                     
@@ -440,10 +441,10 @@ struct ProductDetailView: View {
                 Image(systemName: "info.circle.fill")
                 Text("Info")
             }
-            .padding(.top, -130)
-            ScrollView{
+            VStack{
                 if let productData = productData{Text("")
-                    VStack{
+                    ScrollView{
+                        Spacer()
                         Divider()
                         HStack{
                             Image(systemName: "storefront")
@@ -454,7 +455,6 @@ struct ProductDetailView: View {
                         Divider()
                         HStack(alignment:.center){
                             Text(productData.storename!.count > 0 ? "Store Name" : "")
-                                .frame(width: 150, alignment: .center)
                             Spacer()
                             Button(action: {
                                 if let url = URL(string: productData.storeurl!) {
@@ -464,22 +464,18 @@ struct ProductDetailView: View {
                                 Text(productData.storename!.count > 0 ? productData.storename! : "")
                                     .foregroundColor(.blue)
                             }
-                            .frame(width: 150, alignment: .center)
-                        }.padding(.horizontal,30)
+                            
+                        }.padding(.horizontal,50)
                         HStack{
                             Text(productData.sellerfeedbackscore! > 0 ? "Feedback Score" : "")
-                                .frame(width: 150, alignment: .center)
                             Spacer()
                             Text(productData.sellerfeedbackscore! > 0 ? "\(productData.sellerfeedbackscore!)" : "")
-                                .frame(width: 150, alignment: .center)
-                        }.padding(.horizontal,30)
+                        }.padding(.horizontal,50)
                         HStack{
                             Text(productData.sellerpopularity! > 0 ? "Popularity" : "")
-                                .frame(width: 150, alignment: .center)
                             Spacer()
                             Text(productData.sellerpopularity! > 0 ? "\(productData.sellerpopularity!)" : "")
-                                .frame(width: 150, alignment: .center)
-                        }.padding(.horizontal,30)
+                        }.padding(.horizontal,50)
                             .padding(.bottom,15)
                         Divider()
                         HStack{
@@ -491,25 +487,19 @@ struct ProductDetailView: View {
                         Divider()
                         HStack{
                             Text(product.productshippingcost.count > 0 ? "Shipping Cost" : "")
-                                .frame(width: 150, alignment: .center)
                             Spacer()
                             Text(product.productshippingcost.count > 0 ? product.productshippingcost == "0.0" ? "Free Shipping" : "\(product.productshippingcost)" : "")
-                                .frame(width: 150, alignment: .center)
-                        }.padding(.horizontal,30)
+                        }.padding(.horizontal,50)
                         HStack{
                             Text("Global Shipping")
-                                .frame(width: 150, alignment: .center)
                             Spacer()
                             Text(productData.globalshipping! ? "Yes" : "No")
-                                .frame(width: 150, alignment: .center)
-                        }.padding(.horizontal,30)
+                        }.padding(.horizontal,50)
                         HStack{
                             Text(product.productshippinghandling.count > 0 ? "Handling Time" : "")
-                                .frame(width: 150, alignment: .center)
                             Spacer()
-                            Text(product.productshippinghandling.count > 0 ? product.productshippinghandling == "1" ? "\(product.productshippinghandling) Day" : "\(product.productshippinghandling) Days" : "")
-                                .frame(width: 150, alignment: .center)
-                        }.padding(.horizontal,30)
+                            Text(product.productshippinghandling.count > 0 ? "\(product.productshippinghandling.count) Days" : "")
+                        }.padding(.horizontal,50)
                             .padding(.bottom,15)
                         Divider()
                         HStack{
@@ -521,40 +511,33 @@ struct ProductDetailView: View {
                         Divider()
                         HStack{
                             Text(productData.returnpolicy!.count > 0 ? "Policy" : "")
-                                .frame(width: 150, alignment: .center)
                             Spacer()
                             Text(productData.returnpolicy!.count > 0 ? productData.returnpolicy! : "")
-                                .frame(width: 150, alignment: .center)
-                        }.padding(.horizontal,30)
+                        }.padding(.horizontal,50)
                         HStack{
                             Text(productData.returnmode!.count > 0 ? "Refund Mode" : "")
-                                .frame(width: 150, alignment: .center)
                             Spacer()
-                            Text(productData.returnmode!.count > 0 ? "Money Back" : "")
-                                .frame(width: 150, alignment: .center)
+                            Text(productData.returnmode!.count > 0 ? productData.returnmode! : "")
                                 .lineLimit(1)
                                 .truncationMode(.tail)
-                        }.padding(.horizontal,30)
+                        }.padding(.horizontal,50)
                         HStack{
                             Text(productData.returnwithin!.count > 0 ? "Refund Within" : "")
-                                .frame(width: 150, alignment: .center)
                             Spacer()
                             Text(productData.returnwithin!.count > 0 ? productData.returnwithin! : "")
-                                .frame(width: 150, alignment: .center)
-                        }.padding(.horizontal,30)
+                        }.padding(.horizontal,50)
                         HStack{
                             Text(productData.returnshipcost!.count > 0 ? "Shipping Cost Paid By" : "")
-                                .frame(maxWidth:.infinity , alignment: .center)
                             Spacer()
                             Text(productData.returnshipcost!.count > 0 ? productData.returnshipcost! : "")
-                                .frame(width: 150, alignment: .center)
-                        }.padding(.horizontal,30)
+                        }.padding(.horizontal,50)
                             .padding(.bottom,15)
-                    }.offset(y: 30)
+                    }
                 }else {
-                    ProgressView()
+                    ProgressView("Loading...")
                         .progressViewStyle(CircularProgressViewStyle())
                 }
+                Spacer()
             }
             .tabItem {
                 Image(systemName: "shippingbox.fill")
@@ -575,21 +558,20 @@ struct ProductDetailView: View {
                 }
                 .padding(.all)
                 ScrollView{
-                    VStack{
+                    LazyVStack{
                         ForEach(photos, id: \.self) { photoURL in
                             AsyncImage(url: URL(string: photoURL)) { image in
                                 image.resizable()
+                            } placeholder: {
+                                ProgressView()
                             }
-                        placeholder: {
-//                                ProgressView()
-                            }
-                            .frame( idealWidth: 220, maxWidth: 250, maxHeight: 300)
+                            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 350)
+                            .cornerRadius(8)
                         }
                     }
                     .padding(.horizontal,30)
                 }
             }
-            .padding(.top, -50)
             .tabItem {
                 Image(systemName: "photo.stack.fill")
                 Text("Photos")
@@ -633,24 +615,22 @@ struct ProductDetailView: View {
                                 LazyVGrid(columns: [GridItem(), GridItem()], spacing: 16) {
                                     ForEach(sortedSimilarItems()) { item in
                                         SimilarItemView(item: item)
-                                            .padding(.horizontal,10)
                                     }
                                 }
-                                
+                                .padding()
                             }
             }
             .tabItem {
                 Image(systemName: "list.bullet.indent")
                 Text("Similar")
             }
-            .padding(.top, -35)
-        }.onAppear{
-            productphotos()
-            getSimilarItems()
-            loadData()
-            productviewisloading = false
-        }
-        
+        }.onAppear(
+//            perform: productphotos,
+//                            perform: getSimilarItems,
+            perform: loadData
+//            productviewisloading = false
+            
+        )
         .toolbarBackground(Color.secondary)
         .toolbarTitleDisplayMode(.automatic)
         .navigationBarTitleDisplayMode(.inline)
@@ -664,7 +644,7 @@ struct ProductDetailView: View {
                                 }) {
                                     Image("fb")
                                         .resizable()
-                                        .frame(width: 25, height: 25)
+                                        .frame(width: 30, height: 30)
                                 }
 
                                 Button(action: {
@@ -673,7 +653,7 @@ struct ProductDetailView: View {
                                 }) {
                                     Image(systemName: favoriteproducts.contains(product.productid) ? "heart.fill" : "heart")
                                         .foregroundColor(.red)
-                                        .font(.headline)
+                                        .font(.title)
                                         .onTapGesture {
                                             checkandaddwishlistProduct(product: product)
                                                         }
@@ -688,7 +668,7 @@ struct ProductDetailView: View {
     func checkandaddwishlistProduct(product: Product){
         if(favoriteproducts.contains(product.productid)){
             favoriteproducts.removeAll{ $0 == product.productid }
-            guard let url = URL(string: "https://ebayios.uw.r.appspot.com/deletefav?productid=\(product.productid)") else {
+            guard let url = URL(string: "http://localhost:8080/deletefav?productid=\(product.productid)") else {
                 return
                 }
             URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -696,15 +676,15 @@ struct ProductDetailView: View {
                 print("Error: \(error.localizedDescription)")
                     return
                 }
-//            guard let data = data else {
-//                print("No data received")
-//                return
-//                }
+            guard let data = data else {
+                print("No data received")
+                return
+                }
         }.resume()
         }
         else{
             favoriteproducts.append(product.productid)
-            guard let url = URL(string: "https://ebayios.uw.r.appspot.com/addfav?productid=\(product.productid)&product_name=\(product.productname)&product_price=\(product.productprice)&product_shipping=\(product.productshippingcost)&product_img_url=\(product.productimage)&product_zip=\(product.productzipcode)&product_condition=\(product.productconditionid)") else {
+            guard let url = URL(string: "http://localhost:8080/addfav?productid=\(product.productid)&product_name=\(product.productname)&product_price=\(product.productprice)&product_shipping=\(product.productshippingcost)&product_img_url=\(product.productimage)&product_zip=\(product.productzipcode)&product_condition=\(product.productconditionid)") else {
                 return
                 }
             URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -712,16 +692,16 @@ struct ProductDetailView: View {
                 print("Error: \(error.localizedDescription)")
                     return
                 }
-//            guard let data = data else {
-//                print("No data received")
-//                return
-//                }
+            guard let data = data else {
+                print("No data received")
+                return
+                }
         }.resume()
         }
     }
     
     func getSimilarItems() {
-        guard let url = URL(string: "https://ebayios.uw.r.appspot.com/getsimilaritems?productid=\(product.productid)") else {
+        guard let url = URL(string: "http://localhost:8080/getsimilaritems?productid=\(product.productid)") else {
                 return
             }
 
@@ -765,7 +745,7 @@ struct ProductDetailView: View {
         }
     
     func productphotos() {
-        guard let url = URL(string: "https://ebayios.uw.r.appspot.com/getphotos?productname=\(product.productname)") else {
+        guard let url = URL(string: "http://localhost:8080/getphotos?productname=\(product.productname)") else {
                 return
             }
 
@@ -794,7 +774,7 @@ struct ProductDetailView: View {
         }
     
     func loadData() {
-        guard let url = URL(string: "https://ebayios.uw.r.appspot.com/getsingleitem?productid=\(product.productid)") else {
+        guard let url = URL(string: "http://localhost:8080/getsingleitem?productid=\(product.productid)") else {
             return
         }
 
@@ -900,7 +880,7 @@ struct SimilarItemView: View {
                 .multilineTextAlignment(.leading)
                 .lineLimit(2)
                 .truncationMode(.tail)
-                .padding(.horizontal, 5)
+                .foregroundColor(.primary)
             
             HStack{
                 // Shipping
@@ -912,8 +892,7 @@ struct SimilarItemView: View {
                 Text("\(item.remaining) Days Left")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
-            }.padding(.horizontal, 5)
-                .padding(.bottom, 5)
+            }
             HStack{
                 Spacer()
                 // Price
@@ -921,21 +900,14 @@ struct SimilarItemView: View {
                     .font(.headline)
                     .foregroundColor(.blue)
                     .fontWeight(.bold)
-            }.padding(.horizontal, 5)
-                .padding(.bottom,5)
+            }
             
         }
-        .frame(width: 160, height: 310)
+        .frame(width: 165, height: 300)
         .padding(.all, 5)
-        .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.gray.opacity(0.1))
-                )
+        .background(Color.gray.opacity(0.1))
         .padding(.horizontal, 3)
-        .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.gray, lineWidth: 1)
-                )
+        .cornerRadius(15)
     }
 }
 
