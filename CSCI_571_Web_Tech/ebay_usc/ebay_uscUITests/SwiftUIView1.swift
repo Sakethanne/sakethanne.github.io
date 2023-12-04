@@ -20,15 +20,11 @@ struct ResultsView: View {
     @Binding var customLocationToggle: Bool
     @Binding var customLocation: String
     @Binding var autopostalCode: String
-    @Binding var isLoading: Bool
-    
-    @Binding var isAddedToWishlist: Bool
-    @Binding var isRemovedFromWishlist: Bool
 
     @State var errorfindingresults: Bool = false
-//    @State var isAddedToWishlist: Bool = false
-//    @State var isRemovedFromWishlist: Bool = false
-    
+    @State var isAddedToWishlist: Bool = false
+    @State var isRemovedFromWishlist: Bool = false
+    @State var isLoading: Bool = true
     @State var products: [Product] = []
     @State var favoriteproducts: [String] = []
     @State var wishlistProducts: [NewWishlistProduct] = []
@@ -40,6 +36,10 @@ struct ResultsView: View {
                 Text("Results")
                     .font(.largeTitle)
                     .fontWeight(.bold)
+                    .onAppear {
+                        fetchData()
+                        getwishlistItems()
+                    }
 
                 if isLoading {
                     HStack(alignment: .center, content: {
@@ -62,11 +62,33 @@ struct ResultsView: View {
                         }
                     }
                 }
-            }.onAppear {
-                fetchData()
-                getwishlistItems()
             }
-        
+        .overlay(
+            VStack {
+                Spacer()
+                HStack {
+                    if isAddedToWishlist || isRemovedFromWishlist {
+                        Text(isAddedToWishlist ? "Added to Wishlist" : "Removed from Wishlist")
+                            .foregroundColor(.white)
+                            .padding()
+                            .padding(.horizontal)
+                            .background(Color.black)
+                            .cornerRadius(10)
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    // Hide the message after 2 seconds
+                                    isAddedToWishlist = false
+                                    isRemovedFromWishlist = false
+                                }
+                            }
+                            .onTapGesture {
+                                isAddedToWishlist = false
+                                isRemovedFromWishlist = false
+                            }
+                    }
+                }
+            }
+    )
 //        }
 }
     
@@ -222,10 +244,8 @@ struct ResultsView: View {
         distance:.constant("10"),
         customLocationToggle: .constant(false),
         customLocation:.constant(""),
-        autopostalCode:.constant("90037"),
-        isLoading:.constant(true),
-        isAddedToWishlist: .constant(false),
-        isRemovedFromWishlist: .constant(false)
+        autopostalCode:.constant("90037")
+    
     )
 }
 
@@ -564,7 +584,7 @@ struct ProductDetailView: View {
                                 image.resizable()
                             }
                         placeholder: {
-                                ProgressView()
+//                                ProgressView()
                             }
                             .frame( idealWidth: 220, maxWidth: 250, maxHeight: 300)
                         }
@@ -626,9 +646,12 @@ struct ProductDetailView: View {
                 Image(systemName: "list.bullet.indent")
                 Text("Similar")
             }
+            .onTapGesture {
+                <#code#>
+            }
             .padding(.top, -35)
         }.onAppear{
-//            productphotos()
+            productphotos()
             getSimilarItems()
             loadData()
             productviewisloading = false
@@ -734,7 +757,7 @@ struct ProductDetailView: View {
                 sortedItems.sort { Double($0.price) ?? 0 < Double($1.price) ?? 0 }
             case "Shipping":
                 sortedItems.sort { Double($0.shipping) ?? 0 < Double($1.shipping) ?? 0 }
-            case "Days Left":
+            case "Remaining":
                 sortedItems.sort { Int($0.remaining) ?? 0 < Int($1.remaining) ?? 0 }
             default:
                 break

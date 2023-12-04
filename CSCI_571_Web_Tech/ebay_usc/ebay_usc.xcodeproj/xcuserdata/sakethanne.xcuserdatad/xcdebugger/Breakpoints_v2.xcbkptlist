@@ -14,8 +14,8 @@
             filePath = "ebay_usc/Initial_Form.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "20"
-            endingLineNumber = "20"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
             landmarkName = "SearchFormView"
             landmarkType = "14">
          </BreakpointContent>

@@ -17,6 +17,10 @@ struct SearchFormView: View {
     @State var autopostalCode: String = ""
     @State var pinCodeSuggestions: [String] = []
     @State var isSheetPresented = false
+    @State var isLoading: Bool = true
+    
+    @State var isAddedToWishlist: Bool = false
+    @State var isRemovedFromWishlist: Bool = false
     
     func usedtoggle(){usedCondition = !usedCondition}
     func newtoggle(){newCondition = !newCondition}
@@ -139,7 +143,8 @@ struct SearchFormView: View {
                                 
                                 Section{
                                     if displayresults {
-                                        ResultsView(keyword: $keyword,selectedCategory: $selectedCategory, usedCondition: $usedCondition,newCondition: $newCondition,unspecifiedCondition:$unspecifiedCondition, localPickup: $localPickup,freeShipping:$freeShipping,distance:$distance,customLocationToggle:$customLocationToggle,customLocation:$customLocation,autopostalCode:$autopostalCode)
+                                        ResultsView(keyword: $keyword,selectedCategory: $selectedCategory, usedCondition: $usedCondition,newCondition: $newCondition,unspecifiedCondition:$unspecifiedCondition, localPickup: $localPickup,freeShipping:$freeShipping,distance:$distance,customLocationToggle:$customLocationToggle,customLocation:$customLocation,autopostalCode:$autopostalCode,
+                                                    isLoading: $isLoading, isAddedToWishlist: $isAddedToWishlist, isRemovedFromWishlist: $isRemovedFromWishlist)
                                     }
                                 }
                             }.overlay(
@@ -157,7 +162,32 @@ struct SearchFormView: View {
                                     }
                                 )
                                 })
-        }
+        }.overlay(
+            VStack {
+                Spacer()
+                HStack {
+                    if isAddedToWishlist || isRemovedFromWishlist {
+                        Text(isAddedToWishlist ? "Added to Wishlist" : "Removed from Wishlist")
+                            .foregroundColor(.white)
+                            .padding()
+                            .padding(.horizontal)
+                            .background(Color.black)
+                            .cornerRadius(10)
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    // Hide the message after 2 seconds
+                                    isAddedToWishlist = false
+                                    isRemovedFromWishlist = false
+                                }
+                            }
+                            .onTapGesture {
+                                isAddedToWishlist = false
+                                isRemovedFromWishlist = false
+                            }
+                    }
+                }
+            }
+    )
         
     }
     
@@ -237,6 +267,7 @@ struct SearchFormView: View {
                 isShowingErrorMessage = true
                 hideErrorMessageAfterDelay()
             } else {
+                isLoading = true
                 displayresults = true
 //                print("Keyword: \(keyword)")
                 print("Category: \(selectedCategory)")
@@ -266,6 +297,7 @@ struct SearchFormView: View {
         customLocationToggle = false
         customLocation = ""
         displayresults = false
+        isLoading = true
     }
     
     @ViewBuilder
