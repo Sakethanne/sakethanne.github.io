@@ -548,32 +548,37 @@ struct ProductDetailView: View {
             }
             .padding(.top, 30)
             VStack{
-                HStack{
-                    Spacer()
-                    Text("Powered by ")
-                        .font(.headline)
-                        .onAppear {
-                        }
-                    Image("google")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100)
-                    Spacer()
+                if(photosloading){
+                    ProgressView()
                 }
-                .padding(.all)
-                ScrollView{
-                    VStack{
-                        ForEach(photos, id: \.self) { photoURL in
-                            AsyncImage(url: URL(string: photoURL)) { image in
-                                image.resizable()
+                else{
+                    HStack{
+                        Spacer()
+                        Text("Powered by ")
+                            .font(.headline)
+                            .onAppear {
                             }
-                        placeholder: {
-                                ProgressView()
-                            }
-                            .frame( idealWidth: 220, maxWidth: 250, maxHeight: 300)
-                        }
+                        Image("google")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100)
+                        Spacer()
                     }
-                    .padding(.horizontal,30)
+                    .padding(.all)
+                    ScrollView{
+                        VStack{
+                            ForEach(photos, id: \.self) { photoURL in
+                                AsyncImage(url: URL(string: photoURL)) { image in
+                                    image.resizable()
+                                }
+                            placeholder: {
+//                                    ProgressView()
+                                }
+                                .frame( idealWidth: 220, maxWidth: 250, maxHeight: 300)
+                            }
+                        }
+                        .padding(.horizontal,30)
+                    }
                 }
             }
             .padding(.top, -50)
@@ -581,59 +586,68 @@ struct ProductDetailView: View {
                 Image(systemName: "photo.stack.fill")
                 Text("Photos")
             }
+            .onAppear {
+                productphotos()
+            }
             VStack{
-                HStack{
-                    Text("Sort By")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                    Spacer()
-                }.padding(.horizontal, 20)
-                    .padding(.vertical,0)
-                
-                        Picker("Sort By", selection: $selectedSortOption) {
-                            ForEach(sortOptions, id: \.self) { option in
-                                Text(option)
-                            }
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .padding()
-                if(selectedSortOption=="Default"){
-                    Text("")
+                if(similarloading){
+                    ProgressView()
                 }
                 else{
                     HStack{
-                        Text("Order")
+                        Text("Sort By")
                             .font(.headline)
                             .fontWeight(.bold)
                         Spacer()
                     }.padding(.horizontal, 20)
                         .padding(.vertical,0)
-                    Picker("Sort Order", selection: $selectedSortOrder) {
-                        ForEach(sortOrders, id: \.self) { order in
-                            Text(order)
-                        }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                .padding()
-                }
-                        
-                ScrollView {
-                                LazyVGrid(columns: [GridItem(), GridItem()], spacing: 16) {
-                                    ForEach(sortedSimilarItems()) { item in
-                                        SimilarItemView(item: item)
-                                            .padding(.horizontal,10)
-                                    }
+                    
+                            Picker("Sort By", selection: $selectedSortOption) {
+                                ForEach(sortOptions, id: \.self) { option in
+                                    Text(option)
                                 }
-                                
                             }
+                            .pickerStyle(SegmentedPickerStyle())
+                            .padding()
+                    if(selectedSortOption=="Default"){
+                        Text("")
+                    }
+                    else{
+                        HStack{
+                            Text("Order")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                            Spacer()
+                        }.padding(.horizontal, 20)
+                            .padding(.vertical,0)
+                        Picker("Sort Order", selection: $selectedSortOrder) {
+                            ForEach(sortOrders, id: \.self) { order in
+                                Text(order)
+                            }
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                    .padding()
+                    }
+                            
+                    ScrollView {
+                                    LazyVGrid(columns: [GridItem(), GridItem()], spacing: 16) {
+                                        ForEach(sortedSimilarItems()) { item in
+                                            SimilarItemView(item: item)
+                                                .padding(.horizontal,10)
+                                        }
+                                    }
+                                    
+                                }
+                }
             }
             .tabItem {
                 Image(systemName: "list.bullet.indent")
                 Text("Similar")
             }
+            .onAppear{
+                getSimilarItems()
+            }
         }.onAppear{
-            productphotos()
-            getSimilarItems()
             loadData()
             productviewisloading = false
         }
@@ -719,6 +733,7 @@ struct ProductDetailView: View {
                         let items = try decoder.decode([SimilarItem].self, from: data)
                         DispatchQueue.main.async {
                             self.similarItems = items
+                            self.similarloading = false
                         }
                     } catch {
                         print("Error decoding JSON: \(error.localizedDescription)")
@@ -773,6 +788,7 @@ struct ProductDetailView: View {
                     DispatchQueue.main.async {
                         self.photos = photoURLs
                         print(photos)
+                        self.photosloading = false
                     }
                 } catch {
                     print("Error decoding JSON: \(error.localizedDescription)")
