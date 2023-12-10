@@ -23,7 +23,7 @@ struct FavoritesView: View {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
             } else {
-                NavigationView {
+                
                     if wishlistProducts.isEmpty {
                         // Display a message when there are no items in the wishlist
                         Text("No items in Wishlist")
@@ -46,7 +46,7 @@ struct FavoritesView: View {
                             .onDelete(perform: deleteItem)
                         }
                     }
-                }
+                
             }
         }
         .navigationBarTitle("Favorites")
