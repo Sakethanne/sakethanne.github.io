@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>3725520208 CS571 Assignment 2</title>
+        <!-- <link rel="icon" type="image/jpg" href="{{ url_for('static', filename='/images/Mono_SmUse_Card_RGB.jpg') }}"> -->
+        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='/css/ebay.css') }}"> -->
+        <!-- <script src="{{ url_for('static', filename='/js/ebay.js') }}"></script> -->
+        <style>
+            body {
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Use the full viewport height */
+    margin: 0; /* Remove default margin to prevent unwanted spacing */
+    /* font-family: sans-serif; */
+  }
+  .container {
+    display: flex;
+    align-items: center;
+    margin: 0 auto; /* Center the container horizontally */
+    max-width: 600px; /* Optional: Limit the container's maximum width */
+    padding-left: 250px;
+    margin-top: -20px;
+  }
+
+  /* CSS for the image */
+  .image {
+    width: 150px;
+    height: 70px;
+    margin-right: 10px;
+  }
+.heading{
+    font-size: 35px;
+    font-weight: bold;
+}
+table, td, th{
+    border: 1.5px solid black;
+    margin-top: -10px;
+    padding: 8px;
+    align-self: center;
+    border-collapse: collapse;
+    text-align: center;
+}
+label{
+    font-weight: bold;
+}
+#pricefrom{
+    width: 65px;
+}
+#priceto{
+    width: 65px;
+}
+.submit {
+    display: inline-block;
+    padding: 3px 5px;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: black;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 2px #999;
+  }
+  
+.submit:hover{background-color: #50b753}
+
+.clear {
+    display: inline-block;
+    padding: 3px 5px;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: black;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 2px #999;
+  }
+
+.result, .total-results{
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: black;
+    font-size: 23px;
+    font-weight: bold;
+    padding: 25px;
+    border-bottom: 1px black;
+}
+
+.line{
+  align-items: center;
+  width: 700px;
+  height: 1px;
+  border: none;
+  height: 1px;
+  background-color: black;
+}
+
+.showmore {
+  display: inline-block;
+  padding: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: black;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0 2px #999;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.showmore:hover{background-color: #50b753}
+
+#showmorebutton {
+  text-align: center;
+}
+
+#items-container{
+  text-align: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+}
+
+.item{
+  text-align: center;
+  height: 190px;
+  width: 750px;
+  padding: 10px;
+  background-color: #f4f3f4;
+  color: black;
+  margin: 2px;
+  border: 1.5px solid black;
+  border-radius: 3px;
+  cursor: pointer;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Add shadow */
+}
+
+.item:hover{
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.5); /* Add shadow */
+}
+
+.individualitem{
+  width: 100%;
+  height: 100%;
+  border: none;
+  text-align: left;
+}
+
+#individualitem{
+  width: 120px;
+}
+
+.image-container {
+  width: 130px; /* Set the initial width of the image container */
+  height: 130px; /* Set the initial height of the image container */
+  transition: transform 0.7s ease; /* Add a smooth transition effect */
+  background-color: grey;
+}
+
+/* Style the image */
+.image-container img {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease; /* Add a smooth transition effect */
+}
+
+/* Increase the size of the image on hover */
+.image-container:hover {
+  transform: scale(1.6); /* Increase the size by 20% (1.2 times) */
+  border: 5px grey;
+}
+
+.backtores {
+  display: inline-block;
+  padding: 7px;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 2px #999;
+  margin-bottom: 20px;
+  margin-top: 5px;
+}
+
+.details-table-container{
+  display: inline-block;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.details-table {
+  vertical-align: middle;
+  text-align: left;
+}
+
+#details-table {
+  width: 750px;
+}
+
+.backtores:hover{background-color: #50b753}
+
+#sortby{
+  text-align: center;
+}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            
+            <p class="heading">Shopping</p>
+          </div>
+        <table align="Center">
+            <form onsubmit="submitdata(event)">
+            <tr>
+                <td>
+                    <label for="keywords">Keywords<span style="color: red">*</span>&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                    <input type="text" id="keywords" name="keywords" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="price">Price Range&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                    From&nbsp;&nbsp;<input type="number" id="pricefrom" name="pricefrom">&nbsp;&nbsp;&nbsp;to&nbsp;&nbsp;&nbsp;<input type="number" id="priceto" name="priceto">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="price">Condition&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                    <input type="checkbox" id="new" name="new"> New&nbsp;
+                    <input type="checkbox" id="used" name="used"> Used&nbsp;
+                    <input type="checkbox" id="verygood" name="verygood"> Very Good&nbsp;
+                    <input type="checkbox" id="good" name="good"> Good&nbsp;
+                    <input type="checkbox" id="acceptable" name="acceptable"> Acceptable&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="price">Seller&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                    <input type="checkbox" id="returnaccepted" name="returnaccepted">&nbsp;Return Accepted&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="price">Shipping&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                    <input type="checkbox" id="free" name="free">&nbsp;&nbsp;Free&nbsp;&nbsp;<input type="checkbox" id="expedicted" name="expedicted">&nbsp;&nbsp;Expedicted&nbsp;&nbsp;<br/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="price">Sort by&nbsp;&nbsp;:&nbsp;&nbsp;</label>
+                    <select id="sortby" name="sortby">
+                        <option value="BestMatch">Best Match</option>
+                        <option value="CurrentPriceHighest">Price: highest first</option>
+                        <option value="PricePlusShippingHighest">Price + Shipping: highest first</option>
+                        <option value="PricePlusShippingLowest">Price + Shipping: lowest first</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input class="clear" type="button" value="Clear" onclick="cleanform(event)"> <button class="submit">Search</button>
+                </td>
+            </tr>
+        </form>
+        </table>
+
+        <div id="total-results"></div>
+        
+        <div id="items-container"></div>
+
+        <div id="showmorebutton"></div>
+    </body>
+</html>

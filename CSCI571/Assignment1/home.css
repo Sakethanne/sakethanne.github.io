@@ -1,0 +1,131 @@
+/* using the font from the ttf file that has been downloaded from google fonts */
+@font-face {
+    font-family: MyFont;
+    src: url(AbrilFatface-Regular.ttf);
+}
+@font-face {
+    font-family: MainHeadingFont;
+    src: url(NotoSerif-VariableFont_wdth,wght.ttf);
+}
+/* css for the div containing the figures below the center stage  */
+.figure-container {
+        display:inline-flex; /* Use flexbox for layout */
+        margin-left: 30px;
+        margin-right: 30px;
+        margin-bottom: 20px;
+    }
+.figure {
+        text-align: center; /* Center-align content */
+        margin: 10px; /* Add margin for spacing */
+        padding-left: 5px;
+    }
+figcaption{
+        padding-top: 38px;
+        font-size: large;
+        color: rgba(5,56,192,255);
+        padding-bottom: 20px;
+    }
+/* css for the floating content on top of the background image */
+.heading{
+        color: rgba(5,56,192,255);
+        font-size: x-large;
+        text-align: center;
+        width: 850px;
+        font-weight: 500;
+        font-family: MyFont;
+        padding-top: 15px;
+        font-style: normal;
+    }
+.h1{
+        color: rgba(5,56,192,255);
+        padding-left: 43px;
+        margin: 0px;
+        padding-bottom: 7px;
+        font-family: MainHeadingFont;
+        font-size: 26px;
+        font-weight: 600;
+    }
+    /* arranging all the menu items  */
+.menu{
+        padding-top: 5px;
+        padding-left: 42px;
+        margin-bottom: 30px;
+        font-size: 9px;
+        color: black;
+        font-weight: 200;
+    }
+a{
+        padding-left: 5px;
+        padding-right: 5px;
+        /* font-family: 'Times New Roman', Times, serif; */
+        font-family: Helvetica, sans-serif;
+        /* font-family: MainHeadingFont; */
+    }
+/* general css that applies to the entire html body */
+body {
+    margin: 0;
+    margin-top: 20px;
+    padding: 0;
+    max-width: 830px;
+}
+/* css for the background image and the center transparent box to scroll over the background image */
+.container {
+    width: 750px;
+    height: 415px;
+    margin-left: 45px;
+    background-image: url('Cutlery.png');
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: 760px 750px;
+    background-position: 35px -50px;
+}
+/* css for the transparent box that hosts the contents for the fall cutlery and shop button */
+.transparent-box {
+    background-color: rgba(255, 255, 255, 0);
+    font-size: 43px;
+    font-family: MyFont;
+    color: rgba(5,56,192,255);
+    font-weight: 400;
+    padding-left: 35px;
+    padding-top: 1px;
+}
+/* adding the css styling details for the button on the floatinf content */
+button{
+    font-size: small;
+    padding: 10px;
+    padding-left: 13px;
+    padding-right: 13px;
+    border-radius: 0px;
+    background-color:white;
+    color: rgba(38,38,38,255);
+    border: none;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+/* css for the floating content in general */
+.floating-content {
+    background-color: White;
+    color:black;
+    width: 100%;
+    font-family: MyFont;
+    font-weight: 100;
+    padding-top: 0px;
+    margin-top: 0px;
+}
+/* extending the line from one end of the screen to other end  */
+#line{
+    width: 860px;
+    margin-left: -10px;
+    margin-right: none;
+    border: none;
+    height: 0.7px;
+    background-color: black;
+}
+/* setting the color of the home link to blue sinxe it is selected */
+#homelink{
+    color: rgba(45,87,203,255);
+}
+/* Setting the height and width of the images to a fixed value */
+img{
+    width:362px;
+    height:315px;
+}
