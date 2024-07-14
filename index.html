@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css"> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="now-ui-kit.css" type="text/css">
   <link rel="stylesheet" href="assets/css/nucleo-icons.css" type="text/css">
   <script src="assets/js/navbar-ontop.js"></script>
@@ -19,18 +19,87 @@
       padding: 1%;
     }
     html, body {
-    max-width: 100%;
-    overflow-x: hidden;
-}
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    body.dark-mode {
+      background-color: #121212;
+      color: #ffffff;
+    }
+    .navbar-dark-mode {
+      background-color: #333333 !important;
+    }
+    /* Toggle Switch Styles */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+      margin-left: 15px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 30px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    .slider:after {
+      content: "\f185";
+      font-family: FontAwesome;
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: #f39c12;
+    }
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    input:checked + .slider:before {
+      transform: translateX(30px);
+    }
+    input:checked + .slider:after {
+      content: "\f186";
+      left: auto;
+      right: 10px;
+      color: #f1c40f;
+    }
   </style>
 </head>
 
 <body class="">
   <nav class="navbar navbar-expand-lg bg-primary navbar-dark fixed-top p-3 align-self-center align-items-center">
-    <div class="container-fluid">
-      <a>
-        <b>SAKETH ANNE</b>
-      </a>
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center">
+        <a class="navbar-brand"><b>SAKETH ANNE</b></a>
+        <!-- Dark Mode Toggle -->
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNowUIKitFree">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -61,6 +130,7 @@
       </div>
     </div>
   </nav>
+
   <a name="home" id="home"> </a>
   <div class="py-5 text-center parallax cover" style="background-image: url(&quot;assets/img/profile.jpeg&quot;);position:relative;background-position:center;background-size:cover;">
     <a name="home"> </a>
@@ -1028,6 +1098,22 @@
       $(document).ready(function() {
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const toggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+  
+        toggle.addEventListener('change', function() {
+          body.classList.toggle('dark-mode');
+          document.querySelector('.navbar').classList.toggle('navbar-dark-mode');
+        });
+  
+        // Initialize the toggle state on page load
+        if (body.classList.contains('dark-mode')) {
+          toggle.checked = true;
+        }
       });
     </script>
   </a>
