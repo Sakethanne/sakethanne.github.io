@@ -58,7 +58,7 @@
       right: 0;
       bottom: 0;
       background-color: #f39c12; /* Light mode color */
-      transition: 1s;
+      transition: .4s;
       border-radius: 25px;
     }
     .slider:before {
@@ -70,7 +70,7 @@
       left: 3px;
       bottom: 3px;
       background-color: white;
-      transition: 1s;
+      transition: .4s;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -93,6 +93,7 @@
       align-items: center;
     }
     /* Dark mode styles for headings in Technical Skills */
+    .dark-mode .technical-skills h3,
     .dark-mode .technical-skills p {
       color: #ffffff;
     }
@@ -131,9 +132,6 @@
           </li>
           <li class="nav-item text-uppercase" id="educationlink">
             <a class="nav-link" href="#Education">Education</a>
-          </li>
-          <li class="nav-item text-uppercase" id="projectslink">
-            <a class="nav-link" href="#projects">Projects</a>
           </li>
           <li class="nav-item text-uppercase" id="personallink">
             <a class="nav-link" href="#personal">Certifications</a>
@@ -1173,29 +1171,52 @@
         const toggle = document.getElementById('darkModeToggle');
         const body = document.body;
         const cards = document.querySelectorAll('.card');
-        const headings = document.querySelectorAll('.technical-skills p');
+        const headings = document.querySelectorAll('.technical-skills h3');
+        const paragraphs = document.querySelectorAll('.technical-skills p');
   
+        // Function to apply dark mode
+        function applyDarkMode() {
+          body.classList.add('dark-mode');
+          document.querySelector('.navbar').classList.add('navbar-dark-mode');
+          cards.forEach(card => card.classList.add('card-dark-mode'));
+          headings.forEach(heading => heading.classList.add('text-white'));
+          paragraphs.forEach(paragraph => paragraph.classList.add('text-white'));
+        }
+  
+        // Function to remove dark mode
+        function removeDarkMode() {
+          body.classList.remove('dark-mode');
+          document.querySelector('.navbar').classList.remove('navbar-dark-mode');
+          cards.forEach(card => card.classList.remove('card-dark-mode'));
+          headings.forEach(heading => heading.classList.remove('text-white'));
+          paragraphs.forEach(paragraph => paragraph.classList.remove('text-white'));
+        }
+  
+        // Check initial color scheme preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          applyDarkMode();
+          toggle.checked = true;
+        }
+  
+        // Toggle dark mode on change
         toggle.addEventListener('change', function() {
-          body.classList.toggle('dark-mode');
-          document.querySelector('.navbar').classList.toggle('navbar-dark-mode');
-          cards.forEach(card => {
-            card.classList.toggle('card-dark-mode');
-          });
-          headings.forEach(heading => {
-            heading.classList.toggle('text-white');
-          });
+          if (toggle.checked) {
+            applyDarkMode();
+          } else {
+            removeDarkMode();
+          }
         });
   
-        // Initialize the toggle state on page load
-        if (body.classList.contains('dark-mode')) {
-          toggle.checked = true;
-          cards.forEach(card => {
-            card.classList.add('card-dark-mode');
-          });
-          headings.forEach(heading => {
-            heading.classList.add('text-white');
-          });
-        }
+        // Listen for changes in the color scheme preference
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+          if (e.matches) {
+            applyDarkMode();
+            toggle.checked = true;
+          } else {
+            removeDarkMode();
+            toggle.checked = false;
+          }
+        });
       });
     </script>
   </a>
