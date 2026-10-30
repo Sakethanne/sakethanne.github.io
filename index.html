@@ -121,67 +121,99 @@
     }
 
     /* ==========================================================================
-       CONFIGURABLE LIQUID GLASS & ACCENT PALETTES
+       CONFIGURABLE LIQUID GLASS MATERIAL ARCHITECTURE
+       Three distinct, high-fidelity tactile material presets:
+       - Liquid Glass: Frosted acrylic vibrancy with optical blur & refraction
+       - Ultra Clear:  Crystal-transparent float glass with razor-sharp borders
+       - Solid Ceramic: Opaque machined ceramic hardware with deep contrast
        ========================================================================== */
     :root {
-      --glass-blur: 24px;
-      --glass-saturate: 180%;
+      /* Default to Liquid Glass (Frosted Acrylic Vibrancy) */
+      --glass-blur: 28px;
+      --glass-saturate: 190%;
+      --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(16, 18, 26, 0.72);
+      --card-bg-hover: linear-gradient(135deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.04) 100%), rgba(22, 26, 36, 0.78);
+      --card-border: rgba(255, 255, 255, 0.15);
+      --card-border-hover: rgba(255, 255, 255, 0.3);
+      --card-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.015);
+      --glass-nav: rgba(14, 16, 22, 0.75);
+      --glass-nav-border: rgba(255, 255, 255, 0.16);
     }
 
-    /* Glass Presets - Dark Theme (Default) */
+    /* 1. LIQUID GLASS PRESET (Dark Theme) */
     [data-glass="liquid"] {
-      --glass-blur: 24px;
-      --glass-saturate: 180%;
-      --bg-card: rgba(255, 255, 255, 0.035);
-      --glass-card: rgba(17, 19, 24, 0.72);
-      --glass-nav: rgba(9, 10, 13, 0.78);
-      --inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      --glass-blur: 28px;
+      --glass-saturate: 190%;
+      --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(16, 18, 26, 0.72);
+      --card-bg-hover: linear-gradient(135deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.04) 100%), rgba(22, 26, 36, 0.78);
+      --card-border: rgba(255, 255, 255, 0.15);
+      --card-border-hover: rgba(255, 255, 255, 0.3);
+      --card-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.015);
+      --glass-nav: rgba(14, 16, 22, 0.75);
+      --glass-nav-border: rgba(255, 255, 255, 0.16);
     }
 
+    /* 2. ULTRA CLEAR PRESET (Dark Theme: Crystal Transparency) */
     [data-glass="clear"] {
-      --glass-blur: 10px;
-      --glass-saturate: 130%;
-      --bg-card: rgba(255, 255, 255, 0.018);
-      --glass-card: rgba(17, 19, 24, 0.42);
-      --glass-nav: rgba(9, 10, 13, 0.52);
-      --inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+      --glass-blur: 8px;
+      --glass-saturate: 120%;
+      --card-bg: rgba(255, 255, 255, 0.018);
+      --card-bg-hover: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(255, 255, 255, 0.28);
+      --card-border-hover: rgba(255, 255, 255, 0.5);
+      --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+      --glass-nav: rgba(9, 10, 13, 0.42);
+      --glass-nav-border: rgba(255, 255, 255, 0.3);
     }
 
+    /* 3. SOLID CERAMIC PRESET (Dark Theme: 100% Opaque Ceramic Titanium) */
     [data-glass="ceramic"] {
       --glass-blur: 0px;
       --glass-saturate: 100%;
-      --bg-card: #12141a;
-      --glass-card: #12141a;
-      --glass-nav: #090a0d;
-      --inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      --card-bg: #141720;
+      --card-bg-hover: #1b1f2b;
+      --card-border: rgba(255, 255, 255, 0.09);
+      --card-border-hover: rgba(255, 255, 255, 0.22);
+      --card-shadow: 0 14px 44px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      --glass-nav: #0c0e14;
+      --glass-nav-border: rgba(255, 255, 255, 0.1);
     }
 
-    /* Glass Presets - Light Theme */
+    /* LIGHT THEME PRESETS */
     [data-theme="light"][data-glass="liquid"] {
-      --glass-blur: 24px;
-      --glass-saturate: 180%;
-      --bg-card: rgba(255, 255, 255, 0.85);
-      --glass-card: rgba(255, 255, 255, 0.8);
+      --glass-blur: 28px;
+      --glass-saturate: 190%;
+      --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.72) 100%), rgba(255, 255, 255, 0.8);
+      --card-bg-hover: #ffffff;
+      --card-border: rgba(255, 255, 255, 0.85);
+      --card-border-hover: rgba(0, 0, 0, 0.16);
+      --card-shadow: 0 14px 35px rgba(0, 0, 0, 0.06), inset 0 1px 0 #ffffff;
       --glass-nav: rgba(245, 245, 247, 0.82);
-      --inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      --glass-nav-border: rgba(0, 0, 0, 0.1);
     }
 
     [data-theme="light"][data-glass="clear"] {
-      --glass-blur: 10px;
-      --glass-saturate: 130%;
-      --bg-card: rgba(255, 255, 255, 0.62);
-      --glass-card: rgba(255, 255, 255, 0.55);
-      --glass-nav: rgba(245, 245, 247, 0.65);
-      --inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      --glass-blur: 8px;
+      --glass-saturate: 120%;
+      --card-bg: rgba(255, 255, 255, 0.38);
+      --card-bg-hover: rgba(255, 255, 255, 0.65);
+      --card-border: rgba(0, 0, 0, 0.2);
+      --card-border-hover: rgba(0, 0, 0, 0.36);
+      --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      --glass-nav: rgba(245, 245, 247, 0.48);
+      --glass-nav-border: rgba(0, 0, 0, 0.18);
     }
 
     [data-theme="light"][data-glass="ceramic"] {
       --glass-blur: 0px;
       --glass-saturate: 100%;
-      --bg-card: #ffffff;
-      --glass-card: #ffffff;
+      --card-bg: #ffffff;
+      --card-bg-hover: #fbfbfd;
+      --card-border: rgba(0, 0, 0, 0.1);
+      --card-border-hover: rgba(0, 0, 0, 0.22);
+      --card-shadow: 0 10px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
       --glass-nav: #f5f5f7;
-      --inner-highlight: inset 0 1px 0 rgba(0, 0, 0, 0.04);
+      --glass-nav-border: rgba(0, 0, 0, 0.09);
     }
 
     /* Configurable Accent Color Overrides */
@@ -866,7 +898,64 @@
       box-shadow: var(--shadow-md), var(--inner-highlight);
     }
 
-    /* Liquid Glass & Specular Card Spotlight */
+    /* ==========================================================================
+       ATMOSPHERIC AMBIENT GLASS LIGHTING (Liquid & Clear Diffusion)
+       ========================================================================== */
+    .ambient-glass-mesh {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+      opacity: 0.65;
+      transition: opacity 400ms var(--ease-spring);
+    }
+
+    [data-glass="ceramic"] .ambient-glass-mesh {
+      opacity: 0 !important;
+    }
+
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .orb-1 {
+      top: 12%;
+      right: -8%;
+      width: 540px;
+      height: 540px;
+      background: radial-gradient(circle, rgba(var(--accent-rgb), 0.18) 0%, transparent 70%);
+    }
+
+    .orb-2 {
+      top: 48%;
+      left: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(var(--accent-rgb), 0.14) 0%, rgba(88, 86, 214, 0.08) 50%, transparent 70%);
+    }
+
+    .orb-3 {
+      top: 80%;
+      right: 4%;
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(var(--accent-rgb), 0.16) 0%, transparent 70%);
+    }
+
+    [data-theme="light"] .orb-1,
+    [data-theme="light"] .orb-2,
+    [data-theme="light"] .orb-3 {
+      opacity: 0.4;
+    }
+
+    /* ==========================================================================
+       UNIFIED LIQUID GLASS CARD STYLING ACROSS ALL 51 PORTFOLIO CARDS
+       ========================================================================== */
     .experience-card,
     .pub-card,
     .project-card,
@@ -875,13 +964,43 @@
     .skill-card,
     .credly-badge-card,
     .contact-card {
-      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-      transition: background var(--duration-normal) var(--ease-spring),
-                  border-color var(--duration-normal) var(--ease-spring),
-                  backdrop-filter var(--duration-normal) var(--ease-spring),
-                  transform var(--duration-fast) var(--ease-spring),
-                  box-shadow var(--duration-fast) var(--ease-spring);
+      background: var(--card-bg) !important;
+      border: 1px solid var(--card-border) !important;
+      box-shadow: var(--card-shadow) !important;
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) !important;
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) !important;
+      transition: background 320ms var(--ease-spring),
+                  border-color 320ms var(--ease-spring),
+                  box-shadow 320ms var(--ease-spring),
+                  backdrop-filter 320ms var(--ease-spring),
+                  transform var(--duration-fast) var(--ease-spring);
+    }
+
+    .experience-card:hover,
+    .pub-card:hover,
+    .project-card:hover,
+    .testimonial-card:hover,
+    .edu-card:hover,
+    .skill-card:hover,
+    .credly-badge-card:hover,
+    .contact-card:hover {
+      background: var(--card-bg-hover) !important;
+      border-color: var(--card-border-hover) !important;
+    }
+
+    [data-glass="ceramic"] .experience-card,
+    [data-glass="ceramic"] .pub-card,
+    [data-glass="ceramic"] .project-card,
+    [data-glass="ceramic"] .testimonial-card,
+    [data-glass="ceramic"] .edu-card,
+    [data-glass="ceramic"] .skill-card,
+    [data-glass="ceramic"] .credly-badge-card,
+    [data-glass="ceramic"] .contact-card,
+    [data-glass="ceramic"] .navbar,
+    [data-glass="ceramic"] .display-popover,
+    [data-glass="ceramic"] .cmd-palette-sheet {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
     }
 
     .card-spotlight-enabled .experience-card,
@@ -2226,11 +2345,15 @@
 
     .glass-segmented-control {
       display: flex;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.28);
+      border: 1px solid var(--card-border);
       border-radius: var(--radius-full);
       padding: 3px;
-      gap: 2px;
+      gap: 3px;
+    }
+
+    [data-theme="light"] .glass-segmented-control {
+      background: rgba(0, 0, 0, 0.06);
     }
 
     .glass-segment {
@@ -2240,17 +2363,23 @@
       color: var(--text-secondary);
       font-size: 0.78rem;
       font-weight: 600;
-      padding: 6px 0;
+      padding: 7px 0;
       border-radius: var(--radius-full);
       cursor: pointer;
       transition: all var(--duration-fast) var(--ease-spring);
       text-align: center;
+      position: relative;
+    }
+
+    .glass-segment:hover {
+      color: var(--text-primary);
     }
 
     .glass-segment.active {
-      background: var(--bg-elevated);
-      color: var(--text-primary);
-      box-shadow: var(--shadow-sm), var(--inner-highlight);
+      background: var(--accent) !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 10px rgba(var(--accent-rgb), 0.45) !important;
+      font-weight: 700 !important;
     }
 
     .accent-palette-group {
@@ -2806,6 +2935,13 @@
 </head>
 
 <body>
+
+  <!-- Atmospheric Ambient Glass Lighting (Diffused through Liquid & Clear Glass) -->
+  <div class="ambient-glass-mesh" aria-hidden="true">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+  </div>
 
   <!-- ==========================================================================
        FLOATING APPLE ISLAND NAVIGATION BAR
