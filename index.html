@@ -121,6 +121,115 @@
     }
 
     /* ==========================================================================
+       CONFIGURABLE LIQUID GLASS & ACCENT PALETTES
+       ========================================================================== */
+    :root {
+      --glass-blur: 24px;
+      --glass-saturate: 180%;
+    }
+
+    /* Glass Presets - Dark Theme (Default) */
+    [data-glass="liquid"] {
+      --glass-blur: 24px;
+      --glass-saturate: 180%;
+      --bg-card: rgba(255, 255, 255, 0.035);
+      --glass-card: rgba(17, 19, 24, 0.72);
+      --glass-nav: rgba(9, 10, 13, 0.78);
+      --inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    [data-glass="clear"] {
+      --glass-blur: 10px;
+      --glass-saturate: 130%;
+      --bg-card: rgba(255, 255, 255, 0.018);
+      --glass-card: rgba(17, 19, 24, 0.42);
+      --glass-nav: rgba(9, 10, 13, 0.52);
+      --inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    }
+
+    [data-glass="ceramic"] {
+      --glass-blur: 0px;
+      --glass-saturate: 100%;
+      --bg-card: #12141a;
+      --glass-card: #12141a;
+      --glass-nav: #090a0d;
+      --inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    /* Glass Presets - Light Theme */
+    [data-theme="light"][data-glass="liquid"] {
+      --glass-blur: 24px;
+      --glass-saturate: 180%;
+      --bg-card: rgba(255, 255, 255, 0.85);
+      --glass-card: rgba(255, 255, 255, 0.8);
+      --glass-nav: rgba(245, 245, 247, 0.82);
+      --inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    }
+
+    [data-theme="light"][data-glass="clear"] {
+      --glass-blur: 10px;
+      --glass-saturate: 130%;
+      --bg-card: rgba(255, 255, 255, 0.62);
+      --glass-card: rgba(255, 255, 255, 0.55);
+      --glass-nav: rgba(245, 245, 247, 0.65);
+      --inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    [data-theme="light"][data-glass="ceramic"] {
+      --glass-blur: 0px;
+      --glass-saturate: 100%;
+      --bg-card: #ffffff;
+      --glass-card: #ffffff;
+      --glass-nav: #f5f5f7;
+      --inner-highlight: inset 0 1px 0 rgba(0, 0, 0, 0.04);
+    }
+
+    /* Configurable Accent Color Overrides */
+    [data-accent="f1"] {
+      --accent: #e10600;
+      --accent-hover: #ff1801;
+      --accent-rgb: 225, 6, 0;
+      --accent-soft: rgba(225, 6, 0, 0.12);
+      --accent-gradient: linear-gradient(135deg, #e10600 0%, #ff2a1e 100%);
+      --accent-gradient-teal: linear-gradient(135deg, #ff2a1e 0%, #e10600 50%, #ff4b3e 100%);
+      --border-accent: rgba(225, 6, 0, 0.35);
+      --shadow-glow: 0 0 50px rgba(225, 6, 0, 0.22);
+    }
+
+    [data-accent="blue"] {
+      --accent: #0071e3;
+      --accent-hover: #0077ed;
+      --accent-rgb: 0, 113, 227;
+      --accent-soft: rgba(0, 113, 227, 0.1);
+      --accent-gradient: linear-gradient(135deg, #0071e3 0%, #5856d6 100%);
+      --accent-gradient-teal: linear-gradient(135deg, #0284c7 0%, #0071e3 100%);
+      --border-accent: rgba(0, 113, 227, 0.35);
+      --shadow-glow: 0 0 45px rgba(0, 113, 227, 0.16);
+    }
+
+    [data-accent="green"] {
+      --accent: #008f75;
+      --accent-hover: #00a88b;
+      --accent-rgb: 0, 143, 117;
+      --accent-soft: rgba(0, 143, 117, 0.12);
+      --accent-gradient: linear-gradient(135deg, #008f75 0%, #00b48a 100%);
+      --accent-gradient-teal: linear-gradient(135deg, #00b48a 0%, #008f75 100%);
+      --border-accent: rgba(0, 143, 117, 0.35);
+      --shadow-glow: 0 0 45px rgba(0, 143, 117, 0.2);
+    }
+
+    [data-accent="purple"] {
+      --accent: #892cdc;
+      --accent-hover: #9d4edd;
+      --accent-rgb: 137, 44, 220;
+      --accent-soft: rgba(137, 44, 220, 0.12);
+      --accent-gradient: linear-gradient(135deg, #892cdc 0%, #c77dff 100%);
+      --accent-gradient-teal: linear-gradient(135deg, #c77dff 0%, #892cdc 100%);
+      --border-accent: rgba(137, 44, 220, 0.35);
+      --shadow-glow: 0 0 45px rgba(137, 44, 220, 0.2);
+    }
+
+    /* ==========================================================================
        RESET & BASE STYLES
        ========================================================================== */
     *, *::before, *::after {
@@ -247,9 +356,10 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
+      position: relative;
       background: var(--glass-nav);
-      backdrop-filter: blur(24px) saturate(180%);
-      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
       border: 1px solid var(--glass-nav-border);
       box-shadow: var(--shadow-md), var(--inner-highlight);
       border-radius: var(--radius-full);
@@ -754,6 +864,81 @@
       border-color: var(--border-hover);
       background: var(--bg-card-hover);
       box-shadow: var(--shadow-md), var(--inner-highlight);
+    }
+
+    /* Liquid Glass & Specular Card Spotlight */
+    .experience-card,
+    .pub-card,
+    .project-card,
+    .testimonial-card,
+    .edu-card,
+    .skill-card,
+    .credly-badge-card,
+    .contact-card {
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+      transition: background var(--duration-normal) var(--ease-spring),
+                  border-color var(--duration-normal) var(--ease-spring),
+                  backdrop-filter var(--duration-normal) var(--ease-spring),
+                  transform var(--duration-fast) var(--ease-spring),
+                  box-shadow var(--duration-fast) var(--ease-spring);
+    }
+
+    .card-spotlight-enabled .experience-card,
+    .card-spotlight-enabled .pub-card,
+    .card-spotlight-enabled .project-card,
+    .card-spotlight-enabled .testimonial-card,
+    .card-spotlight-enabled .edu-card,
+    .card-spotlight-enabled .skill-card,
+    .card-spotlight-enabled .credly-badge-card,
+    .card-spotlight-enabled .contact-card {
+      position: relative;
+    }
+
+    .card-spotlight-enabled .experience-card::before,
+    .card-spotlight-enabled .pub-card::before,
+    .card-spotlight-enabled .project-card::before,
+    .card-spotlight-enabled .testimonial-card::before,
+    .card-spotlight-enabled .edu-card::before,
+    .card-spotlight-enabled .skill-card::before,
+    .card-spotlight-enabled .credly-badge-card::before,
+    .card-spotlight-enabled .contact-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      background: radial-gradient(
+        520px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+        rgba(var(--accent-rgb), 0.12),
+        transparent 65%
+      );
+      opacity: 0;
+      transition: opacity 280ms ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .card-spotlight-enabled .experience-card:hover::before,
+    .card-spotlight-enabled .pub-card:hover::before,
+    .card-spotlight-enabled .project-card:hover::before,
+    .card-spotlight-enabled .testimonial-card:hover::before,
+    .card-spotlight-enabled .edu-card:hover::before,
+    .card-spotlight-enabled .skill-card:hover::before,
+    .card-spotlight-enabled .credly-badge-card:hover::before,
+    .card-spotlight-enabled .contact-card:hover::before {
+      opacity: 1;
+    }
+
+    .experience-card > *,
+    .pub-card > *,
+    .project-card > *,
+    .testimonial-card > *,
+    .edu-card > *,
+    .skill-card > *,
+    .credly-badge-card > *,
+    .contact-card > * {
+      position: relative;
+      z-index: 2;
     }
 
     .exp-header {
@@ -1865,6 +2050,742 @@
     }
 
     /* ==========================================================================
+       NAVBAR SCROLL PROGRESS, COMMAND BUTTON & TACTILE SPRINGS
+       ========================================================================== */
+    .nav-scroll-progress {
+      position: absolute;
+      bottom: 0;
+      left: 18px;
+      right: 18px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: var(--radius-full);
+      transform-origin: left;
+      transform: scaleX(0);
+      box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.7);
+      pointer-events: none;
+      transition: transform 45ms linear;
+    }
+
+    .nav-link.active {
+      color: var(--text-primary);
+      background: var(--bg-card-hover);
+      box-shadow: var(--inner-highlight);
+    }
+
+    .nav-cmd-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 36px;
+      padding: 0 12px;
+      border-radius: var(--radius-full);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-spring);
+    }
+
+    .nav-cmd-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+      transform: scale(1.03);
+    }
+
+    .nav-cmd-btn kbd {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-tertiary);
+    }
+
+    [data-theme="light"] .nav-cmd-btn kbd {
+      background: rgba(0, 0, 0, 0.06);
+    }
+
+    .nav-icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-spring);
+    }
+
+    .nav-icon-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: scale(1.05);
+    }
+
+    /* Apple Fluid Tactile Springs (Emil Kowalski) */
+    button:active,
+    .btn-primary:active,
+    .btn-secondary:active,
+    .tab-pill:active,
+    .theme-toggle:active,
+    .nav-icon-btn:active,
+    .nav-cmd-btn:active,
+    .btn-resume:active,
+    .glass-segment:active,
+    .accent-swatch:active {
+      transform: scale(0.96) !important;
+      transition: transform 70ms ease-out !important;
+    }
+
+    /* ==========================================================================
+       DISPLAY & LIQUID GLASS CONFIGURATION POPOVER
+       ========================================================================== */
+    .display-popover {
+      position: fixed;
+      top: 76px;
+      right: calc((100vw - min(var(--container-max), 100vw - 32px)) / 2 + 16px);
+      width: 310px;
+      max-width: calc(100vw - 32px);
+      background: var(--glass-card);
+      backdrop-filter: blur(32px) saturate(190%);
+      -webkit-backdrop-filter: blur(32px) saturate(190%);
+      border: 1px solid var(--border-hover);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), var(--inner-highlight);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      z-index: 1200;
+      opacity: 0;
+      transform: translateY(-10px) scale(0.96);
+      pointer-events: none;
+      transition: opacity 220ms var(--ease-spring), transform 220ms var(--ease-spring);
+    }
+
+    .display-popover.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .display-popover-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .display-popover-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .display-popover-close {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-spring);
+    }
+
+    .display-popover-close:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .display-popover-section {
+      margin-bottom: 16px;
+    }
+
+    .display-popover-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-tertiary);
+      margin-bottom: 8px;
+    }
+
+    .glass-segmented-control {
+      display: flex;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .glass-segment {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 6px 0;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-spring);
+      text-align: center;
+    }
+
+    .glass-segment.active {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-sm), var(--inner-highlight);
+    }
+
+    .accent-palette-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: space-between;
+    }
+
+    .accent-swatch {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      background: var(--swatch-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform var(--duration-fast) var(--ease-spring), border-color var(--duration-fast) var(--ease-spring);
+      position: relative;
+    }
+
+    .accent-swatch:hover {
+      transform: scale(1.14);
+    }
+
+    .accent-swatch.active {
+      border-color: #ffffff;
+      box-shadow: 0 0 14px var(--swatch-color);
+    }
+
+    .accent-swatch .swatch-check {
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: all var(--duration-fast) var(--ease-spring);
+    }
+
+    .accent-swatch.active .swatch-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .display-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .display-toggle-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .display-toggle-title {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .display-toggle-desc {
+      font-size: 0.72rem;
+      color: var(--text-tertiary);
+    }
+
+    /* iOS-Inspired Switch */
+    .apple-switch {
+      position: relative;
+      display: inline-block;
+      width: 42px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .apple-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .apple-switch-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--border-hover);
+      border-radius: 24px;
+      transition: 280ms var(--ease-spring);
+    }
+
+    .apple-switch-slider::before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+      transition: 280ms var(--ease-spring);
+    }
+
+    .apple-switch input:checked + .apple-switch-slider {
+      background-color: var(--accent);
+    }
+
+    .apple-switch input:checked + .apple-switch-slider::before {
+      transform: translateX(18px);
+    }
+
+    .display-popover-footer {
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-display-reset {
+      background: none;
+      border: none;
+      color: var(--text-tertiary);
+      font-size: 0.76rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      transition: color var(--duration-fast) var(--ease-spring);
+    }
+
+    .btn-display-reset:hover {
+      color: var(--accent);
+    }
+
+    /* ==========================================================================
+       SPOTLIGHT COMMAND PALETTE MODAL
+       ========================================================================== */
+    .cmd-palette-sheet {
+      background: var(--glass-card);
+      backdrop-filter: blur(34px) saturate(190%);
+      -webkit-backdrop-filter: blur(34px) saturate(190%);
+      border: 1px solid var(--border-hover);
+      border-radius: var(--radius-xl);
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55), var(--inner-highlight);
+      overflow: hidden;
+      transform: scale(0.96) translateY(-12px);
+      transition: transform var(--duration-normal) var(--ease-spring);
+    }
+
+    .modal-overlay.active .cmd-palette-sheet {
+      transform: scale(1) translateY(0);
+    }
+
+    .cmd-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cmd-search-icon {
+      color: var(--text-tertiary);
+      flex-shrink: 0;
+    }
+
+    .cmd-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: var(--font-sans);
+      font-size: 1.05rem;
+      color: var(--text-primary);
+    }
+
+    .cmd-input::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    .cmd-esc-badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-tertiary);
+    }
+
+    .cmd-list {
+      max-height: 380px;
+      overflow-y: auto;
+      padding: 10px 12px;
+      overscroll-behavior: contain;
+    }
+
+    .cmd-group-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-tertiary);
+      padding: 8px 10px 4px 10px;
+    }
+
+    .cmd-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      transition: all var(--duration-fast) var(--ease-spring);
+    }
+
+    .cmd-item:hover,
+    .cmd-item.selected {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .cmd-item.selected {
+      border-left: 2px solid var(--accent);
+      padding-left: 10px;
+    }
+
+    .cmd-item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cmd-item-icon {
+      font-size: 1rem;
+      width: 20px;
+      text-align: center;
+    }
+
+    .cmd-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+      padding: 10px 20px;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      font-size: 0.72rem;
+      color: var(--text-tertiary);
+    }
+
+    .cmd-footer kbd {
+      font-family: var(--font-mono);
+      padding: 1px 4px;
+      border-radius: 3px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+    }
+
+    /* ==========================================================================
+       FORMULA 1 STARTING GRID MODAL
+       ========================================================================== */
+    .f1-modal-overlay {
+      background: rgba(0, 0, 0, 0.85);
+    }
+
+    .f1-modal-sheet {
+      background: #0d0f14;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-xl);
+      max-width: 580px;
+      width: 100%;
+      padding: 32px 28px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7), 0 0 50px rgba(225, 6, 0, 0.2);
+      position: relative;
+      text-align: center;
+      transform: scale(0.95);
+      transition: transform var(--duration-normal) var(--ease-spring);
+    }
+
+    .modal-overlay.active .f1-modal-sheet {
+      transform: scale(1);
+    }
+
+    .f1-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #e10600;
+      background: rgba(225, 6, 0, 0.14);
+      border: 1px solid rgba(225, 6, 0, 0.35);
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      margin-bottom: 10px;
+    }
+
+    .f1-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #f5f5f7;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .f1-subtitle {
+      font-size: 0.88rem;
+      color: #a1a1a6;
+      max-width: 440px;
+      margin: 0 auto 24px auto;
+      line-height: 1.45;
+    }
+
+    .f1-gantry {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      background: #151820;
+      border: 2px solid #232734;
+      border-radius: var(--radius-lg);
+      padding: 22px 16px;
+      margin-bottom: 24px;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);
+    }
+
+    .f1-light-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 8px 6px;
+      background: #090a0d;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .f1-light {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #252830;
+      border: 2px solid #181b22;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+      transition: background 60ms ease, box-shadow 60ms ease;
+    }
+
+    .f1-light.active-red {
+      background: #ff1801 !important;
+      border-color: #ff4b3e !important;
+      box-shadow: 0 0 24px #ff1801, 0 0 45px rgba(255, 24, 1, 0.8), inset 0 0 10px #ffffff !important;
+    }
+
+    .f1-tap-zone {
+      background: rgba(255, 255, 255, 0.04);
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-lg);
+      padding: 28px 16px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      outline: none;
+      transition: all var(--duration-fast) var(--ease-spring);
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .f1-tap-zone:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .f1-tap-zone:active {
+      transform: scale(0.98);
+    }
+
+    .f1-status-msg {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #f5f5f7;
+    }
+
+    .f1-result-display {
+      margin-top: 8px;
+    }
+
+    .f1-time-val {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #f5f5f7;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .f1-tier-badge {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      background: rgba(48, 209, 88, 0.18);
+      color: #30d158;
+      margin-bottom: 6px;
+    }
+
+    .f1-tier-comment {
+      font-size: 0.86rem;
+      color: #a1a1a6;
+    }
+
+    .f1-footer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.84rem;
+      color: #86868b;
+    }
+
+    .f1-best-score strong {
+      color: #f5f5f7;
+    }
+
+    .f1-btn {
+      padding: 8px 18px;
+      font-size: 0.84rem;
+    }
+
+    /* ==========================================================================
+       KONAMI TOAST & CONFETTI CELEBRATION
+       ========================================================================== */
+    .konami-toast {
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, rgba(225, 6, 0, 0.96), rgba(255, 42, 30, 0.96));
+      color: #ffffff;
+      padding: 14px 24px;
+      border-radius: var(--radius-full);
+      box-shadow: 0 12px 36px rgba(225, 6, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 9999;
+      pointer-events: none;
+      transition: top 440ms var(--ease-spring);
+    }
+
+    .konami-toast.show {
+      top: 24px;
+    }
+
+    .konami-toast-icon {
+      font-size: 1.4rem;
+    }
+
+    .konami-toast-text {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .konami-toast-text strong {
+      font-size: 0.92rem;
+      letter-spacing: 0.02em;
+    }
+
+    .konami-toast-text span {
+      font-size: 0.78rem;
+      opacity: 0.92;
+    }
+
+    .celebration-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    @media (max-width: 768px) {
+      .nav-cmd-btn {
+        display: none;
+      }
+      .display-popover {
+        right: 16px;
+        left: 16px;
+        width: auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-actions {
+        gap: 6px;
+      }
+      .btn-resume span {
+        display: none;
+      }
+      .btn-resume {
+        padding: 8px 10px;
+      }
+      .f1-gantry {
+        gap: 8px;
+        padding: 16px 10px;
+      }
+      .f1-light {
+        width: 24px;
+        height: 24px;
+      }
+      .f1-time-val {
+        font-size: 2.2rem;
+      }
+    }
+
+    /* ==========================================================================
        ACCESSIBILITY: PREFERS-REDUCED-MOTION (Apple Design Skill)
        ========================================================================== */
     @media (prefers-reduced-motion: reduce) {
@@ -1908,6 +2829,28 @@
       </ul>
 
       <div class="nav-actions">
+        <button id="commandPaletteBtn" class="nav-cmd-btn" aria-label="Open Command Palette (⌘K)" title="Command Palette (⌘K)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <kbd>⌘K</kbd>
+        </button>
+
+        <button id="displayConfigBtn" class="nav-icon-btn" aria-label="Customize Display & Glass Material" title="Display & Glass Settings">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14"></line>
+            <line x1="4" y1="10" x2="4" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12" y2="3"></line>
+            <line x1="20" y1="21" x2="20" y2="16"></line>
+            <line x1="20" y1="12" x2="20" y2="3"></line>
+            <line x1="1" y1="14" x2="7" y2="14"></line>
+            <line x1="9" y1="8" x2="15" y2="8"></line>
+            <line x1="17" y1="16" x2="23" y2="16"></line>
+          </svg>
+        </button>
+
         <button id="themeToggleBtn" class="theme-toggle" aria-label="Toggle Dark and Light Mode" title="Toggle Theme">
           <!-- Sun SVG (Dark Mode active) -->
           <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1946,7 +2889,99 @@
           </svg>
         </button>
       </div>
+
+      <!-- Fluid Reading Scroll Progress Indicator -->
+      <div id="scrollProgressBar" class="nav-scroll-progress" aria-hidden="true"></div>
     </nav>
+
+    <!-- Interactive Liquid Glass & Display Configurator -->
+    <div id="displayConfigPopover" class="display-popover" role="dialog" aria-label="Display and Liquid Glass Customizer">
+      <div class="display-popover-header">
+        <div class="display-popover-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14"></line>
+            <line x1="4" y1="10" x2="4" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12" y2="3"></line>
+            <line x1="20" y1="21" x2="20" y2="16"></line>
+            <line x1="20" y1="12" x2="20" y2="3"></line>
+            <line x1="1" y1="14" x2="7" y2="14"></line>
+            <line x1="9" y1="8" x2="15" y2="8"></line>
+            <line x1="17" y1="16" x2="23" y2="16"></line>
+          </svg>
+          <span>Display & Liquid Glass</span>
+        </div>
+        <button class="display-popover-close" id="closeDisplayConfigBtn" aria-label="Close settings">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="display-popover-section">
+        <div class="display-popover-label">Glass Material Preset</div>
+        <div class="glass-segmented-control" role="radiogroup" aria-label="Glass Material Preset">
+          <button class="glass-segment active" data-glass-val="liquid" role="radio" aria-checked="true">
+            <span>Liquid</span>
+          </button>
+          <button class="glass-segment" data-glass-val="clear" role="radio" aria-checked="false">
+            <span>Clear</span>
+          </button>
+          <button class="glass-segment" data-glass-val="ceramic" role="radio" aria-checked="false">
+            <span>Ceramic</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="display-popover-section">
+        <div class="display-popover-label">Accent Theme</div>
+        <div class="accent-palette-group" role="radiogroup" aria-label="Accent Color Palette">
+          <button class="accent-swatch active" data-accent-val="f1" title="Formula 1 Racing Red" style="--swatch-color:#e10600;" role="radio" aria-checked="true">
+            <span class="swatch-check">✓</span>
+          </button>
+          <button class="accent-swatch" data-accent-val="blue" title="Apple Tech Blue" style="--swatch-color:#0071e3;" role="radio" aria-checked="false">
+            <span class="swatch-check">✓</span>
+          </button>
+          <button class="accent-swatch" data-accent-val="green" title="Aston Racing Green" style="--swatch-color:#008f75;" role="radio" aria-checked="false">
+            <span class="swatch-check">✓</span>
+          </button>
+          <button class="accent-swatch" data-accent-val="purple" title="Monaco Purple" style="--swatch-color:#892cdc;" role="radio" aria-checked="false">
+            <span class="swatch-check">✓</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="display-popover-section">
+        <div class="display-toggle-row">
+          <div class="display-toggle-info">
+            <span class="display-toggle-title">Card Spotlight</span>
+            <span class="display-toggle-desc">Dynamic cursor specular illumination</span>
+          </div>
+          <label class="apple-switch" aria-label="Toggle dynamic card spotlight">
+            <input type="checkbox" id="spotlightToggleInput" checked>
+            <span class="apple-switch-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="display-popover-section">
+        <div class="display-toggle-row">
+          <div class="display-toggle-info">
+            <span class="display-toggle-title">Tactile Audio</span>
+            <span class="display-toggle-desc">Synthesized click feedback</span>
+          </div>
+          <label class="apple-switch" aria-label="Toggle tactile audio feedback">
+            <input type="checkbox" id="audioToggleInput">
+            <span class="apple-switch-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="display-popover-footer">
+        <button class="btn-display-reset" id="resetDisplayConfigBtn">Restore Defaults</button>
+      </div>
+    </div>
   </header>
 
   <!-- Mobile Drawer Menu -->
@@ -3254,6 +4289,107 @@
   </div>
 
   <!-- ==========================================================================
+       SPOTLIGHT COMMAND PALETTE MODAL (Cmd+K / Ctrl+K)
+       ========================================================================== -->
+  <div id="commandPaletteModal" class="modal-overlay" onclick="handleModalBackdropClick(event, 'commandPaletteModal')" role="dialog" aria-modal="true" aria-label="Command Palette">
+    <div class="cmd-palette-sheet">
+      <div class="cmd-input-wrapper">
+        <svg class="cmd-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="cmdPaletteInput" class="cmd-input" placeholder="Type a section, action, or easter egg..." autocomplete="off" spellcheck="false">
+        <kbd class="cmd-esc-badge">ESC</kbd>
+      </div>
+      <div class="cmd-list" id="cmdPaletteList" role="listbox">
+        <!-- Dynamically rendered and filtered via JS -->
+      </div>
+      <div class="cmd-footer">
+        <span><kbd>↑</kbd> <kbd>↓</kbd> navigate</span>
+        <span><kbd>↵</kbd> select</span>
+        <span><kbd>esc</kbd> close</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       FORMULA 1™ STARTING LIGHTS REACTION TEST MODAL
+       ========================================================================== -->
+  <div id="f1RaceModal" class="modal-overlay f1-modal-overlay" onclick="handleModalBackdropClick(event, 'f1RaceModal')" role="dialog" aria-modal="true" aria-label="Formula 1 Reaction Test">
+    <div class="f1-modal-sheet" id="f1ModalCard">
+      <button class="modal-close-btn" onclick="closeF1RaceModal()" aria-label="Close F1 challenge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="f1-header">
+        <span class="f1-badge">FORMULA 1™ STARTING GRID</span>
+        <h3 class="f1-title">Reaction Time Challenge</h3>
+        <p class="f1-subtitle">Wait for all 5 red lights to turn on. When the lights go OUT, tap or press SPACE immediately!</p>
+      </div>
+
+      <!-- FIA 5-Light Gantry -->
+      <div class="f1-gantry" id="f1Gantry">
+        <div class="f1-light-col" data-col="0">
+          <div class="f1-light"></div>
+          <div class="f1-light"></div>
+        </div>
+        <div class="f1-light-col" data-col="1">
+          <div class="f1-light"></div>
+          <div class="f1-light"></div>
+        </div>
+        <div class="f1-light-col" data-col="2">
+          <div class="f1-light"></div>
+          <div class="f1-light"></div>
+        </div>
+        <div class="f1-light-col" data-col="3">
+          <div class="f1-light"></div>
+          <div class="f1-light"></div>
+        </div>
+        <div class="f1-light-col" data-col="4">
+          <div class="f1-light"></div>
+          <div class="f1-light"></div>
+        </div>
+      </div>
+
+      <!-- Interactive Tap Pad / Status Zone -->
+      <div class="f1-tap-zone" id="f1TapZone" tabindex="0" role="button" aria-label="Tap here when lights go out">
+        <div class="f1-status-msg" id="f1StatusMsg">TAP HERE OR PRESS SPACE TO START</div>
+        <div class="f1-result-display" id="f1ResultDisplay" style="display:none;">
+          <div class="f1-time-val" id="f1TimeVal">0 ms</div>
+          <div class="f1-tier-badge" id="f1TierBadge">VERSTAPPEN TIER</div>
+          <div class="f1-tier-comment" id="f1TierComment">Incredible Grand Prix launch!</div>
+        </div>
+      </div>
+
+      <div class="f1-footer-bar">
+        <div class="f1-best-score">
+          <span>Personal Best: </span>
+          <strong id="f1BestScoreText">-- ms</strong>
+        </div>
+        <div class="f1-actions">
+          <button id="f1RestartBtn" class="btn-primary f1-btn" style="display:none;" onclick="startRaceCountdown()">Race Again 🔄</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       KONAMI CELEBRATION TOAST & CONFETTI CANVAS
+       ========================================================================== -->
+  <div id="konamiToast" class="konami-toast" role="status">
+    <span class="konami-toast-icon">🏎️</span>
+    <div class="konami-toast-text">
+      <strong>WORLD CHAMPION UNLOCKED!</strong>
+      <span>Pole Position: Saketh Anne • Fastest Lap Recorded!</span>
+    </div>
+  </div>
+
+  <canvas id="celebrationCanvas" class="celebration-canvas" aria-hidden="true"></canvas>
+
+  <!-- ==========================================================================
        VANILLA JAVASCRIPT: THEME, MOTION, MODALS & INTERACTIONS
        Zero dependencies; Apple spring physics and instant latency response.
        ========================================================================== -->
@@ -3542,6 +4678,734 @@
     // Update Year
     const yearSpan = document.getElementById('yearSpan');
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+
+    // ==========================================================================
+    // WEB AUDIO API SYNTHESIZER (Tactile & Easter Egg Soundscapes)
+    // ==========================================================================
+    let audioCtx = null;
+    let soundEnabled = localStorage.getItem('portfolio-audio') === 'true';
+
+    function playTactileFeedback(type = 'click') {
+      if (!soundEnabled && type === 'click') return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+
+        if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(820, now);
+          osc.frequency.exponentialRampToValueAtTime(320, now + 0.015);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.015);
+          osc.start(now);
+          osc.stop(now + 0.015);
+        } else if (type === 'beep') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(440, now);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'start') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(880, now);
+          osc.frequency.exponentialRampToValueAtTime(1320, now + 0.16);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+          osc.start(now);
+          osc.stop(now + 0.2);
+        } else if (type === 'buzz') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(160, now);
+          gain.gain.setValueAtTime(0.09, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.start(now);
+          osc.stop(now + 0.18);
+        } else if (type === 'celebrate') {
+          const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 chord
+          notes.forEach((freq, idx) => {
+            const chordOsc = audioCtx.createOscillator();
+            const chordGain = audioCtx.createGain();
+            chordOsc.connect(chordGain);
+            chordGain.connect(audioCtx.destination);
+            chordOsc.type = 'sine';
+            chordOsc.frequency.setValueAtTime(freq, now + idx * 0.06);
+            chordGain.gain.setValueAtTime(0.07, now + idx * 0.06);
+            chordGain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.06 + 0.35);
+            chordOsc.start(now + idx * 0.06);
+            chordOsc.stop(now + idx * 0.06 + 0.35);
+          });
+        }
+      } catch (e) {
+        // AudioContext disabled or blocked by policy
+      }
+    }
+
+    // Attach click sound to interactive buttons
+    document.querySelectorAll('button, .nav-link, .tab-pill, .btn-primary, .btn-secondary').forEach(btn => {
+      btn.addEventListener('click', () => playTactileFeedback('click'), { passive: true });
+    });
+
+    // ==========================================================================
+    // LIQUID GLASS & DISPLAY CONFIGURATION CONTROLLER
+    // ==========================================================================
+    const displayConfigBtn = document.getElementById('displayConfigBtn');
+    const displayConfigPopover = document.getElementById('displayConfigPopover');
+    const closeDisplayConfigBtn = document.getElementById('closeDisplayConfigBtn');
+    const spotlightToggleInput = document.getElementById('spotlightToggleInput');
+    const audioToggleInput = document.getElementById('audioToggleInput');
+    const resetDisplayConfigBtn = document.getElementById('resetDisplayConfigBtn');
+
+    function toggleDisplayPopover() {
+      displayConfigPopover.classList.toggle('open');
+      playTactileFeedback('click');
+    }
+
+    function closeDisplayPopover() {
+      displayConfigPopover.classList.remove('open');
+    }
+
+    if (displayConfigBtn) displayConfigBtn.addEventListener('click', toggleDisplayPopover);
+    if (closeDisplayConfigBtn) closeDisplayConfigBtn.addEventListener('click', closeDisplayPopover);
+
+    // Glass Material Selector
+    function setGlassStyle(style, playSound = true) {
+      document.documentElement.setAttribute('data-glass', style);
+      localStorage.setItem('portfolio-glass', style);
+      document.querySelectorAll('.glass-segment').forEach(seg => {
+        const isActive = seg.getAttribute('data-glass-val') === style;
+        seg.classList.toggle('active', isActive);
+        seg.setAttribute('aria-checked', isActive ? 'true' : 'false');
+      });
+      if (playSound) playTactileFeedback('click');
+    }
+
+    document.querySelectorAll('.glass-segment').forEach(seg => {
+      seg.addEventListener('click', () => {
+        setGlassStyle(seg.getAttribute('data-glass-val'));
+      });
+    });
+
+    // Accent Palette Selector
+    function setAccentColor(accent, playSound = true) {
+      if (accent === 'default') {
+        document.documentElement.removeAttribute('data-accent');
+        localStorage.removeItem('portfolio-accent');
+      } else {
+        document.documentElement.setAttribute('data-accent', accent);
+        localStorage.setItem('portfolio-accent', accent);
+      }
+      document.querySelectorAll('.accent-swatch').forEach(sw => {
+        const isSelected = sw.getAttribute('data-accent-val') === accent;
+        sw.classList.toggle('active', isSelected);
+        sw.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+      });
+      if (playSound) playTactileFeedback('click');
+    }
+
+    document.querySelectorAll('.accent-swatch').forEach(sw => {
+      sw.addEventListener('click', () => {
+        setAccentColor(sw.getAttribute('data-accent-val'));
+      });
+    });
+
+    // Dynamic Card Spotlight Toggle
+    function setSpotlight(enabled, playSound = true) {
+      document.documentElement.classList.toggle('card-spotlight-enabled', enabled);
+      localStorage.setItem('portfolio-spotlight', enabled ? 'true' : 'false');
+      if (spotlightToggleInput) spotlightToggleInput.checked = enabled;
+      if (playSound) playTactileFeedback('click');
+    }
+
+    if (spotlightToggleInput) {
+      spotlightToggleInput.addEventListener('change', (e) => {
+        setSpotlight(e.target.checked);
+      });
+    }
+
+    // Audio Clicks Toggle
+    function setAudioEnabled(enabled, playSound = true) {
+      soundEnabled = enabled;
+      localStorage.setItem('portfolio-audio', enabled ? 'true' : 'false');
+      if (audioToggleInput) audioToggleInput.checked = enabled;
+      if (playSound) playTactileFeedback('click');
+    }
+
+    if (audioToggleInput) {
+      audioToggleInput.addEventListener('change', (e) => {
+        setAudioEnabled(e.target.checked);
+      });
+    }
+
+    // Restore Defaults
+    function resetDisplaySettings() {
+      setGlassStyle('liquid', false);
+      setAccentColor('default', false);
+      setSpotlight(true, false);
+      setAudioEnabled(false, false);
+      playTactileFeedback('click');
+    }
+
+    if (resetDisplayConfigBtn) resetDisplayConfigBtn.addEventListener('click', resetDisplaySettings);
+
+    // Initialize Saved Settings
+    const savedGlass = localStorage.getItem('portfolio-glass') || 'liquid';
+    setGlassStyle(savedGlass, false);
+
+    const savedAccent = localStorage.getItem('portfolio-accent');
+    if (savedAccent) {
+      setAccentColor(savedAccent, false);
+    } else {
+      // Sync swatch selection with theme
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const defaultVal = currentTheme === 'light' ? 'blue' : 'f1';
+      document.querySelectorAll('.accent-swatch').forEach(sw => {
+        sw.classList.toggle('active', sw.getAttribute('data-accent-val') === defaultVal);
+      });
+    }
+
+    const savedSpotlight = localStorage.getItem('portfolio-spotlight');
+    setSpotlight(savedSpotlight !== 'false', false);
+
+    const savedAudio = localStorage.getItem('portfolio-audio');
+    setAudioEnabled(savedAudio === 'true', false);
+
+    // ==========================================================================
+    // DYNAMIC CARD SPECULAR CURSOR SPOTLIGHT TRACKING
+    // ==========================================================================
+    const spotlightCards = document.querySelectorAll(
+      '.experience-card, .pub-card, .project-card, .testimonial-card, .edu-card, .skill-card, .credly-badge-card, .contact-card'
+    );
+
+    spotlightCards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        if (!document.documentElement.classList.contains('card-spotlight-enabled')) return;
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+      }, { passive: true });
+    });
+
+    // ==========================================================================
+    // SCROLL PROGRESS BAR & ACTIVE SCROLLSPY (Apple Design Craft)
+    // ==========================================================================
+    const scrollProgressBar = document.getElementById('scrollProgressBar');
+    function updateScrollProgress() {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
+      if (scrollProgressBar) {
+        scrollProgressBar.style.transform = `scaleX(${progress})`;
+      }
+    }
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+
+    // Section Scrollspy
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links .nav-link');
+
+    const scrollSpyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            link.classList.toggle('active', href === `#${id}`);
+          });
+        }
+      });
+    }, { rootMargin: '-25% 0px -65% 0px' });
+
+    sections.forEach(sec => scrollSpyObserver.observe(sec));
+
+    // ==========================================================================
+    // SPOTLIGHT COMMAND PALETTE CONTROLLER (Cmd+K / Ctrl+K)
+    // ==========================================================================
+    const commandPaletteBtn = document.getElementById('commandPaletteBtn');
+    const commandPaletteModal = document.getElementById('commandPaletteModal');
+    const cmdPaletteInput = document.getElementById('cmdPaletteInput');
+    const cmdPaletteList = document.getElementById('cmdPaletteList');
+
+    const cmdItems = [
+      { id: 'nav-about', category: 'Navigation', title: 'About Sai Venkata Naga Saketh Anne', icon: '👤', action: () => scrollToId('about') },
+      { id: 'nav-exp', category: 'Navigation', title: 'Work Experience (T-Mobile, USC, Linux Foundation, GE)', icon: '💼', action: () => scrollToId('experience') },
+      { id: 'nav-pub', category: 'Navigation', title: 'Research & Papers (IEEE Xplore, Springer, IJARESM)', icon: '📚', action: () => scrollToId('publications') },
+      { id: 'nav-proj', category: 'Navigation', title: 'Featured Engineering Projects', icon: '🚀', action: () => scrollToId('projects') },
+      { id: 'nav-skills', category: 'Navigation', title: 'Technical Skills Matrix', icon: '⚡', action: () => scrollToId('skills') },
+      { id: 'nav-test', category: 'Navigation', title: 'Executive Endorsements & Recommendations', icon: '💬', action: () => scrollToId('testimonials') },
+      { id: 'nav-edu', category: 'Navigation', title: 'Education & Credly Verified Badges', icon: '🎓', action: () => scrollToId('education') },
+      { id: 'act-resume', category: 'Quick Actions', title: 'View Full Curriculum Vitae & Resume Sheet', icon: '📄', action: () => openResumeModal() },
+      { id: 'act-email', category: 'Quick Actions', title: 'Copy Email Address (asvn.saketh@gmail.com)', icon: '📋', action: () => copyEmailToClipboard() },
+      { id: 'act-theme', category: 'Display & Glass', title: 'Toggle Dark / Light Mode', icon: '🌓', action: () => toggleThemeSmoothly() },
+      { id: 'glass-liquid', category: 'Display & Glass', title: 'Glass Material: Liquid Glass (Default)', icon: '💧', action: () => setGlassStyle('liquid') },
+      { id: 'glass-clear', category: 'Display & Glass', title: 'Glass Material: Ultra Clear', icon: '🔍', action: () => setGlassStyle('clear') },
+      { id: 'glass-ceramic', category: 'Display & Glass', title: 'Glass Material: Solid Ceramic', icon: '🏛️', action: () => setGlassStyle('ceramic') },
+      { id: 'col-f1', category: 'Accent Colors', title: 'Accent: Formula 1 Racing Red', icon: '🔴', action: () => setAccentColor('f1') },
+      { id: 'col-blue', category: 'Accent Colors', title: 'Accent: Apple Tech Blue', icon: '🔵', action: () => setAccentColor('blue') },
+      { id: 'col-green', category: 'Accent Colors', title: 'Accent: Aston Racing Green', icon: '🟢', action: () => setAccentColor('green') },
+      { id: 'col-purple', category: 'Accent Colors', title: 'Accent: Monaco Purple', icon: '🟣', action: () => setAccentColor('purple') },
+      { id: 'f1-race', category: 'Easter Egg', title: '🏎️ Formula 1™ Starting Lights Reaction Challenge', icon: '🏁', action: () => launchF1RaceModal() },
+      { id: 'konami-code', category: 'Easter Egg', title: '🏆 Podium Confetti Celebration', icon: '🎉', action: () => triggerCelebration() },
+      { id: 'ext-gh', category: 'External Links', title: 'Open GitHub Profile (Sakethanne)', icon: '🐙', action: () => window.open('https://github.com/Sakethanne', '_blank') },
+      { id: 'ext-in', category: 'External Links', title: 'Open LinkedIn Profile (sakethanne)', icon: '💼', action: () => window.open('https://www.linkedin.com/in/sakethanne/', '_blank') }
+    ];
+
+    let currentSelectedCmdIndex = 0;
+    let filteredCmdItems = [...cmdItems];
+
+    function renderCommandList(items) {
+      filteredCmdItems = items;
+      currentSelectedCmdIndex = 0;
+      if (items.length === 0) {
+        cmdPaletteList.innerHTML = `<div style="padding:24px; text-align:center; color:var(--text-tertiary); font-size:0.86rem;">No commands or sections matching your search.</div>`;
+        return;
+      }
+
+      let html = '';
+      let currentCategory = '';
+      items.forEach((item, index) => {
+        if (item.category !== currentCategory) {
+          currentCategory = item.category;
+          html += `<div class="cmd-group-title">${currentCategory}</div>`;
+        }
+        const isSelected = index === currentSelectedCmdIndex;
+        html += `
+          <div class="cmd-item ${isSelected ? 'selected' : ''}" data-cmd-idx="${index}" onclick="executeCommand(${index})" role="option" aria-selected="${isSelected ? 'true' : 'false'}">
+            <div class="cmd-item-left">
+              <span class="cmd-item-icon">${item.icon}</span>
+              <span>${item.title}</span>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </div>
+        `;
+      });
+      cmdPaletteList.innerHTML = html;
+    }
+
+    function executeCommand(index) {
+      const item = filteredCmdItems[index];
+      if (item && item.action) {
+        closeCommandPalette();
+        item.action();
+      }
+    }
+
+    function scrollToId(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function openCommandPalette() {
+      commandPaletteModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      cmdPaletteInput.value = '';
+      renderCommandList(cmdItems);
+      setTimeout(() => cmdPaletteInput.focus(), 50);
+      playTactileFeedback('click');
+    }
+
+    function closeCommandPalette() {
+      commandPaletteModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function toggleCommandPalette() {
+      if (commandPaletteModal.classList.contains('active')) {
+        closeCommandPalette();
+      } else {
+        openCommandPalette();
+      }
+    }
+
+    if (commandPaletteBtn) commandPaletteBtn.addEventListener('click', toggleCommandPalette);
+
+    cmdPaletteInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      if (!query) {
+        renderCommandList(cmdItems);
+      } else {
+        const filtered = cmdItems.filter(item =>
+          item.title.toLowerCase().includes(query) ||
+          item.category.toLowerCase().includes(query)
+        );
+        renderCommandList(filtered);
+      }
+    });
+
+    cmdPaletteInput.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (filteredCmdItems.length > 0) {
+          currentSelectedCmdIndex = (currentSelectedCmdIndex + 1) % filteredCmdItems.length;
+          updateCmdSelectionHighlight();
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (filteredCmdItems.length > 0) {
+          currentSelectedCmdIndex = (currentSelectedCmdIndex - 1 + filteredCmdItems.length) % filteredCmdItems.length;
+          updateCmdSelectionHighlight();
+        }
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        executeCommand(currentSelectedCmdIndex);
+      }
+    });
+
+    function updateCmdSelectionHighlight() {
+      const itemElements = cmdPaletteList.querySelectorAll('.cmd-item');
+      itemElements.forEach((el, idx) => {
+        const isSelected = idx === currentSelectedCmdIndex;
+        el.classList.toggle('selected', isSelected);
+        el.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+        if (isSelected) {
+          el.scrollIntoView({ block: 'nearest' });
+        }
+      });
+    }
+
+    // ==========================================================================
+    // FORMULA 1™ STARTING LIGHTS REACTION TEST GAME
+    // ==========================================================================
+    const f1RaceModal = document.getElementById('f1RaceModal');
+    const f1TapZone = document.getElementById('f1TapZone');
+    const f1StatusMsg = document.getElementById('f1StatusMsg');
+    const f1ResultDisplay = document.getElementById('f1ResultDisplay');
+    const f1TimeVal = document.getElementById('f1TimeVal');
+    const f1TierBadge = document.getElementById('f1TierBadge');
+    const f1TierComment = document.getElementById('f1TierComment');
+    const f1RestartBtn = document.getElementById('f1RestartBtn');
+    const f1BestScoreText = document.getElementById('f1BestScoreText');
+
+    let f1State = 'idle'; // idle | counting | holding | go | false-start | finished
+    let f1StartTime = 0;
+    let f1Timeouts = [];
+
+    function clearF1Timeouts() {
+      f1Timeouts.forEach(t => clearTimeout(t));
+      f1Timeouts = [];
+    }
+
+    function setF1Lights(count) {
+      const cols = document.querySelectorAll('.f1-light-col');
+      cols.forEach((col, idx) => {
+        const lights = col.querySelectorAll('.f1-light');
+        lights.forEach(l => {
+          if (idx < count) {
+            l.classList.add('active-red');
+          } else {
+            l.classList.remove('active-red');
+          }
+        });
+      });
+    }
+
+    function resetF1Game() {
+      clearF1Timeouts();
+      f1State = 'idle';
+      setF1Lights(0);
+      f1StatusMsg.textContent = 'TAP HERE OR PRESS SPACE TO START';
+      f1ResultDisplay.style.display = 'none';
+      f1RestartBtn.style.display = 'none';
+      const best = localStorage.getItem('f1-best-reaction');
+      if (f1BestScoreText) f1BestScoreText.textContent = best ? `${best} ms` : '-- ms';
+    }
+
+    function launchF1RaceModal() {
+      closeCommandPalette();
+      closeDisplayPopover();
+      resetF1Game();
+      f1RaceModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => f1TapZone.focus(), 60);
+      playTactileFeedback('beep');
+    }
+
+    function closeF1RaceModal() {
+      clearF1Timeouts();
+      f1RaceModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function startRaceCountdown() {
+      clearF1Timeouts();
+      f1State = 'counting';
+      setF1Lights(0);
+      f1StatusMsg.textContent = 'STAND BY FOR STARTING LIGHTS...';
+      f1ResultDisplay.style.display = 'none';
+      f1RestartBtn.style.display = 'none';
+
+      // 5 Red Lights Sequence
+      [1, 2, 3, 4, 5].forEach((lightNum, idx) => {
+        f1Timeouts.push(setTimeout(() => {
+          setF1Lights(lightNum);
+          playTactileFeedback('beep');
+          if (lightNum === 5) {
+            f1State = 'holding';
+            f1StatusMsg.textContent = 'WAIT FOR LIGHTS OUT...';
+            // Randomized Hold (1.0s to 2.4s)
+            const holdDelay = 1000 + Math.random() * 1400;
+            f1Timeouts.push(setTimeout(() => {
+              // LIGHTS OUT!
+              setF1Lights(0);
+              f1State = 'go';
+              f1StartTime = performance.now();
+              playTactileFeedback('start');
+              f1StatusMsg.innerHTML = '<span style="color:#30d158; font-weight:800; font-size:1.15rem; letter-spacing:0.04em;">🏎️ LIGHTS OUT AND AWAY WE GO! 🏁</span>';
+            }, holdDelay));
+          }
+        }, (idx + 1) * 950));
+      });
+    }
+
+    function handleRaceInteraction() {
+      if (f1State === 'idle') {
+        startRaceCountdown();
+      } else if (f1State === 'counting' || f1State === 'holding') {
+        // Jump start penalty!
+        clearF1Timeouts();
+        setF1Lights(5);
+        f1State = 'false-start';
+        playTactileFeedback('buzz');
+        f1StatusMsg.innerHTML = '<span style="color:#ff453a; font-weight:800; font-size:1.05rem;">⚠️ JUMP START! False Start Penalty!</span>';
+        f1ResultDisplay.style.display = 'block';
+        f1TimeVal.textContent = 'PENALTY';
+        f1TimeVal.style.color = '#ff453a';
+        f1TierBadge.textContent = '5-SECOND TIME PENALTY';
+        f1TierBadge.style.background = 'rgba(255, 69, 58, 0.2)';
+        f1TierBadge.style.color = '#ff453a';
+        f1TierComment.textContent = 'Charlie Whiting / FIA Race Control is investigating. You tapped before lights out!';
+        f1RestartBtn.style.display = 'inline-flex';
+      } else if (f1State === 'go') {
+        const reactionTime = Math.round(performance.now() - f1StartTime);
+        f1State = 'finished';
+        playTactileFeedback('click');
+        f1StatusMsg.textContent = 'RACE START COMPLETE!';
+        f1ResultDisplay.style.display = 'block';
+        f1TimeVal.textContent = `${reactionTime} ms`;
+        f1TimeVal.style.color = '#f5f5f7';
+
+        // Best Record Update
+        let best = localStorage.getItem('f1-best-reaction');
+        if (!best || reactionTime < parseInt(best, 10)) {
+          best = reactionTime;
+          localStorage.setItem('f1-best-reaction', best);
+        }
+        if (f1BestScoreText) f1BestScoreText.textContent = `${best} ms`;
+
+        // Tier Grading
+        if (reactionTime < 210) {
+          f1TierBadge.textContent = '🏆 VERSTAPPEN / HAMILTON TIER';
+          f1TierBadge.style.background = 'rgba(255, 214, 10, 0.2)';
+          f1TierBadge.style.color = '#ffd60a';
+          f1TierComment.textContent = 'Godlike reaction speed! You would claim the holeshot into Turn 1 at Monza!';
+          triggerCelebration();
+        } else if (reactionTime < 260) {
+          f1TierBadge.textContent = '🔥 FORMULA 1 DRIVER TIER';
+          f1TierBadge.style.background = 'rgba(48, 209, 88, 0.2)';
+          f1TierBadge.style.color = '#30d158';
+          f1TierComment.textContent = 'Elite Grand Prix launch reflex! Ready for the front row of the grid.';
+          triggerCelebration();
+        } else if (reactionTime < 310) {
+          f1TierBadge.textContent = '🏎️ PODIUM CONTENDER TIER';
+          f1TierBadge.style.background = 'rgba(10, 132, 255, 0.2)';
+          f1TierBadge.style.color = '#0a84ff';
+          f1TierComment.textContent = 'Outstanding launch off the line! Solid gap created into Turn 1.';
+        } else if (reactionTime < 380) {
+          f1TierBadge.textContent = '⚡ POINTS FINISHER TIER';
+          f1TierBadge.style.background = 'rgba(191, 90, 242, 0.2)';
+          f1TierBadge.style.color = '#bf5af2';
+          f1TierComment.textContent = 'Clean and consistent start. Kept your front wing intact.';
+        } else {
+          f1TierBadge.textContent = '🚦 PITLANE STARTER';
+          f1TierBadge.style.background = 'rgba(255, 159, 10, 0.2)';
+          f1TierBadge.style.color = '#ff9f0a';
+          f1TierComment.textContent = 'A bit of wheelspin off the line! Warm up your soft Pirelli tires and try again.';
+        }
+
+        f1RestartBtn.style.display = 'inline-flex';
+      }
+    }
+
+    if (f1TapZone) {
+      f1TapZone.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        handleRaceInteraction();
+      });
+    }
+
+    // ==========================================================================
+    // KONAMI CODE LISTENER & 60FPS CONFETTI ENGINE
+    // ==========================================================================
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let konamiPos = 0;
+    let keyBuffer = '';
+
+    const konamiToast = document.getElementById('konamiToast');
+    const celebrationCanvas = document.getElementById('celebrationCanvas');
+    let confettiCtx = null;
+    let confettiParticles = [];
+    let confettiAnimId = null;
+
+    function triggerCelebration() {
+      playTactileFeedback('celebrate');
+      if (konamiToast) {
+        konamiToast.classList.add('show');
+        setTimeout(() => konamiToast.classList.remove('show'), 3600);
+      }
+      launchConfetti();
+    }
+
+    function launchConfetti() {
+      if (!celebrationCanvas) return;
+      celebrationCanvas.width = window.innerWidth;
+      celebrationCanvas.height = window.innerHeight;
+      confettiCtx = celebrationCanvas.getContext('2d');
+
+      const colors = ['#e10600', '#ffd60a', '#30d158', '#0071e3', '#ffffff', '#ff2a1e'];
+      confettiParticles = [];
+
+      for (let i = 0; i < 90; i++) {
+        confettiParticles.push({
+          x: Math.random() < 0.5 ? Math.random() * (celebrationCanvas.width * 0.25) : celebrationCanvas.width - Math.random() * (celebrationCanvas.width * 0.25),
+          y: celebrationCanvas.height + 20,
+          w: Math.random() * 8 + 6,
+          h: Math.random() * 6 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 12,
+          vy: -(Math.random() * 14 + 12),
+          rotation: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 14,
+          alpha: 1,
+          gravity: 0.38
+        });
+      }
+
+      if (confettiAnimId) cancelAnimationFrame(confettiAnimId);
+      animateConfetti();
+    }
+
+    function animateConfetti() {
+      if (!confettiCtx) return;
+      confettiCtx.clearRect(0, 0, celebrationCanvas.width, celebrationCanvas.height);
+
+      let activeCount = 0;
+      confettiParticles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += p.gravity;
+        p.rotation += p.vRot;
+        if (p.y > celebrationCanvas.height * 0.5) {
+          p.alpha -= 0.012;
+        }
+
+        if (p.alpha > 0 && p.y < celebrationCanvas.height + 50) {
+          activeCount++;
+          confettiCtx.save();
+          confettiCtx.translate(p.x, p.y);
+          confettiCtx.rotate((p.rotation * Math.PI) / 180);
+          confettiCtx.globalAlpha = Math.max(0, p.alpha);
+          confettiCtx.fillStyle = p.color;
+          confettiCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          confettiCtx.restore();
+        }
+      });
+
+      if (activeCount > 0) {
+        confettiAnimId = requestAnimationFrame(animateConfetti);
+      } else {
+        confettiCtx.clearRect(0, 0, celebrationCanvas.width, celebrationCanvas.height);
+      }
+    }
+
+    // Global Key Listener for Cmd+K, F1 game, Spacebar, ESC, and Konami
+    document.addEventListener('keydown', (e) => {
+      // Ignore if user is typing in form field unless Esc
+      const isInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName);
+      if (isInput && e.key === 'Escape') {
+        closeCommandPalette();
+        return;
+      }
+      if (isInput) return;
+
+      // 1. Command Palette Shortcut: Cmd+K / Ctrl+K
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        toggleCommandPalette();
+        return;
+      }
+
+      // 2. Spacebar in F1 Modal
+      if (e.code === 'Space' && f1RaceModal.classList.contains('active')) {
+        e.preventDefault();
+        handleRaceInteraction();
+        return;
+      }
+
+      // 3. Escape: Close open sheets
+      if (e.key === 'Escape') {
+        closeCommandPalette();
+        closeDisplayPopover();
+        closeF1RaceModal();
+        closeProjectModal();
+        closeResumeModal();
+        closeMobileDrawer();
+        return;
+      }
+
+      // 4. Konami Code Progression
+      if (e.key.toLowerCase() === konamiCode[konamiPos].toLowerCase()) {
+        konamiPos++;
+        if (konamiPos === konamiCode.length) {
+          triggerCelebration();
+          konamiPos = 0;
+        }
+      } else {
+        konamiPos = 0;
+      }
+
+      // 5. Letter Buffer for 'f1' or 'race'
+      keyBuffer += e.key.toLowerCase();
+      if (keyBuffer.length > 8) keyBuffer = keyBuffer.slice(-8);
+      if (keyBuffer.endsWith('f1') || keyBuffer.endsWith('race')) {
+        keyBuffer = '';
+        launchF1RaceModal();
+      }
+    });
+
+    // Close popovers on click outside
+    document.addEventListener('click', (e) => {
+      if (displayConfigPopover && !displayConfigPopover.contains(e.target) && !displayConfigBtn.contains(e.target)) {
+        closeDisplayPopover();
+      }
+    });
+
+    // ==========================================================================
+    // DEVELOPER CONSOLE EASTER EGG
+    // ==========================================================================
+    console.log(
+      '%c🏎️ SAKETH ANNE | PORTFOLIO v2.0%c\n\n' +
+      'Engineering high-throughput distributed systems & predictive cloud FinOps automation.\n' +
+      'Passionate Formula 1 and distributed computing enthusiast.\n\n' +
+      '%cTip: Call race() or press "f1" on your keyboard to test your reaction time on the Starting Grid!',
+      'color:#e10600; font-size:18px; font-weight:800; padding:6px 0;',
+      'color:#86868b; font-size:12px; line-height:1.5;',
+      'color:#30d158; font-size:12px; font-weight:600;'
+    );
+    window.race = () => launchF1RaceModal();
   </script>
 </body>
 </html>
